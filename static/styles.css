@@ -1,0 +1,138 @@
+/* root Values */
+:root {
+    --background: #f5f6ff;
+    --card: #fffff5e2;
+    --text: ;
+    --muted: ;
+    --border: ;
+    --shadow: ;
+    --primary: ;
+
+    --padding: 8px;
+    --bar: 20px;
+
+    /* Headers */
+    --h1: #e0700d;
+}
+
+body {
+    background: var(--background);
+    color: var(--text);
+}
+
+/* Fonts */
+.elms-sans-regular {
+    font-family: "Elms Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+
+/* Semantic Tags */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+nav {
+    position: sticky;
+    display: grid;
+    grid-template-columns: auto 1fr 1fr;
+    align-items: center;
+    padding: var(--bar);
+
+
+    /* Visual Design  */
+    border-bottom: 1px solid lightgrey;
+    background: white;
+}
+
+
+    nav button {
+        padding: 6px 20px;
+        border: none;
+        border-radius: 10px;
+        background: grey;
+        color: white;
+
+        cursor: pointer;
+    }
+
+    nav button:hover {
+        color: coral;
+        transition: 0.2s ease-in;
+    }
+
+
+    nav img {
+        color: black;
+    }
+
+
+main {
+    padding: var(--padding);
+}
+
+
+footer {
+    /* Positioning */
+    position: fixed;
+    left: 0;
+    bottom: 0;
+
+    /* Grid */
+    display: grid;  
+    grid-template-columns: auto 1fr 1fr;
+    align-items: center;
+    padding: var(--bar);
+
+    /* Visual Design */
+    border-top: 1px solid lightgrey;
+    background: white;
+    width: 100%;
+    min-height: 20vh;
+}
+
+
+/* Classes */
+.nav-links {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: right;
+    gap: 10%;
+    list-style: none;
+}
+
+.login-links {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: right;
+    list-style: none;
+}
+
+.introduction h1 {
+    color: var(--h1);
+}
+
+.footer-nav {
+    list-style: none;
+}
+    .footer-nav h1 {
+        font-size: 24px;
+        text-transform: uppercase;
+    }
+
+
+/* Media Queries */
+
+
+
+
+/* Extra Small Devices */
+@media only screen and (max-width:600px) {
+
+
+}
