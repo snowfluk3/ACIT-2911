@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snack Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-logo">Snack Stash Storeroom</div>
+
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#add-snack">Add Snack</a>
+      <a href="#snack-list">Pantry</a>
+    </div>
+
+    <button class="nav-button">Dashboard</button>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">Simple Pantry Tracking</p>
+        <h1>Track your snacks before they disappear.</h1>
+        <p class="hero-text">
+          A clean and simple front end for keeping snack items organized.
+        </p>
+      </div>
+
+      <div class="hero-card">
+        <span class="hero-emoji">🍪</span>
+        <h2>Example Snack</h2>
+        <p>Quantity: 1</p>
+      </div>
+    </section>
+
+    <section class="summary-grid">
+      <div class="summary-card">
+        <p>Total Snacks</p>
+        <h2 id="totalSnacks">1</h2>
+      </div>
+
+      <div class="summary-card">
+        <p>Categories</p>
+        <h2>1</h2>
+      </div>
+
+      <div class="summary-card">
+        <p>Expiring Soon</p>
+        <h2>1</h2>
+      </div>
+    </section>
+
+    <section class="content-grid">
+      <div class="panel" id="add-snack">
+        <h2>Add a Snack</h2>
+        <p class="section-text">Use this form to add an example snack item.</p>
+
+        <form id="snackForm">
+          <label for="snackName">Snack Name</label>
+          <input type="text" id="snackName" placeholder="Example: Snack Name" required />
+
+          <label for="snackCategory">Category</label>
+          <input type="text" id="snackCategory" placeholder="Example: Category" required />
+
+          <label for="snackQuantity">Quantity</label>
+          <input type="number" id="snackQuantity" placeholder="Example: Quantity" min="1" required />
+
+          <label for="snackExpiry">Expiry Date</label>
+          <input type="text" id="snackExpiry" placeholder="Example: Expiry Date" required />
+
+          <button type="submit">Add Snack</button>
+        </form>
+      </div>
+
+      <div class="panel" id="snack-list">
+        <h2>Snack List</h2>
+        <p class="section-text">Only one example card is included by default.</p>
+
+        <div id="snackList">
+          <div class="snack-card">
+            <div class="snack-icon">🍿</div>
+            <div>
+              <h3>Example Snack Name</h3>
+              <p>Category: Example Category</p>
+              <p>Quantity: 1</p>
+              <p>Expiry Date: Example Date</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
