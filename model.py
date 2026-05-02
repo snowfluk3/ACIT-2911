@@ -1,7 +1,7 @@
 from datetime import datetime
 from peewee import SqliteDatabase, Model, CharField, IntegerField, FloatField, DateField, ForeignKeyField
 
-db = SqliteDatabase("pantry.db")
+db = SqliteDatabase("snack_stash.db")
 
 
 class Ingredient(Model):
