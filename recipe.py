@@ -1,6 +1,5 @@
 import json
 
-import jsonschema
 import requests
 
 api_url = "http://localhost:1234/v1"
@@ -16,3 +15,34 @@ parameters = {
     "max_tokens": 6144,
     "enable_thinking": False,
 }
+
+def generate_recipes(ingredients):
+    with open(prompt_file, "r", encoding="utf-8") as f:
+        system_prompt = f.read().strip()
+
+    with open(schema_file, "r", encoding="utf-8") as f:
+        recipe_schema = json.load(f)
+
+    response = requests.post(
+        f"{api_url}/chat/completions",
+        json={
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": json.dumps(ingredients)},
+            ],
+            "response_format": {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "RecipeSuggestions",
+                    "schema": recipe_schema,
+                    "strict": True,
+                },
+            },
+            **parameters,
+        },
+    )
+    response.raise_for_status()
+
+    content = response.json()["choices"][0]["message"]["content"]
+    return json.loads(content)["recipes"]

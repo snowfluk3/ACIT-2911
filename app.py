@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template, request
 
 from model import db, init_db, Ingredient, Food
+from recipe import generate_recipes
 
 app = Flask(__name__)
 
@@ -123,3 +124,10 @@ def delete_food(id):
         return jsonify({"error": f"Food {id} not found"}), 404
     item.delete_instance()
     return "", 204
+
+
+@app.route("/recipes/generate", methods=["POST"])
+def recipes_generate():
+    ingredients = [i.__data__ for i in Ingredient.select()]
+    recipes = generate_recipes(ingredients)
+    return jsonify(recipes)
