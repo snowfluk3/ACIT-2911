@@ -11,3 +11,6 @@ dependencies = [
     "python-dotenv>=1.2.2",
     "requests>=2.33.1",
 ]
+
+[project.scripts]
+start = "ACIT-2911.app.py"

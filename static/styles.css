@@ -46,6 +46,18 @@ body {
     padding: var(--padding);
 }
 
+.spacer-small {
+    height: 8vh;
+}
+
+.spacer-medium {
+    height: 20vh;
+}
+
+.spacer-large {
+    height: 50vh;
+}
+
 /* Fonts */
 .elms-sans-regular {
     font-family: "Elms Sans", sans-serif;
@@ -162,7 +174,8 @@ footer {
 
     .login-links p {
         text-decoration-line: underline;
-        text-decoration-thickness: 3px;
+        text-decoration-thickness: 1px;
+        font-weight: bold;
     }
 
 .h1 {
@@ -243,6 +256,14 @@ footer {
 
     .popup-login p {
         font-size: 20px;
+    }
+
+    .error-login {
+        display: none;
+        font-size: 16px;
+        font-weight: bold;
+        color: red;
+        text-shadow: 1px 1px 1px #1c1919;
     }
 
     .password-wrapper {

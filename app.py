@@ -148,19 +148,16 @@ def load_user(user_id):
 
 @app.route("/login", methods=["POST"])
 def login():
-    if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
+    username = request.form.get("username")
+    password = request.form.get("password")
 
-        user = authenticate(username, password)
+    user = authenticate(username, password)
 
-        if user:
-            login_user(user)
-            return redirect(url_for("index"))
+    if user:
+        login_user(user, remember=True)
+        return jsonify({"success": True, "redirect": url_for("index")})
 
-    return "Invalid Credentials", 401
-    
-# Logout
+    return jsonify({"success": False, "error": "Invalid user credentials"}), 401
 
 @app.route("/logout", methods=["POST"])
 @login_required

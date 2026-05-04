@@ -1,5 +1,8 @@
 const loginBtn = document.getElementById("login-btn")
 const loginPopup = document.getElementById("login-popup")
+const loginForm = document.getElementById("login-form")
+const loginError = document.getElementById("login-error")
+const errorText = document.getElementById("error-text")
 
 const closeBtn = document.getElementById("close-btn")
 const overlay = document.getElementById("overlay")
@@ -17,6 +20,36 @@ loginBtn.onclick = () => {
         loginPopup.classList.remove("show")
         overlay.classList.remove("show")
     }
+})
+
+// Error Logic
+loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault()
+
+    const formData = new FormData(event.target)
+
+    const response = await fetch(event.target.action, {
+        method: 'POST',
+        body: formData
+    })
+
+    const result = await response.json()
+    
+    if (response.ok && result.success) {
+        window.location.href = result.redirect
+    } else {
+        errorText.innerText = result.error
+        loginError.style.display = "block"
+    }
+})
+
+loginForm.querySelector('input[name="username"]').addEventListener('input', () => {
+    loginError.style.display = "none"
+})
+
+closeBtn.addEventListener("click", () => {
+    loginError.style.display = "none"
+    loginForm.reset()
 })
 
 // Show Password logic
