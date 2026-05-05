@@ -4,7 +4,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Home</title>
-        <link rel="stylesheet" href="/ACIT-2911/static/styles.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
         <!-- Imported Links -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,18 +21,55 @@
                 <li><a href="#" class="quicksand-regular">About</a></li>
                 <li><a href="#" class="quicksand-regular">Contacts</a></li>
             </ul>
-            <!-- {% if user.is_logged_in %} -->
 
-            <!-- {% else %} -->
+            {% if current_user.is_authenticated %}
+
+            <ul class="login-links">
+                <li class="quicksand-regular"><p>{{ current_user.username }}</p></li>
+                <li>
+                    <form method="POST" action="/logout">
+                        <button type="submit" class="quicksand-regular">Logout</button>
+                    </form>
+                </li>
+            </ul>
+
+            {% else %}
+                <div id="overlay" class="overlay"></div>
+
                 <ul class="login-links">
-                    <li ><button class="quicksand-regular">Login</button></li>
+                    <li>
+                        <button id="login-btn" class="quicksand-regular">Login</button>
+                    </li>
                 </ul>
+            
+            {% endif %}
+
+            <div id="login-popup" class="popup-login">
+                
+                <button id="close-btn" class="close-btn">&times;</button>
+
+                <form id="login-form" method="post" action="{{ url_for('login') }}">
+                    <h3 class="elms-sans-regular h1">Login</h3>
+                    <br>
+                    <p class="elms-sans-regular">Username:</p>
+                    <input type="text" name="username" 
+                    placeholder="Username" class="quicksand-regular" required>
+                    <p class="elms-sans-regular">Password:</p>
+                    <div class="password-wrapper">
+                        <input id="password-field" type="password" name="password" 
+                        placeholder="Password" class="quicksand-regular" required>
+                        <span id="toggle-password" class="toggle-eye elms-sans-regular">Show</span>
+                    </div>
+                    <div id="login-error" class="error-login quicksand-regular">
+                        <p id="error-text" class="quicksand-regular"></p>
+                    </div>
+                    <br>
+                    <button type="submit" class="quicksand-regular">Confirm</button>
+                </form>
+            </div>
         </nav>
 
         <main>
-            <!-- {% if user .is_logged_in %} -->
-
-            <!-- {% else %} -->
             <section class="introduction two-grid">
                 <div>
                     <p class="elms-sans-regular h1">For your Pantry Tracking Needs!</p>
@@ -42,16 +80,15 @@
                 </div>
             </section>
 
-            <hr>
+            <div class="spacer-medium"></div>
 
             <h2 class="elms-sans-regular h1">Features</h2>
 
             <section class="two-grid">
                 <div>
+                    <h2 class="elms-sans-regular h2">Item Tracking</h2>
                     <p class="quicksand-regular">
-                        Snack Stash Storeroom is a versatile tool in tracking your pantry items. 
-                        Users are capable of adding items to their pantry tracker, editing and deleting those items, 
-                        and categorize according to their ingredient label.
+                        Snack Stash Storeroom is first and foremost a tracking app.
                     </p>
                     <br><br>
                     <p class="quicksand-regular">
@@ -78,5 +115,7 @@
                 <li><a href="#" class="quicksand-regular">Contacts</a></li>
             </ul>
         </footer>
+
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
     </body>
 </html>

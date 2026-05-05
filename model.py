@@ -1,10 +1,11 @@
 from datetime import datetime
-from peewee import SqliteDatabase, Model, CharField, IntegerField, FloatField, DateField, ForeignKeyField
+from peewee import SqliteDatabase, Model, CharField, IntegerField, FloatField, DateField, ForeignKeyField, AutoField
 
-db = SqliteDatabase("snack_stash.db")
+db = SqliteDatabase("database/database.db")
 
 
 class Ingredient(Model):
+    id = AutoField()
     name = CharField()
     quantity = FloatField()
     unit = CharField()
@@ -19,6 +20,7 @@ class Ingredient(Model):
 
 
 class Food(Model):
+    id = AutoField()
     name = CharField()
     description = CharField(null=True)
     food_type = CharField()

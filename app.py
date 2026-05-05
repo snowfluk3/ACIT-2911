@@ -1,10 +1,18 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, redirect, url_for
+from flask_login import LoginManager, login_user, logout_user, login_required
 
 from model import db, init_db, Ingredient, Food
 from recipe import generate_recipes
+from auth import authenticate, users
+
+import os
+from dotenv import load_dotenv
 
 app = Flask(__name__)
+login_manager = LoginManager()
+login_manager.init_app(app)
 
+app.secret_key = "secret"
 
 @app.before_request
 def open_db():
@@ -19,12 +27,12 @@ def close_db(exc):
 
 init_db()
 
-
+"""Render HTML Pages"""
 @app.route("/")
 def index():
     return render_template("index.html")
 
-
+"""CRUD Operations"""
 @app.route("/ingredients", methods=["GET"])
 def list_ingredients():
     ingredients = [i.__data__ for i in Ingredient.select()]
@@ -131,3 +139,32 @@ def recipes_generate():
     ingredients = [i.__data__ for i in Ingredient.select()]
     recipes = generate_recipes(ingredients)
     return jsonify(recipes)
+
+"""Login Authentication"""
+
+@login_manager.user_loader
+def load_user(user_id):
+    return users.get(user_id)
+
+@app.route("/login", methods=["POST"])
+def login():
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    user = authenticate(username, password)
+
+    if user:
+        login_user(user, remember=True)
+        return jsonify({"success": True, "redirect": url_for("index")})
+
+    return jsonify({"success": False, "error": "Invalid user credentials"}), 401
+
+@app.route("/logout", methods=["POST"])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
+
+# Run the file
+if __name__ == "__main__":
+    app.run(debug=True)

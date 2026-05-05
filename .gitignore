@@ -1,1 +1,5 @@
 .env
+.python-version
+.venv
+__pycache__
+.pytest_cache
