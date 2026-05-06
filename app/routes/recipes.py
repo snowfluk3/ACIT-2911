@@ -70,6 +70,7 @@ def delete_recipe(id):
 def recipes_generate():
     ingredients = [i.__data__ for i in Ingredient.select()]
     raw_recipes = generate_recipes(ingredients)
+    # Saves all 3 generated recipes to the DB
     for r in raw_recipes:
         save_recipe(r)
     return render_template("_recipes.html", recipes=raw_recipes)

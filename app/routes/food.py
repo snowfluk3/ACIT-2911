@@ -3,13 +3,13 @@ from ..models.model import Food
 
 food_bp = Blueprint("food", __name__, url_prefix="/food")
 
-@food_bp.route("/food", methods=["GET"])
+@food_bp.route("", methods=["GET"])
 def list_food():
     items = [f.__data__ for f in Food.select()]
     return jsonify(items)
 
 
-@food_bp.route("/food", methods=["POST"])
+@food_bp.route("", methods=["POST"])
 def new_food():
     data = request.get_json()
     item = Food.create(
@@ -24,7 +24,7 @@ def new_food():
     return jsonify(item.__data__), 201
 
 
-@food_bp.route("/food/<int:id>", methods=["GET"])
+@food_bp.route("/<int:id>", methods=["GET"])
 def get_food(id):
     item = Food.get_or_none(Food.id == id)
     if item is None:
@@ -32,7 +32,7 @@ def get_food(id):
     return jsonify(item.__data__)
 
 
-@food_bp.route("/food/<int:id>", methods=["PUT"])
+@food_bp.route("/<int:id>", methods=["PUT"])
 def update_food(id):
     item = Food.get_or_none(Food.id == id)
     if item is None:
@@ -45,7 +45,7 @@ def update_food(id):
     return jsonify(item.__data__)
 
 
-@food_bp.route("/food/<int:id>", methods=["DELETE"])
+@food_bp.route("/<int:id>", methods=["DELETE"])
 def delete_food(id):
     item = Food.get_or_none(Food.id == id)
     if item is None:
