@@ -42,7 +42,7 @@ body {
 .two-grid {
     display: grid;
     grid-template-columns: auto 1fr;
-    align-items: right;
+    align-items: center;
     padding: var(--padding);
 }
 
@@ -196,6 +196,27 @@ footer {
 
     font-size: clamp(24px, 5vw, 40px);
     text-align: center;
+}
+
+.features {
+    display: grid;
+    grid-auto-flow: row;
+    justify-content: right;
+    align-items: right;
+}
+
+.features img {
+    /* Proportions */
+    width: 30%;
+    margin-left: 20%;
+    margin-top: -10%;
+    min-width: 112px;
+
+    /* Appearance */
+    border: var(--border);
+    border-radius: var(--medium-radius);
+    background-color: var(--card);
+    padding: var(--paddingbar);
 }
 
 /* Popups */

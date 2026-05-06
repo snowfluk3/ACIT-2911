@@ -12,5 +12,7 @@ dependencies = [
     "requests>=2.33.1",
 ]
 
-[project.scripts]
-start = "ACIT-2911.app.py"
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
