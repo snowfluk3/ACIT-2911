@@ -98,6 +98,48 @@
                     </p>
                 </div>
             </section>
+
+            <section class="pantry-section">
+                <div class="section-header">
+                    <div>
+                        <h2 class="elms-sans-regular h1">Pantry Items</h2>
+                        <p class="quicksand-regular">View, add, edit, and delete items from your pantry directly on the home page.</p>
+                    </div>
+                    <button id="add-item-btn" class="quicksand-regular">Add Item</button>
+                </div>
+
+                <div id="pantry-items" class="pantry-items-grid"></div>
+
+                <div id="item-form-container" class="item-form-container hidden">
+                    <form id="item-form" class="item-form">
+                        <h3 id="item-form-title" class="elms-sans-regular h2">Add Pantry Item</h3>
+                        <input type="hidden" id="item-id">
+
+                        <label class="quicksand-regular" for="item-name">Name</label>
+                        <input id="item-name" name="name" type="text" class="item-input quicksand-regular" required>
+
+                        <label class="quicksand-regular" for="item-quantity">Quantity</label>
+                        <input id="item-quantity" name="quantity" type="number" step="0.1" class="item-input quicksand-regular" required>
+
+                        <label class="quicksand-regular" for="item-unit">Unit</label>
+                        <input id="item-unit" name="unit" type="text" class="item-input quicksand-regular" placeholder="e.g. pcs, g, ml">
+
+                        <label class="quicksand-regular" for="item-category">Category</label>
+                        <input id="item-category" name="category" type="text" class="item-input quicksand-regular" placeholder="e.g. Snacks, Dairy">
+
+                        <label class="quicksand-regular" for="item-expiry-date">Expiry Date</label>
+                        <input id="item-expiry-date" name="expiry_date" type="date" class="item-input quicksand-regular">
+
+                        <label class="quicksand-regular" for="item-notes">Notes</label>
+                        <textarea id="item-notes" name="notes" rows="3" class="item-input quicksand-regular"></textarea>
+
+                        <div class="form-actions">
+                            <button type="submit" id="submit-item-btn" class="quicksand-regular">Add Item</button>
+                            <button type="button" id="cancel-item-btn" class="quicksand-regular">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
         </main>
 
         <br><br>
