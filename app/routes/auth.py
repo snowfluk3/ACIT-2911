@@ -53,7 +53,7 @@ def login():
 
     if user:
         login_user(user, remember=True)
-        return jsonify({"success": True, "redirect": url_for("templates.index")})
+        return jsonify({"success": True, "redirect": url_for("templates.dashboard")})
 
     return jsonify({"success": False, "error": "Invalid user credentials"}), 401
 

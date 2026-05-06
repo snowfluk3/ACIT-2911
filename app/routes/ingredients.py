@@ -21,7 +21,7 @@ def new_ingredient():
     )
     return jsonify(ingredient.__data__), 201
 
-@ingredients_bp.route("/ingredients/<int:id>", methods=["GET"])
+@ingredients_bp.route("/<int:id>", methods=["GET"])
 def get_ingredient(id):
     ingredient = Ingredient.get_or_none(Ingredient.id == id)
     if ingredient is None:
@@ -29,7 +29,7 @@ def get_ingredient(id):
     return jsonify(ingredient.__data__)
 
 
-@ingredients_bp.route("/ingredients/<int:id>", methods=["PUT"])
+@ingredients_bp.route("/<int:id>", methods=["PUT"])
 def update_ingredient(id):
     ingredient = Ingredient.get_or_none(Ingredient.id == id)
     if ingredient is None:
@@ -42,7 +42,7 @@ def update_ingredient(id):
     return jsonify(ingredient.__data__)
 
 
-@ingredients_bp.route("/ingredients/<int:id>", methods=["DELETE"])
+@ingredients_bp.route("/<int:id>", methods=["DELETE"])
 def delete_ingredient(id):
     ingredient = Ingredient.get_or_none(Ingredient.id == id)
     if ingredient is None:

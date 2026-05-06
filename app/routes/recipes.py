@@ -41,12 +41,12 @@ def recipe_to_dict(recipe):
     }
 
 
-@recipe_bp.route("/recipes", methods=["GET"])
+@recipe_bp.route("", methods=["GET"])
 def list_recipes():
     return jsonify([r.__data__ for r in Recipe.select()])
 
 
-@recipe_bp.route("/recipes/<int:id>", methods=["GET"])
+@recipe_bp.route("/<int:id>", methods=["GET"])
 def get_recipe(id):
     recipe = Recipe.get_or_none(Recipe.id == id)
     if recipe is None:
@@ -54,7 +54,7 @@ def get_recipe(id):
     return jsonify(recipe_to_dict(recipe))
 
 
-@recipe_bp.route("/recipes/<int:id>", methods=["DELETE"])
+@recipe_bp.route("/<int:id>", methods=["DELETE"])
 def delete_recipe(id):
     recipe = Recipe.get_or_none(Recipe.id == id)
     if recipe is None:
@@ -66,7 +66,7 @@ def delete_recipe(id):
     return "", 204
 
 
-@recipe_bp.route("/recipes/generate", methods=["POST"])
+@recipe_bp.route("/generate", methods=["POST"])
 def recipes_generate():
     ingredients = [i.__data__ for i in Ingredient.select()]
     
