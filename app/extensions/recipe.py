@@ -29,7 +29,7 @@ def generate_recipes(ingredients):
             "model": model,
             "messages": [
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": json.dumps(ingredients)},
+                {"role": "user", "content": json.dumps(ingredients, default=str)},
             ],
             "response_format": {
                 "type": "json_schema",
@@ -44,5 +44,7 @@ def generate_recipes(ingredients):
     )
     response.raise_for_status()
 
-    content = response.json()["choices"][0]["message"]["content"]
+    message = response.json()["choices"][0]["message"]
+    content = message.get("content") or message.get("reasoning_content", "")
+    print("LM Studio response content:", repr(content[:200]))
     return json.loads(content)["recipes"]
