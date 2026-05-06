@@ -1,8 +1,10 @@
 from datetime import datetime
-from peewee import SqliteDatabase, Model, CharField, IntegerField, FloatField, DateField, ForeignKeyField, AutoField
+from peewee import Model, CharField, IntegerField, FloatField, DateField, ForeignKeyField, AutoField
+from app.extensions.extensions import db
 
-db = SqliteDatabase("database/database.db")
-
+class BaseModel(Model):
+    class Meta:
+        database = db
 
 class Ingredient(Model):
     id = AutoField()
@@ -36,6 +38,7 @@ class Food(Model):
 
 
 class Recipe(Model):
+    id = AutoField()
     title = CharField()
     description = CharField(null=True)
     prep_time_minutes = IntegerField()
@@ -49,6 +52,7 @@ class Recipe(Model):
 
 
 class RecipeIngredient(Model):
+    id = AutoField()
     recipe = ForeignKeyField(Recipe, backref="ingredients")
     item = CharField()
     amount = CharField()
@@ -60,6 +64,7 @@ class RecipeIngredient(Model):
 
 
 class RecipeMissingIngredient(Model):
+    id = AutoField()
     recipe = ForeignKeyField(Recipe, backref="missing_ingredients")
     item = CharField()
     amount = CharField()
@@ -71,6 +76,7 @@ class RecipeMissingIngredient(Model):
 
 
 class RecipeInstruction(Model):
+    id = AutoField()
     recipe = ForeignKeyField(Recipe, backref="instructions")
     step_number = IntegerField()
     instruction = CharField()
