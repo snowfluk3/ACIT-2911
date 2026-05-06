@@ -3,7 +3,7 @@ import json
 import requests
 
 api_url = "http://localhost:1234/v1"
-model = "qwen/qwen3.5-9b"
+model = ""
 prompt_file = "system_prompt.txt"
 schema_file = "recipe_schema.json"
 
