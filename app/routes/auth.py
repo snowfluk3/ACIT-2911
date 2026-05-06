@@ -53,7 +53,7 @@ def login():
 
     if user:
         login_user(user, remember=True)
-        return jsonify({"success": True, "redirect": url_for("template.index")})
+        return jsonify({"success": True, "redirect": url_for("templates.index")})
 
     return jsonify({"success": False, "error": "Invalid user credentials"}), 401
 
@@ -61,4 +61,4 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("template.index"))
+    return redirect(url_for("templates.index"))
