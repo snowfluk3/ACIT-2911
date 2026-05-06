@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required
 
 from model import db, init_db, Ingredient, Food, Recipe, RecipeIngredient, RecipeMissingIngredient, RecipeInstruction
 from recipe import generate_recipes
-from auth import authenticate, users
+from app.routes.auth import authenticate, users
 
 import os
 from dotenv import load_dotenv
