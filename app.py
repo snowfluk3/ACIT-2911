@@ -9,6 +9,10 @@ import os
 from dotenv import load_dotenv
 
 app = Flask(__name__)
+
+def run():
+    app.run(debug=True)
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -167,4 +171,4 @@ def logout():
 
 # Run the file
 if __name__ == "__main__":
-    app.run(debug=True)
+    run()

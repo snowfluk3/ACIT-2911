@@ -80,22 +80,31 @@
                 </div>
             </section>
 
-            <div class="spacer-medium"></div>
+            <div class="spacer-large"></div>
 
             <h2 class="elms-sans-regular h1">Features</h2>
 
-            <section class="two-grid">
+            <section class="two-grid features">
                 <div>
                     <h2 class="elms-sans-regular h2">Item Tracking</h2>
                     <p class="quicksand-regular">
-                        Snack Stash Storeroom is first and foremost a tracking app.
+                        Snack Stash Storeroom is first and foremost a tracking app. <br>
+                        Use this application to track expiration dates, item quantities, and your recipes!
                     </p>
-                    <br><br>
+                </div>
+                <div class="spacer-medium features">
+                    <img src="{{ url_for('static', filename='images/pantry-icon.png') }}" alt="img">
+                </div>
+                <div>
+                    <h2 class="elms-sans-regular h2">Recipe Generation</h2>
                     <p class="quicksand-regular">
-                        Users can generate recipes by providing an image in the "Recipes" section of their pantry list.
-                        These recipes are simple, and meant to give users an idea on how they want to create a new recipe.
+                        Users can generate recipes by providing an image in the "Recipes" section of their pantry list. <br>
+                        These recipes are simple, and meant to give users an idea on how they want to create a new recipe. <br>
                         Suggestions can also be given to develop a recipe based on ingredients on a user's pantry.
-                    </p>
+                    </p><br><br><br><br><br><br><br>                    
+                </div>
+                <div class="spacer-medium features">
+                    <img src="{{ url_for('static', filename='images/recipe-icon.png') }}" alt="img">
                 </div>
             </section>
         </main>
