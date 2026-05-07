@@ -10,6 +10,60 @@ const overlay = document.getElementById("overlay")
 const passwordField = document.getElementById("password-field")
 const togglePassword = document.getElementById("toggle-password")
 
+if (loginBtn && loginPopup && overlay) {
+    loginBtn.onclick = () => {
+        loginPopup.classList.add("show")
+        overlay.classList.add("show")
+    }
+
+    ;[closeBtn, overlay].forEach(element => {
+        element.onclick = () => {
+            loginPopup.classList.remove("show")
+            overlay.classList.remove("show")
+        }
+    })
+}
+
+if (loginForm) {
+    loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault()
+
+        const formData = new FormData(event.target)
+
+        const response = await fetch(event.target.action, {
+            method: 'POST',
+            body: formData
+        })
+
+        const result = await response.json()
+
+        if (response.ok && result.success) {
+            window.location.href = result.redirect
+        } else {
+            errorText.innerText = result.error
+            loginError.style.display = "block"
+        }
+    })
+
+    loginForm.querySelector('input[name="username"]').addEventListener('input', () => {
+        loginError.style.display = "none"
+    })
+
+    closeBtn.addEventListener("click", () => {
+        loginError.style.display = "none"
+        loginForm.reset()
+    })
+
+    togglePassword.addEventListener("click", function () {
+        const type = passwordField.getAttribute("type") === "password" ? "text" : "password"
+        passwordField.setAttribute("type", type)
+        this.textContent = type === "password" ? 'Show' : 'Hide'
+    })
+}
+
+// Pantry item management
+const API_BASE = "/ingredients"
+
 const addItemBtn = document.getElementById("add-item-btn")
 const pantryItemsContainer = document.getElementById("pantry-items")
 const itemFormContainer = document.getElementById("item-form-container")
@@ -24,59 +78,6 @@ const itemExpiryField = document.getElementById("item-expiry-date")
 const itemNotesField = document.getElementById("item-notes")
 const cancelItemBtn = document.getElementById("cancel-item-btn")
 const submitItemBtn = document.getElementById("submit-item-btn")
-
-loginBtn.onclick = () => {
-    loginPopup.classList.add("show")
-    overlay.classList.add("show")
-}
-
-[closeBtn, overlay].forEach(element => {
-    element.onclick = () => {
-        loginPopup.classList.remove("show")
-        overlay.classList.remove("show")
-    }
-})
-
-// Error Logic
-loginForm.addEventListener("submit", async (event) => {
-    event.preventDefault()
-
-    const formData = new FormData(event.target)
-
-    const response = await fetch(event.target.action, {
-        method: 'POST',
-        body: formData
-    })
-
-    const result = await response.json()
-    
-    if (response.ok && result.success) {
-        window.location.href = result.redirect
-    } else {
-        errorText.innerText = result.error
-        loginError.style.display = "block"
-    }
-})
-
-loginForm.querySelector('input[name="username"]').addEventListener('input', () => {
-    loginError.style.display = "none"
-})
-
-closeBtn.addEventListener("click", () => {
-    loginError.style.display = "none"
-    loginForm.reset()
-})
-
-// Show Password logic
-togglePassword.addEventListener("click", function () {
-    const type = passwordField.getAttribute("type") === "password" ? "text" : "password"
-    passwordField.setAttribute("type", type)
-
-    this.textContent = type === "password" ? 'Show' : 'Hide'
-})
-
-// Pantry item management
-const API_BASE = "/ingredients"
 
 function formatDate(dateString) {
     if (!dateString) return ""
@@ -220,6 +221,7 @@ cancelItemBtn.addEventListener('click', hideItemForm)
 
 document.addEventListener('DOMContentLoaded', fetchIngredients)
 
+// Recipe generation
 const generateBtn = document.getElementById("generate-btn")
 const recipesGrid = document.getElementById("recipes-grid")
 const recipesLoading = document.getElementById("recipes-loading")
