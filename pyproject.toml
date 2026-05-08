@@ -9,7 +9,7 @@ dependencies = [
     "flask-login>=0.6.3",
     "peewee>=4.0.5",
     "python-dotenv>=1.2.2",
-    "requests>=2.33.1",
+    "anthropic>=0.52.0",
 ]
 
 [dependency-groups]

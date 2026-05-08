@@ -43,7 +43,7 @@ function startPolling() {
                 setLoading(false)
             } else if (data.state === "error") {
                 stopPolling()
-                showError(`Could not generate recipes: ${data.error}. Make sure LM Studio is running.`)
+                showError(`Could not generate recipes: ${data.error}`)
                 setLoading(false)
             }
         } catch (err) {
@@ -69,7 +69,7 @@ if (generateBtn) {
             if (!response.ok) throw new Error(await response.text())
             startPolling()
         } catch (err) {
-            showError(`Could not start recipe generation: ${err.message}. Make sure LM Studio is running.`)
+            showError(`Could not start recipe generation: ${err.message}`)
             setLoading(false)
         }
     })
