@@ -1,0 +1,40 @@
+{% for recipe in recipes %}
+<div class="recipe-card">
+    <p class="elms-sans-regular recipe-card-title">{{ recipe.title }}</p>
+    <p class="quicksand-regular recipe-card-generated">Generated {{ recipe.generated_label }}</p>
+    <p class="quicksand-regular">{{ recipe.description }}</p>
+    <p class="quicksand-regular recipe-card-meta">
+        Prep: {{ recipe.prep_time_minutes }} min  |
+        Cook: {{ recipe.cook_time_minutes }} min  |
+        Total: {{ recipe.prep_time_minutes + recipe.cook_time_minutes }} min  |
+        Serves: {{ recipe.servings }}
+    </p>
+
+    <p class="elms-sans-regular recipe-card-section-label">Pantry Ingredients</p>
+    {% for ing in recipe.ingredients_used %}
+    <p class="quicksand-regular recipe-card-ingredient-item">
+        &bull; {{ ing.amount }}{% if ing.unit %} {{ ing.unit }}{% endif %} {{ ing.item }}{% if ing.preparation %}, {{ ing.preparation }}{% endif %}
+    </p>
+    {% endfor %}
+
+    {% if recipe.missing_ingredients %}
+    <p class="elms-sans-regular recipe-card-section-label">You'll Also Need</p>
+    {% for ing in recipe.missing_ingredients %}
+    <p class="quicksand-regular recipe-card-missing-item">
+        &bull; {{ ing.amount }}{% if ing.unit %} {{ ing.unit }}{% endif %} {{ ing.item }}{% if ing.substitute %} (sub: {{ ing.substitute }}){% endif %}
+    </p>
+    {% endfor %}
+    {% endif %}
+
+    <p class="elms-sans-regular recipe-card-section-label">Instructions</p>
+    <ol class="quicksand-regular recipe-card-instructions">
+        {% for step in recipe.instructions %}
+        <li>{{ step.instruction }}</li>
+        {% endfor %}
+    </ol>
+
+    {% if recipe.tips %}
+    <p class="quicksand-regular recipe-card-tips">Tip: {{ recipe.tips }}</p>
+    {% endif %}
+</div>
+{% endfor %}

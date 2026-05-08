@@ -6,7 +6,7 @@ class BaseModel(Model):
     class Meta:
         database = db
 
-class Ingredient(Model):
+class Ingredient(BaseModel):
     id = AutoField()
     name = CharField()
     quantity = FloatField()
@@ -18,10 +18,10 @@ class Ingredient(Model):
     updated_at = DateField(default=datetime.now)
 
     class Meta:
-        database = db
+        table_name = "ingredients"
 
 
-class Food(Model):
+class Food(BaseModel):
     id = AutoField()
     name = CharField()
     description = CharField(null=True)
@@ -34,10 +34,10 @@ class Food(Model):
     updated_at = DateField(default=datetime.now)
 
     class Meta:
-        database = db
+        table_name = "food"
 
 
-class Recipe(Model):
+class Recipe(BaseModel):
     id = AutoField()
     title = CharField()
     description = CharField(null=True)
@@ -48,10 +48,10 @@ class Recipe(Model):
     created_at = DateField(default=datetime.now)
 
     class Meta:
-        database = db
+        table_name = "recipes"
 
 
-class RecipeIngredient(Model):
+class RecipeIngredient(BaseModel):
     id = AutoField()
     recipe = ForeignKeyField(Recipe, backref="ingredients")
     item = CharField()
@@ -60,10 +60,10 @@ class RecipeIngredient(Model):
     preparation = CharField(null=True)
 
     class Meta:
-        database = db
+        table_name = "recipe_ingredients"
 
 
-class RecipeMissingIngredient(Model):
+class RecipeMissingIngredient(BaseModel):
     id = AutoField()
     recipe = ForeignKeyField(Recipe, backref="missing_ingredients")
     item = CharField()
@@ -72,17 +72,17 @@ class RecipeMissingIngredient(Model):
     substitute = CharField(null=True)
 
     class Meta:
-        database = db
+        table_name = "recipe_missing_ingredients"
 
 
-class RecipeInstruction(Model):
+class RecipeInstruction(BaseModel):
     id = AutoField()
     recipe = ForeignKeyField(Recipe, backref="instructions")
     step_number = IntegerField()
     instruction = CharField()
 
     class Meta:
-        database = db
+        table_name = "recipe_instructions"
 
 
 def init_db():
