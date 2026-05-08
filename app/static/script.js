@@ -16,7 +16,6 @@ if (loginBtn && loginPopup && overlay) {
         loginPopup.classList.add("show")
         overlay.classList.add("show")
     }
-}
 
     ;[closeBtn, overlay].forEach(element => {
         element.onclick = () => {
@@ -24,6 +23,7 @@ if (loginBtn && loginPopup && overlay) {
             overlay.classList.remove("show")
         }
     })
+}
 
 // Error Logic
 if (loginForm) {

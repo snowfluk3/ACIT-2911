@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, render_template, request
 from ..models.model import Recipe, RecipeIngredient, RecipeInstruction, RecipeMissingIngredient, Ingredient
 from ..extensions.recipe import generate_recipes
 
@@ -41,7 +41,7 @@ def recipe_to_dict(recipe):
     }
 
 
-@recipe_bp.route("", methods=["GET"])
+@recipe_bp.route("/", methods=["GET"])
 def list_recipes():
     return jsonify([r.__data__ for r in Recipe.select()])
 
@@ -69,10 +69,9 @@ def delete_recipe(id):
 @recipe_bp.route("/generate", methods=["POST"])
 def recipes_generate():
     ingredients = [i.__data__ for i in Ingredient.select()]
-    
-    # Automatically saves all 3 generated recipes to the DB 
-    # (Can be changed later when merged with the recipe generation frontend)
     raw_recipes = generate_recipes(ingredients)
-    saved = [save_recipe(r) for r in raw_recipes]
-    return jsonify([recipe_to_dict(r) for r in saved]), 201
+    # Saves all 3 generated recipes to the DB
+    for r in raw_recipes:
+        save_recipe(r)
+    return render_template("_recipes.html", recipes=raw_recipes)
 
