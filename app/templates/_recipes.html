@@ -28,7 +28,7 @@
     <p class="elms-sans-regular recipe-card-section-label">Instructions</p>
     <ol class="quicksand-regular recipe-card-instructions">
         {% for step in recipe.instructions %}
-        <li>{{ step }}</li>
+        <li>{{ step.instruction }}</li>
         {% endfor %}
     </ol>
 

@@ -1,8 +1,14 @@
+import threading
 from flask import Blueprint, jsonify, render_template, request
 from ..models.model import Recipe, RecipeIngredient, RecipeInstruction, RecipeMissingIngredient, Ingredient
 from ..extensions.recipe import generate_recipes
+from ..extensions.extensions import db
 
 recipe_bp = Blueprint("recipes", __name__, url_prefix="/recipes")
+
+# Simple in-memory generation state. Fine for a single-process dev server.
+_gen_status = {"state": "idle", "error": None}  # state: "idle" | "generating" | "done" | "error"
+
 
 def save_recipe(r):
     recipe = Recipe.create(
@@ -41,6 +47,33 @@ def recipe_to_dict(recipe):
     }
 
 
+def _generate_worker(ingredients):
+    global _gen_status
+    try:
+        db.connect()
+        raw = generate_recipes(ingredients)
+        for r in raw:
+            save_recipe(r)
+        _gen_status = {"state": "done", "error": None}
+    except Exception as e:
+        _gen_status = {"state": "error", "error": str(e)}
+    finally:
+        if not db.is_closed():
+            db.close()
+
+
+@recipe_bp.route("/status", methods=["GET"])
+def generation_status():
+    return jsonify(_gen_status)
+
+
+@recipe_bp.route("/rendered", methods=["GET"])
+def recipes_rendered():
+    latest = list(Recipe.select().order_by(Recipe.id.desc()).limit(3))
+    recipes = [recipe_to_dict(r) for r in reversed(latest)]
+    return render_template("_recipes.html", recipes=recipes)
+
+
 @recipe_bp.route("/", methods=["GET"])
 def list_recipes():
     return jsonify([r.__data__ for r in Recipe.select()])
@@ -68,10 +101,10 @@ def delete_recipe(id):
 
 @recipe_bp.route("/generate", methods=["POST"])
 def recipes_generate():
+    global _gen_status
+    if _gen_status["state"] == "generating":
+        return jsonify({"error": "Generation already in progress"}), 409
     ingredients = [i.__data__ for i in Ingredient.select()]
-    raw_recipes = generate_recipes(ingredients)
-    # Saves all 3 generated recipes to the DB
-    for r in raw_recipes:
-        save_recipe(r)
-    return render_template("_recipes.html", recipes=raw_recipes)
-
+    _gen_status = {"state": "generating", "error": None}
+    threading.Thread(target=_generate_worker, args=(ingredients,), daemon=True).start()
+    return jsonify({"status": "started"}), 202
