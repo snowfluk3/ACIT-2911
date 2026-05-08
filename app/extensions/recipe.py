@@ -1,48 +1,43 @@
 import json
+import os
 
-import requests
+import anthropic
 
-api_url = "http://localhost:1234/v1"
-model = "qwen/qwen3.5-9b"
+MODEL = "claude-haiku-4-5-20251001"
 prompt_file = "system_prompt.txt"
 schema_file = "recipe_schema.json"
 
-parameters = {
-    "temperature": 0.7,
-    "top_p": 0.8,
-    "top_k": 20,
-    "presence_penalty": 1.5,
-    "max_tokens": 6144,
-    "enable_thinking": False,
-}
 
 def generate_recipes(ingredients):
     with open(prompt_file, "r", encoding="utf-8") as f:
         system_prompt = f.read().strip()
 
     with open(schema_file, "r", encoding="utf-8") as f:
-        recipe_schema = json.load(f)
+        schema = json.load(f)
 
-    response = requests.post(
-        f"{api_url}/chat/completions",
-        json={
-            "model": model,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": json.dumps(ingredients)},
-            ],
-            "response_format": {
-                "type": "json_schema",
-                "json_schema": {
-                    "name": "RecipeSuggestions",
-                    "schema": recipe_schema,
-                    "strict": True,
-                },
-            },
-            **parameters,
-        },
+    input_schema = {
+        "type": schema["type"],
+        "required": schema["required"],
+        "additionalProperties": schema.get("additionalProperties", False),
+        "properties": schema["properties"],
+    }
+
+    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+
+    response = client.messages.create(
+        model=MODEL,
+        max_tokens=4096,
+        system=system_prompt,
+        messages=[
+            {"role": "user", "content": json.dumps(ingredients, default=str)}
+        ],
+        tools=[{
+            "name": "suggest_recipes",
+            "description": "Return exactly 3 recipe suggestions based on the pantry ingredients.",
+            "input_schema": input_schema,
+        }],
+        tool_choice={"type": "tool", "name": "suggest_recipes"},
     )
-    response.raise_for_status()
 
-    content = response.json()["choices"][0]["message"]["content"]
-    return json.loads(content)["recipes"]
+    tool_use = next(b for b in response.content if b.type == "tool_use")
+    return tool_use.input["recipes"]
