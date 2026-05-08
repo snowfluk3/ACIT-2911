@@ -503,6 +503,12 @@ footer {
     font-size: 22px;
 }
 
+.recipe-card-generated {
+    font-size: 12px;
+    color: #999;
+    margin-top: -8px;
+}
+
 .recipe-card-meta {
     color: var(--h2);
     font-size: 14px;

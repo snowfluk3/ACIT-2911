@@ -1,4 +1,5 @@
 import threading
+from datetime import date
 from flask import Blueprint, jsonify, render_template, request
 from ..models.model import Recipe, RecipeIngredient, RecipeInstruction, RecipeMissingIngredient, Ingredient
 from ..extensions.recipe import generate_recipes
@@ -67,10 +68,24 @@ def generation_status():
     return jsonify(_gen_status)
 
 
+def _relative_date(d):
+    if isinstance(d, str):
+        d = date.fromisoformat(d)
+    elif hasattr(d, "date"):
+        d = d.date()
+    delta = (date.today() - d).days
+    if delta == 0:
+        return "today"
+    if delta == 1:
+        return "yesterday"
+    return f"{delta} days ago"
+
+
 @recipe_bp.route("/rendered", methods=["GET"])
 def recipes_rendered():
-    latest = list(Recipe.select().order_by(Recipe.id.desc()).limit(3))
-    recipes = [recipe_to_dict(r) for r in reversed(latest)]
+    recipes = [recipe_to_dict(r) for r in Recipe.select().order_by(Recipe.id.desc())]
+    for r in recipes:
+        r["generated_label"] = _relative_date(r["created_at"])
     return render_template("_recipes.html", recipes=recipes)
 
 

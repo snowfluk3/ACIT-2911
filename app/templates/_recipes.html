@@ -1,6 +1,7 @@
 {% for recipe in recipes %}
 <div class="recipe-card">
     <p class="elms-sans-regular recipe-card-title">{{ recipe.title }}</p>
+    <p class="quicksand-regular recipe-card-generated">Generated {{ recipe.generated_label }}</p>
     <p class="quicksand-regular">{{ recipe.description }}</p>
     <p class="quicksand-regular recipe-card-meta">
         Prep: {{ recipe.prep_time_minutes }} min  |
