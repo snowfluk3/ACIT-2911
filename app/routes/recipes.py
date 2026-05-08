@@ -1,6 +1,7 @@
 import threading
 from datetime import date
 from flask import Blueprint, jsonify, render_template, request
+from flask_login import current_user, login_required
 from ..models.model import Recipe, RecipeIngredient, RecipeInstruction, RecipeMissingIngredient, Ingredient
 from ..extensions.recipe import generate_recipes
 from ..extensions.extensions import db
@@ -11,8 +12,9 @@ recipe_bp = Blueprint("recipes", __name__, url_prefix="/recipes")
 _gen_status = {"state": "idle", "error": None}  # state: "idle" | "generating" | "done" | "error"
 
 
-def save_recipe(r):
+def save_recipe(r, user_id):
     recipe = Recipe.create(
+        user_id=user_id,
         title=r["title"],
         description=r.get("description"),
         prep_time_minutes=r["prep_time_minutes"],
@@ -48,13 +50,13 @@ def recipe_to_dict(recipe):
     }
 
 
-def _generate_worker(ingredients):
+def _generate_worker(ingredients, user_id):
     global _gen_status
     try:
         db.connect()
         raw = generate_recipes(ingredients)
         for r in raw:
-            save_recipe(r)
+            save_recipe(r, user_id)
         _gen_status = {"state": "done", "error": None}
     except Exception as e:
         _gen_status = {"state": "error", "error": str(e)}
@@ -82,8 +84,10 @@ def _relative_date(d):
 
 
 @recipe_bp.route("/rendered", methods=["GET"])
+@login_required
 def recipes_rendered():
-    recipes = [recipe_to_dict(r) for r in Recipe.select().order_by(Recipe.id.desc())]
+    user_id = int(current_user.id)
+    recipes = [recipe_to_dict(r) for r in Recipe.select().where(Recipe.user_id == user_id).order_by(Recipe.id.desc())]
     for r in recipes:
         r["generated_label"] = _relative_date(r["created_at"])
     return render_template("_recipes.html", recipes=recipes)
@@ -115,11 +119,13 @@ def delete_recipe(id):
 
 
 @recipe_bp.route("/generate", methods=["POST"])
+@login_required
 def recipes_generate():
     global _gen_status
     if _gen_status["state"] == "generating":
         return jsonify({"error": "Generation already in progress"}), 409
+    user_id = int(current_user.id)
     ingredients = [i.__data__ for i in Ingredient.select()]
     _gen_status = {"state": "generating", "error": None}
-    threading.Thread(target=_generate_worker, args=(ingredients,), daemon=True).start()
+    threading.Thread(target=_generate_worker, args=(ingredients, user_id), daemon=True).start()
     return jsonify({"status": "started"}), 202
