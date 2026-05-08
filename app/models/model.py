@@ -39,6 +39,7 @@ class Food(BaseModel):
 
 class Recipe(BaseModel):
     id = AutoField()
+    user_id = IntegerField()
     title = CharField()
     description = CharField(null=True)
     prep_time_minutes = IntegerField()
