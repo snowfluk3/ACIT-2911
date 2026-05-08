@@ -17,6 +17,9 @@ VALUES
 (1, 'Bread', 1, 'loaf', 'Bakery', '2026-05-06', 'Whole wheat'),
 (1, 'Rice', 5, 'kg', 'Grain', NULL, 'Stored in pantry'),
 (1, 'Chicken Breast', 4, 'pcs', 'Meat', '2026-05-10', 'Frozen');
+(1, 'Garlic', 8, 'cloves', 'Produce', '2026-05-28', NULL),
+(1, 'Cheddar Cheese', 0.5, 'kg', 'Dairy', '2026-05-20', 'Block, unopened'),
+(1, 'Fettuccine', 500, 'g', 'Grain', NULL, 'Stored in pantry');
 
 INSERT INTO food (
     user_id,
