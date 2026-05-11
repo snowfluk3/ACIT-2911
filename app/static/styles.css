@@ -188,6 +188,14 @@ footer {
     font-size: 24px;
 }
 
+.small-text {
+    font-size: 11px;
+}
+
+.medium-text {
+    font-size: 16px;
+}
+
 .introduction-title {
     display: grid;
     place-items: center;
@@ -240,7 +248,7 @@ footer {
     color: white;
     font-size: 24px;
     cursor: pointer;
-}
+    }
 
 .popup-login {
     /* Appearance */
@@ -263,11 +271,11 @@ footer {
     /* Animation */
 }
 
-    .popup-login.show, .overlay.show {
+    .popup-login.show, .overlay.show, .popup-register.show {
         display: block;
     }
 
-    .popup-login input {
+    .popup-login input, .popup-register input {
         width: 80%;
         padding: var(--padding);
         border-radius: var(--small-radius);
@@ -275,6 +283,62 @@ footer {
         border: none;
     }
 
+    
+    .error-login {
+        display: none;
+        font-size: 16px;
+        font-weight: bold;
+        color: red;
+        text-shadow: 1px 1px 1px #1c1919;
+    }
+
+    .password-wrapper {
+        position: relative;
+        width: 80%;
+        margin: 10px auto;
+    }
+
+        .password-wrapper input {
+            width: 100%; 
+            padding: 10px;
+            padding-right: 40px; 
+            box-sizing: border-box;
+        }
+
+        .toggle-eye {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #e0700d;
+            cursor: pointer;
+            user-select: none;
+            z-index: 2;
+        }
+
+
+.popup-register {
+    /* Appearance */
+display: none;
+width: 90%;
+max-width: 450px;
+background-color: #555;
+color: #fff;
+text-align: center;
+border-radius: var(--medium-radius);
+padding: 8px 0;
+
+/* Positioning */
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+z-index: 5;
+
+/* Animation */ 
+}
+
+/* Pantry */
 .pantry-section {
     margin-top: 2rem;
     padding: var(--paddingbar);
@@ -412,42 +476,109 @@ footer {
     text-align: center;
 }
 
-    .popup-login p {
-        font-size: 20px;
+.generate-btn {
+    padding: 10px 28px;
+    border: none;
+    border-radius: var(--small-radius);
+    background: var(--h1);
+    color: white;
+    font-size: 16px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.generate-btn:hover {
+    opacity: 0.85;
+    transition: opacity 0.2s ease-in;
+}
+
+.generate-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.recipes-loading {
+    padding: var(--padding);
+    color: var(--h2);
+}
+
+.recipes-error {
+    padding: var(--padding);
+    color: #c0392b;
+    font-weight: bold;
+}
+
+.recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 16px;
+}
+
+.recipe-card {
+    border: var(--border);
+    border-radius: var(--medium-radius);
+    background: var(--card);
+    padding: var(--paddingbar);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.recipe-card-title {
+    color: var(--h1);
+    font-size: 22px;
+}
+
+.recipe-card-generated {
+    font-size: 12px;
+    color: #999;
+    margin-top: -8px;
+}
+
+.recipe-card-meta {
+    color: var(--h2);
+    font-size: 14px;
+}
+
+.recipe-card-section-label {
+    color: var(--h2);
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.recipe-card-ingredient-item {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.recipe-card-missing-item {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #c0392b;
+}
+
+.recipe-card-instructions {
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.recipe-card-tips {
+    font-size: 13px;
+    color: #555;
+    font-style: italic;
+    border-top: var(--border);
+    padding-top: 8px;
+}
+
+@media only screen and (max-width: 900px) {
+    .recipes-grid {
+        grid-template-columns: 1fr;
     }
-
-    .error-login {
-        display: none;
-        font-size: 16px;
-        font-weight: bold;
-        color: red;
-        text-shadow: 1px 1px 1px #1c1919;
-    }
-
-    .password-wrapper {
-        position: relative;
-        width: 80%;
-        margin: 10px auto;
-    }
-
-        .password-wrapper input {
-            width: 100%; 
-            padding: 10px;
-            padding-right: 40px; 
-            box-sizing: border-box;
-        }
-
-        .toggle-eye {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #ccc;
-            cursor: pointer;
-            user-select: none;
-            z-index: 2;
-        }
-
+}
 
 /* Media Queries */
 

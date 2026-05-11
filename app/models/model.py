@@ -1,12 +1,39 @@
 from datetime import datetime
-from peewee import Model, CharField, IntegerField, FloatField, DateField, ForeignKeyField, AutoField
+from peewee import Model, CharField, IntegerField, FloatField, DateField, DateTimeField, ForeignKeyField, AutoField
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 from app.extensions.extensions import db
 
 class BaseModel(Model):
     class Meta:
         database = db
 
-class Ingredient(Model):
+class User(UserMixin, BaseModel):
+    id = AutoField()
+    username = CharField(unique=True)
+    email = CharField(unique=True)
+    password_hash = CharField()
+    created_at = DateTimeField(default=datetime.now)
+    updated_at = DateTimeField(default=datetime.now)
+
+    class Meta:
+        table_name = "users"
+
+    def save(self, *args, **kwargs):
+        self.updated_at = datetime.now()
+        return super(User, self).save(*args, **kwargs)
+
+    def get_id(self):
+        return str(self.id)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(str(self.password_hash), password)
+
+
+class Ingredient(BaseModel):
     id = AutoField()
     name = CharField()
     quantity = FloatField()
@@ -18,10 +45,10 @@ class Ingredient(Model):
     updated_at = DateField(default=datetime.now)
 
     class Meta:
-        database = db
+        table_name = "ingredients"
 
 
-class Food(Model):
+class Food(BaseModel):
     id = AutoField()
     name = CharField()
     description = CharField(null=True)
@@ -34,11 +61,12 @@ class Food(Model):
     updated_at = DateField(default=datetime.now)
 
     class Meta:
-        database = db
+        table_name = "food"
 
 
-class Recipe(Model):
+class Recipe(BaseModel):
     id = AutoField()
+    user_id = IntegerField()
     title = CharField()
     description = CharField(null=True)
     prep_time_minutes = IntegerField()
@@ -48,10 +76,10 @@ class Recipe(Model):
     created_at = DateField(default=datetime.now)
 
     class Meta:
-        database = db
+        table_name = "recipes"
 
 
-class RecipeIngredient(Model):
+class RecipeIngredient(BaseModel):
     id = AutoField()
     recipe = ForeignKeyField(Recipe, backref="ingredients")
     item = CharField()
@@ -60,10 +88,10 @@ class RecipeIngredient(Model):
     preparation = CharField(null=True)
 
     class Meta:
-        database = db
+        table_name = "recipe_ingredients"
 
 
-class RecipeMissingIngredient(Model):
+class RecipeMissingIngredient(BaseModel):
     id = AutoField()
     recipe = ForeignKeyField(Recipe, backref="missing_ingredients")
     item = CharField()
@@ -72,19 +100,19 @@ class RecipeMissingIngredient(Model):
     substitute = CharField(null=True)
 
     class Meta:
-        database = db
+        table_name = "recipe_missing_ingredients"
 
 
-class RecipeInstruction(Model):
+class RecipeInstruction(BaseModel):
     id = AutoField()
     recipe = ForeignKeyField(Recipe, backref="instructions")
     step_number = IntegerField()
     instruction = CharField()
 
     class Meta:
-        database = db
+        table_name = "recipe_instructions"
 
 
 def init_db():
     with db:
-        db.create_tables([Ingredient, Food, Recipe, RecipeIngredient, RecipeMissingIngredient, RecipeInstruction])
+        db.create_tables([Ingredient, Food, Recipe, RecipeIngredient, RecipeMissingIngredient, RecipeInstruction, User])
