@@ -19,40 +19,17 @@
                 <h2 class="elms-sans-regular h1">Pantry Items</h2>
                 <p class="quicksand-regular">View, add, edit, and delete items from your pantry directly on the home page.</p>
             </div>
-            <button id="add-item-btn" class="quicksand-regular">Add Item</button>
+            <button class="quicksand-regular"
+                hx-get="/ingredients/new"
+                hx-target="#item-form-container"
+                hx-swap="innerHTML">Add Item</button>
         </div>
 
-        <div id="pantry-items" class="pantry-items-grid"></div>
-
-        <div id="item-form-container" class="item-form-container hidden">
-            <form id="item-form" class="item-form">
-                <h3 id="item-form-title" class="elms-sans-regular h2">Add Pantry Item</h3>
-                <input type="hidden" id="item-id">
-
-                <label class="quicksand-regular" for="item-name">Name</label>
-                <input id="item-name" name="name" type="text" class="item-input quicksand-regular" required>
-
-                <label class="quicksand-regular" for="item-quantity">Quantity</label>
-                <input id="item-quantity" name="quantity" type="number" step="0.1" class="item-input quicksand-regular" required>
-
-                <label class="quicksand-regular" for="item-unit">Unit</label>
-                <input id="item-unit" name="unit" type="text" class="item-input quicksand-regular" placeholder="e.g. pcs, g, ml">
-
-                <label class="quicksand-regular" for="item-category">Category</label>
-                <input id="item-category" name="category" type="text" class="item-input quicksand-regular" placeholder="e.g. Snacks, Dairy">
-
-                <label class="quicksand-regular" for="item-expiry-date">Expiry Date</label>
-                <input id="item-expiry-date" name="expiry_date" type="date" class="item-input quicksand-regular">
-
-                <label class="quicksand-regular" for="item-notes">Notes</label>
-                <textarea id="item-notes" name="notes" rows="3" class="item-input quicksand-regular"></textarea>
-
-                <div class="form-actions">
-                    <button type="submit" id="submit-item-btn" class="quicksand-regular">Add Item</button>
-                    <button type="button" id="cancel-item-btn" class="quicksand-regular">Cancel</button>
-                </div>
-            </form>
+        <div id="pantry-items" class="pantry-items-grid">
+            {% include "_pantry_items.html" %}
         </div>
+
+        <div id="item-form-container" class="item-form-container"></div>
     </section>
 
     <div class="spacer-medium"></div>
@@ -62,25 +39,9 @@
     <div class="spacer-small"></div>
 
     <section id="recipes-section">
-        <button id="generate-btn" class="quicksand-regular generate-btn">Generate Recipes</button>
-
-        <div id="recipes-loading" class="recipes-loading" style="display:none;">
-            <p class="quicksand-regular">Generating recipes from your pantry...</p>
-        </div>
-
-        <div id="recipes-error" class="recipes-error" style="display:none;">
-            <p class="quicksand-regular"></p>
-        </div>
-
-        <div id="recipes-grid" class="recipes-grid"></div>
+        {% include "_recipes_section.html" %}
     </section>
     {% endif %}
 </main>
 
 {% endblock %}
-
-{% block scripts %}
-<script src="{{ url_for('static', filename='pantry.js') }}"></script>
-<script src="{{ url_for('static', filename='recipes.js') }}"></script>
-{% endblock %}
-

@@ -1,0 +1,33 @@
+{% if items %}
+  {% for item in items %}
+  <article class="pantry-card">
+    <div class="card-header">
+      <div>
+        <h3 class="elms-sans-regular">{{ item.name }}</h3>
+        <p class="quicksand-regular">{{ item.category or "Uncategorized" }}</p>
+      </div>
+      <div class="card-actions">
+        <button class="card-edit quicksand-regular"
+          hx-get="/ingredients/{{ item.id }}/edit"
+          hx-target="#item-form-container"
+          hx-swap="innerHTML">Edit</button>
+        <button class="card-delete quicksand-regular"
+          hx-delete="/ingredients/{{ item.id }}"
+          hx-target="#pantry-items"
+          hx-swap="innerHTML"
+          hx-confirm="Delete this pantry item?">Delete</button>
+      </div>
+    </div>
+    <p class="quicksand-regular">Quantity: {{ item.quantity }} {{ item.unit or "" }}</p>
+    <p class="quicksand-regular">Expiry: {{ item.expiry_date or "None" }}</p>
+    {% if item.notes %}
+    <p class="quicksand-regular notes">Notes: {{ item.notes }}</p>
+    {% endif %}
+  </article>
+  {% endfor %}
+{% else %}
+  <div class="empty-state quicksand-regular">
+    <p>No pantry items yet.</p>
+    <p>Click "Add Item" to create your first entry.</p>
+  </div>
+{% endif %}
