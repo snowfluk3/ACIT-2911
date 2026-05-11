@@ -1,18 +1,23 @@
 from flask import Flask
 from .extensions.extensions import login_manager, db
-from .routes.auth import find_user_by_id
 
 def create_app():
     app = Flask(__name__)
     app.secret_key = "secret"
 
     db.init("database/database.db")
+    from .models.model import init_db
+    init_db()
     login_manager.init_app(app)
 
     # Load User
+    from .models.model import User
     @login_manager.user_loader
     def load_user(user_id):
-        return find_user_by_id(user_id)
+        try:
+            return User.get_or_none(User.id == int(user_id))
+        except (ValueError, TypeError):
+            return None
 
     # Database Initialization
     @app.before_request

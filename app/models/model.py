@@ -1,10 +1,37 @@
 from datetime import datetime
-from peewee import Model, CharField, IntegerField, FloatField, DateField, ForeignKeyField, AutoField
+from peewee import Model, CharField, IntegerField, FloatField, DateField, DateTimeField, ForeignKeyField, AutoField
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 from app.extensions.extensions import db
 
 class BaseModel(Model):
     class Meta:
         database = db
+
+class User(UserMixin, BaseModel):
+    id = AutoField()
+    username = CharField(unique=True)
+    email = CharField(unique=True)
+    password_hash = CharField()
+    created_at = DateTimeField(default=datetime.now)
+    updated_at = DateTimeField(default=datetime.now)
+
+    class Meta:
+        table_name = "users"
+
+    def save(self, *args, **kwargs):
+        self.updated_at = datetime.now()
+        return super(User, self).save(*args, **kwargs)
+
+    def get_id(self):
+        return str(self.id)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(str(self.password_hash), password)
+
 
 class Ingredient(BaseModel):
     id = AutoField()
@@ -88,4 +115,4 @@ class RecipeInstruction(BaseModel):
 
 def init_db():
     with db:
-        db.create_tables([Ingredient, Food, Recipe, RecipeIngredient, RecipeMissingIngredient, RecipeInstruction])
+        db.create_tables([Ingredient, Food, Recipe, RecipeIngredient, RecipeMissingIngredient, RecipeInstruction, User])
