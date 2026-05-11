@@ -9,9 +9,10 @@
         <!-- Imported Links -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link 
-        href="https://fonts.googleapis.com/css2?family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@300..700&display=swap" 
+        <link
+        href="https://fonts.googleapis.com/css2?family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@300..700&display=swap"
         rel="stylesheet">
+        <script src="https://unpkg.com/htmx.org@1.9.12" crossorigin="anonymous"></script>
     </head>
     <body>
         <nav>
@@ -34,48 +35,69 @@
             </ul>
 
             {% else %}
-                <div id="overlay" class="overlay"></div>
+                <div id="overlay" class="overlay"
+                    hx-on:click="document.getElementById('login-popup').classList.remove('show');
+                                 document.getElementById('register-popup').classList.remove('show');
+                                 document.getElementById('overlay').classList.remove('show');"></div>
 
                 <ul class="login-links">
                     <li>
-                        <button type="button" id="login-btn" class="quicksand-regular">Login</button>
+                        <button type="button" id="login-btn" class="quicksand-regular"
+                            hx-on:click="document.getElementById('login-popup').classList.add('show');
+                                         document.getElementById('overlay').classList.add('show');">Login</button>
                     </li>
                 </ul>
 
                 <div id="login-popup" class="popup-login">
-                
-                    <button id="close-btn" class="close-btn">&times;</button>
 
-                    <form id="login-form" method="post" action="{{ url_for('auth.login') }}">
+                    <button id="close-btn" class="close-btn"
+                        hx-on:click="document.getElementById('login-popup').classList.remove('show');
+                                     document.getElementById('overlay').classList.remove('show');
+                                     document.getElementById('login-form').reset();">&times;</button>
+
+                    <form id="login-form" method="post"
+                        hx-post="{{ url_for('auth.login') }}"
+                        hx-target="#login-error"
+                        hx-swap="innerHTML">
                         <h3 class="elms-sans-regular h1">Login</h3>
                         <br>
                         <p class="elms-sans-regular">Username / Email:</p>
-                        <input type="text" name="login_input" 
+                        <input type="text" name="login_input"
                         placeholder="Username / Email" class="quicksand-regular" required>
                         <p class="elms-sans-regular">Password:</p>
                         <div class="password-wrapper">
-                            <input id="password-field" type="password" name="password" 
+                            <input id="password-field" type="password" name="password"
                             placeholder="Password" class="quicksand-regular" required>
-                            <span id="toggle-password" class="toggle-eye elms-sans-regular">Show</span>
+                            <span id="toggle-password" class="toggle-eye elms-sans-regular"
+                                hx-on:click="var f=document.getElementById('password-field');
+                                             f.type=f.type==='password'?'text':'password';
+                                             this.innerText=f.type==='password'?'Show':'Hide';">Show</span>
                         </div>
-                        <div id="login-error" class="error-login quicksand-regular">
-                            <p id="error-text" class="quicksand-regular"></p>
-                        </div>
+                        <div id="login-error" class="error-login quicksand-regular"></div>
                         <button type="submit" class="quicksand-regular">Confirm</button>
                         <div id="registration">
                             <br>
                             <p class="quicksand-regular medium-text">Don't have an account?
-                                <a href="#" id="register-toggle" style="color: #e0700d;">Register here</a>
+                                <a href="#" id="register-toggle" style="color: #e0700d;"
+                                    hx-on:click="event.preventDefault();
+                                                 document.getElementById('login-popup').classList.remove('show');
+                                                 document.getElementById('register-popup').classList.add('show');">Register here</a>
                             </p>
                         </div>
                     </form>
                 </div>
 
                 <div id="register-popup" class="popup-register">
-                    
-                    <button id="close-reg-button" class="close-btn">&times;</button>
 
-                    <form id="register-form" method="post" action="{{ url_for('auth.register') }}">
+                    <button id="close-reg-button" class="close-btn"
+                        hx-on:click="document.getElementById('register-popup').classList.remove('show');
+                                     document.getElementById('overlay').classList.remove('show');
+                                     document.getElementById('register-form').reset();">&times;</button>
+
+                    <form id="register-form" method="post"
+                        hx-post="{{ url_for('auth.register') }}"
+                        hx-target="#register-error"
+                        hx-swap="innerHTML">
                         <h3 class="elms-sans-regular h1">Register</h3>
                         <br>
 
@@ -91,8 +113,13 @@
                         <div class="password-wrapper">
                             <input id="register-password-field" type="password" name="password"
                             placeholder="Password" class="quicksand-regular" required>
-                            <span id="register-toggle-password" class="toggle-eye elms-sans-regular">Show</span>
+                            <span id="register-toggle-password" class="toggle-eye elms-sans-regular"
+                                hx-on:click="var f=document.getElementById('register-password-field');
+                                             f.type=f.type==='password'?'text':'password';
+                                             this.innerText=f.type==='password'?'Show':'Hide';">Show</span>
                         </div>
+
+                        <div id="register-error" class="error-login quicksand-regular"></div>
 
                         <button type="submit" class="quicksand-regular">Create Account</button>
                     </form>

@@ -460,6 +460,14 @@ z-index: 5;
     display: none;
 }
 
+.item-form-container:empty {
+    display: none;
+}
+
+.error-login:not(:empty) {
+    display: block;
+}
+
 .error-message {
     padding: 20px;
     border: var(--border);
