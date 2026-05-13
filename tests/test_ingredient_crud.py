@@ -49,8 +49,15 @@ def create_ingredient(client, **overrides):
     assert response.status_code == 201
     return response.get_json()
 
+def register_and_login(client):
+    client.post("/register", data={
+        "username": "Fossil",
+        "email": "test_user@example.com",
+        "password": "password"
+    })
 
 def test_create_ingredient(client):
+    register_and_login(client)
     ingredient = create_ingredient(client)
 
     assert ingredient["name"] == "Milk"
@@ -60,7 +67,9 @@ def test_create_ingredient(client):
     assert ingredient["notes"] == "Opened carton"
 
 
+
 def test_get_ingredient(client):
+    register_and_login(client)
     created = create_ingredient(client, name="Eggs", quantity=12, unit="pcs", category="Protein")
 
     response = client.get(f"/ingredients/{created['id']}")
@@ -70,6 +79,7 @@ def test_get_ingredient(client):
 
 
 def test_update_ingredient(client):
+    register_and_login(client)
     created = create_ingredient(client, name="Rice", quantity=5, unit="kg", category="Grain")
 
     response = client.put(
@@ -84,6 +94,7 @@ def test_update_ingredient(client):
 
 
 def test_delete_ingredient(client):
+    register_and_login(client)
     created = create_ingredient(client, name="Bread", quantity=1, unit="loaf", category="Bakery")
 
     delete_response = client.delete(f"/ingredients/{created['id']}")
