@@ -1,0 +1,18 @@
+# Deploy to Render
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  on-merge:
+      if: github.event.pull_request.merged == true
+      runs-on: ubuntu-latest
+      steps:
+        - name: Deploy Latest Changes to Render
+          env:
+            deploy_url: ${{ secrets.RENDER_DEPLOY_URL }}
+          run: |
+            curl "$deploy_url"
