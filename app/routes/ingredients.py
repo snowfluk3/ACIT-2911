@@ -7,7 +7,9 @@ _OOB_CLEAR = '<div id="item-form-container" hx-swap-oob="innerHTML"></div>'
 
 
 def _items_html():
-    return render_template("_pantry_items.html", items=list(Ingredient.select().dicts()))
+    today = date.today()
+    # Passes 'today' and 'warning_days'. Can be checked by: 'if item.expiry_date <= warning_days'
+    return render_template("_pantry_items.html", items=list(Ingredient.select().dicts()), today=today.isoformat(), warning_days=(today + timedelta(days=3)).isoformat(),)
 
 
 @ingredients_bp.route("/new", methods=["GET"])
