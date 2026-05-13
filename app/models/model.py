@@ -76,7 +76,6 @@ class Recipe(BaseModel):
     servings = IntegerField()
     tips = CharField(null=True)
     created_at = DateTimeField(default=datetime.now)
-    updated_at = DateTimeField(default=datetime.now)
 
     class Meta:
         table_name = "recipes"
