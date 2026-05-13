@@ -35,14 +35,15 @@ class User(UserMixin, BaseModel):
 
 class Ingredient(BaseModel):
     id = AutoField()
+    user = ForeignKeyField(User, backref="ingredients")
     name = CharField()
     quantity = FloatField()
     unit = CharField()
     category = CharField()
     expiry_date = DateField(null=True)
     notes = CharField(null=True)
-    created_at = DateField(default=datetime.now)
-    updated_at = DateField(default=datetime.now)
+    created_at = DateTimeField(default=datetime.now)
+    updated_at = DateTimeField(default=datetime.now)
 
     class Meta:
         table_name = "ingredients"
@@ -50,6 +51,7 @@ class Ingredient(BaseModel):
 
 class Food(BaseModel):
     id = AutoField()
+    user = ForeignKeyField(User, backref="foods")
     name = CharField()
     description = CharField(null=True)
     food_type = CharField()
@@ -57,8 +59,8 @@ class Food(BaseModel):
     category = CharField()
     expiry_date = DateField(null=True)
     notes = CharField(null=True)
-    created_at = DateField(default=datetime.now)
-    updated_at = DateField(default=datetime.now)
+    created_at = DateTimeField(default=datetime.now)
+    updated_at = DateTimeField(default=datetime.now)
 
     class Meta:
         table_name = "food"
@@ -66,14 +68,15 @@ class Food(BaseModel):
 
 class Recipe(BaseModel):
     id = AutoField()
-    user_id = IntegerField()
+    user = ForeignKeyField(User, backref="recipes")
     title = CharField()
     description = CharField(null=True)
     prep_time_minutes = IntegerField()
     cook_time_minutes = IntegerField()
     servings = IntegerField()
     tips = CharField(null=True)
-    created_at = DateField(default=datetime.now)
+    created_at = DateTimeField(default=datetime.now)
+    updated_at = DateTimeField(default=datetime.now)
 
     class Meta:
         table_name = "recipes"
