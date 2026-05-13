@@ -19,6 +19,17 @@
             <div class="logo">
                 <p class="elms-sans-regular h1">Snack Stash Storeroom</p>
             </div>
+            <div class="search-bar">
+                <form id="search-form">
+                    <input type="text" name="filter" placeholder="Search items..." class="quicksand-regular">
+                </form>
+                <details class="dropdown">
+                    <summary class="quicksand-regular dropdown-trigger">Categories</summary>
+                    <div class="dropdown-menu">
+                        <p>test</p>
+                    </div>
+                </details>
+            </div>
             <ul class="nav-links">
 
                 {% if current_user.is_authenticated %}

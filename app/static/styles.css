@@ -10,6 +10,7 @@
     --primary: ;
 
     /* Padding */
+    --paddingsmall: 5px;
     --padding: 8px;
     --paddingbar: 20px;
 
@@ -73,6 +74,24 @@ body {
     font-style: normal;
 }
 
+.h1 {
+    color: var(--h1);
+    font-size: 40px;
+}
+
+.h2 {
+    color: var(--h2);
+    font-size: 24px;
+}
+
+.small-text {
+    font-size: 11px;
+}
+
+.medium-text {
+    font-size: 16px;
+}
+
 /* Semantic Tags */
 * {
     margin: 0;
@@ -83,7 +102,7 @@ body {
 nav {
     position: sticky;
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
     padding: var(--paddingbar);
 
@@ -155,7 +174,7 @@ footer {
     grid-auto-flow: column;
     justify-content: right;
     align-items: center;
-    gap: 4%;
+    gap: 6%;
     list-style: none;
 }
 
@@ -171,23 +190,21 @@ footer {
         font-size: 25px;
     }
 
-.h1 {
-    color: var(--h1);
-    font-size: 40px;
+.search-bar {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: left;
+    align-items: center;
+    margin-left: 10%;
 }
 
-.h2 {
-    color: var(--h2);
-    font-size: 24px;
-}
-
-.small-text {
-    font-size: 11px;
-}
-
-.medium-text {
-    font-size: 16px;
-}
+    #search-form input {
+        position: relative;
+        padding: var(--paddingsmall);
+        border-radius: var(--small-radius);
+        width: 40vw;
+        max-width: 20vw;
+    }
 
 .dropdown {
     position: relative;
