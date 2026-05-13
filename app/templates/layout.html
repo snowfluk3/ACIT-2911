@@ -30,11 +30,8 @@
 
                 <li>
                     <details class="dropdown">
-                        <summary class="quicksand-regular">{{ current_user.username }}</summary>
+                        <summary class="quicksand-regular dropdown-trigger"><u>{{ current_user.username }}</u></summary>
                         <div class="dropdown-menu">
-                            <a class="quicksand-regular">Pantry</a>
-                            <a class="quicksand-regular">Recipes</a>
-                            <a class="quicksand-regular">Ingredients</a>
                             <form method="POST" action="{{ url_for('auth.logout') }}">
                                 <button type="submit" class="quicksand-regular">Logout</button>
                             </form>

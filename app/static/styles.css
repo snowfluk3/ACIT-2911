@@ -189,6 +189,36 @@ footer {
     font-size: 16px;
 }
 
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-trigger {
+    cursor: pointer;
+    list-style: none;
+    padding: (--padding);
+    user-select: none;
+}
+    .dropdown-trigger::-webkit-details-marker {
+        display: none;
+    }
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 160px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--medium-radius);
+    box-shadow: var(--shadow);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
 .introduction-title {
     display: grid;
     place-items: center;
