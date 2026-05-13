@@ -22,6 +22,11 @@
     <p class="quicksand-regular">Expiry: {{ item.expiry_date or "None" }}</p>
     {% if item.notes %}
     <p class="quicksand-regular notes">Notes: {{ item.notes }}</p>
+    {% if item.expiry_date and item.expiry_date < today %}
+      <div class="warning-badge expired-badge">Expired!</div>
+    {% elif item.expiry_date and item.expiry_date <= warning_days %}
+      <div class="warning-badge near-expiry-badge">Expires in {{ (item.expiry_date - today).days }} days!</div>
+    {% endif %}
     {% endif %}
   </article>
   {% endfor %}
