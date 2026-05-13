@@ -18,7 +18,7 @@ def dashboard():
     user_id = int(current_user.id)
     items = list(Ingredient.select().dicts())
     recipes = [recipes_mod.recipe_to_dict(r) for r in
-               Recipe.select().where(Recipe.user_id == user_id).order_by(Recipe.id.desc())]
+                Recipe.select().where(Recipe.user_id == user_id).order_by(Recipe.id.desc())]
     for r in recipes:
         r["generated_label"] = recipes_mod._relative_date(r["created_at"])
     today = date.today()
