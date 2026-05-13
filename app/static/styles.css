@@ -6,7 +6,7 @@
     --text: ;
     --muted: ;
     --border: 1px solid lightgrey;
-    --shadow: 56px;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     --primary: ;
 
     /* Padding */
@@ -90,7 +90,7 @@ nav {
 
     /* Visual Design  */
     border-bottom: 2px solid lightgrey;
-    border-radius: var(--medium-radius);
+    box-shadow: var(--shadow);
     background: white;
 }
 
@@ -130,7 +130,7 @@ footer {
 
     /* Visual Design */
     border-top: 2px solid lightgrey;
-    border-radius: var(--medium-radius);
+    box-shadow: var(--shadow);
     background: white;
     width: 100%;
 }
