@@ -83,7 +83,7 @@ body {
 nav {
     position: sticky;
     display: grid;
-    grid-template-columns: auto 1fr 1fr;
+    grid-template-columns: auto auto;
     align-items: center;
     padding: var(--paddingbar);
 
@@ -154,28 +154,21 @@ footer {
     display: grid;
     grid-auto-flow: column;
     justify-content: right;
-    gap: 10%;
+    align-items: center;
+    gap: 4%;
     list-style: none;
 }
 
-.login-links {
+.logo {
     display: grid;
     grid-auto-flow: column;
-    justify-content: right;
+    justify-content: left;
     align-items: center;
-    gap: 20px;
-    list-style: none;
 }
 
-    .login-links li {
-        position: relative;
-        display: inline-block;
-    }
-
-    .login-links p {
-        text-decoration-line: underline;
-        text-decoration-thickness: 1px;
+    .logo p {
         font-weight: bold;
+        font-size: 25px;
     }
 
 .h1 {
@@ -194,6 +187,36 @@ footer {
 
 .medium-text {
     font-size: 16px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-trigger {
+    cursor: pointer;
+    list-style: none;
+    padding: (--padding);
+    user-select: none;
+}
+    .dropdown-trigger::-webkit-details-marker {
+        display: none;
+    }
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 160px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--medium-radius);
+    box-shadow: var(--shadow);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .introduction-title {

@@ -23,14 +23,28 @@
 
                 {% if current_user.is_authenticated %}
 
-                <li class="quicksand-regular"><p>{{ current_user.username }}</p></li>
+                <li><a href="#" class="quicksand-regular">Pantry</a></li>
+                <li><a href="#" class="quicksand-regular">Recipes</a></li>
+                <li><a href="#" class="quicksand-regular">Ingredients</a></li>
+
+
                 <li>
-                    <form method="POST" action="{{ url_for('auth.logout') }}">
-                        <button type="submit" class="quicksand-regular">Logout</button>
-                    </form>
-                </li>
+                    <details class="dropdown">
+                        <summary class="quicksand-regular dropdown-trigger"><u>{{ current_user.username }}</u></summary>
+                        <div class="dropdown-menu">
+                            <form method="POST" action="{{ url_for('auth.logout') }}">
+                                <button type="submit" class="quicksand-regular">Logout</button>
+                            </form>
+                        </div>
+                    </details>
+                </li>   
 
                 {% else %}
+
+                <li class="quicksand-regular"><a href="#">Home</a></li>
+                <li class="quicksand-regular"><a href="#">About</a></li>
+                <li class="quicksand-regular"><a href="#">Contacts</a></li>
+                
                 <div id="overlay" class="overlay"
                     hx-on:click="document.getElementById('login-popup').classList.remove('show');
                                 document.getElementById('register-popup').classList.remove('show');
@@ -119,8 +133,7 @@
                     </form>
                 </div>
 
-            {% endif %}
-
+                {% endif %}
             </ul>
         </nav>
 
