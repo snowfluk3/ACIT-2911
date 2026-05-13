@@ -5,6 +5,9 @@ from app import create_app
 
 app = create_app()
 
-# Run the file
-if __name__ == "__main__":
+def start_server():
     app.run(debug=True)
+
+# Run the file - uv run run.py
+if __name__ == "__main__":
+    start_server()
