@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 from flask import Blueprint, render_template
 from flask_login import current_user, login_required
 from ..models.model import Ingredient, Recipe
@@ -20,9 +21,12 @@ def dashboard():
                 Recipe.select().where(Recipe.user_id == user_id).order_by(Recipe.id.desc())]
     for r in recipes:
         r["generated_label"] = recipes_mod._relative_date(r["created_at"])
+    today = date.today()
     return render_template(
         "dashboard.html",
         items=items,
         recipes=recipes,
         gen_status=recipes_mod._gen_status,
+        today=today,
+        warning_days=today + timedelta(days=3),
     )

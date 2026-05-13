@@ -22,6 +22,9 @@
     /* Headers */
     --h1: #e0700d;
     --h2: #060606e6;
+
+    --red-warn: #ff4a3d;
+    --yellow-warn: #ffad33;
 }
 
 body {
@@ -620,6 +623,21 @@ z-index: 5;
     font-style: italic;
     border-top: var(--border);
     padding-top: 8px;
+}
+
+.warning-badge {
+    padding: 8px;
+    margin-top: 8px;
+    border-radius: 12px;
+    font-family: "Elms Sans", sans-serif;
+}
+
+.expired-badge {
+    background-color: var(--red-warn);
+}
+
+.near-expiry-badge {
+    background-color: var(--yellow-warn);
 }
 
 @media only screen and (max-width: 900px) {
