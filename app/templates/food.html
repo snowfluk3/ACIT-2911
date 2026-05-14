@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<main>
+    <section class="introduction">
+        <div>
+            <p class="elms-sans-regular h1">Food</p>
+        </div>
+    </section>
+
+    <section class="pantry-section">
+        <div class="section-header">
+            <div>
+                <h2 class="elms-sans-regular h1">Food Items</h2>
+                <p class="quicksand-regular">View, add, edit, and delete ready-to-eat food items.</p>
+            </div>
+            <button class="quicksand-regular"
+                hx-get="/food/new"
+                hx-target="#food-form-container"
+                hx-swap="innerHTML">Add Item</button>
+        </div>
+
+        <div id="food-items" class="pantry-items-grid">
+            {% include "_food_items.html" %}
+        </div>
+
+        <div id="food-form-container" class="item-form-container"></div>
+    </section>
+</main>
+
+{% endblock %}

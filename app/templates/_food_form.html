@@ -1,0 +1,51 @@
+<form class="item-form"
+  {% if item %}
+    hx-put="/food/{{ item.id }}"
+  {% else %}
+    hx-post="/food"
+  {% endif %}
+  hx-target="#food-items"
+  hx-swap="innerHTML">
+
+  <h3 class="elms-sans-regular h2">{{ "Edit Food Item" if item else "Add Food Item" }}</h3>
+
+  <label class="quicksand-regular" for="food-name">Name</label>
+  <input id="food-name" name="name" type="text" class="item-input quicksand-regular"
+    value="{{ item.name if item else '' }}" required>
+
+  <label class="quicksand-regular" for="food-type">Type</label>
+  <input id="food-type" name="food_type" type="text" class="item-input quicksand-regular"
+    placeholder="e.g. Snack, Meal, Beverage"
+    value="{{ item.food_type if item else '' }}" required>
+
+  <label class="quicksand-regular" for="food-category">Category</label>
+  <input id="food-category" name="category" type="text" class="item-input quicksand-regular"
+    placeholder="e.g. Frozen, Canned, Fresh"
+    value="{{ item.category if item else '' }}" required>
+
+  <label class="quicksand-regular" for="food-description">Description</label>
+  <input id="food-description" name="description" type="text" class="item-input quicksand-regular"
+    value="{{ item.description if item else '' }}">
+
+  <label class="quicksand-regular" for="food-serving-size">Serving Size</label>
+  <input id="food-serving-size" name="serving_size" type="text" class="item-input quicksand-regular"
+    placeholder="e.g. 1 cup, 200g"
+    value="{{ item.serving_size if item else '' }}">
+
+  <label class="quicksand-regular" for="food-expiry-date">Expiry Date</label>
+  <input id="food-expiry-date" name="expiry_date" type="date" class="item-input quicksand-regular"
+    value="{{ item.expiry_date if item else '' }}">
+
+  <label class="quicksand-regular" for="food-notes">Notes</label>
+  <textarea id="food-notes" name="notes" rows="3" class="item-input quicksand-regular">{{ item.notes if item else '' }}</textarea>
+
+  <div class="form-actions">
+    <button type="submit" class="quicksand-regular">
+      {{ "Update Item" if item else "Add Item" }}
+    </button>
+    <button type="button" class="quicksand-regular"
+      hx-get="/food/clear-form"
+      hx-target="#food-form-container"
+      hx-swap="innerHTML">Cancel</button>
+  </div>
+</form>
