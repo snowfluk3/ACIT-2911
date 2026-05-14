@@ -19,17 +19,42 @@
             <div class="logo">
                 <p class="elms-sans-regular h1">Snack Stash Storeroom</p>
             </div>
+
+            {% if current_user.is_authenticated %}
+
             <div class="search-bar">
-                <form id="search-form">
-                    <input type="text" name="filter" placeholder="Search items..." class="quicksand-regular">
+                <form id="search-form" class="search-form">
+                    <span class="search-icon">⌕</span>
+
+                    <input 
+                    id="search-filter" 
+                    type="text" 
+                    name="filter" 
+                    placeholder="Search items..." 
+                    class="quicksand-regular">
+
+                    <button type="button" id="clear-search">×</button>
                 </form>
-                <details class="dropdown">
-                    <summary class="quicksand-regular dropdown-trigger">Categories</summary>
-                    <div class="dropdown-menu">
-                        <p>test</p>
+                
+                <details class="category-dropdown">
+
+                    <summary class="dropdown-trigger elms-sans-regular">
+                        All
+                        <span class="chevron">⌄</span>
+                    </summary>
+
+                    <div class="category-menu">
+                        <button type="button" class="quicksand-regular">All</button>
+                        <button type="button" class="quicksand-regular" disabled>
+                            Categories soon
+                        </button>
                     </div>
+
                 </details>
             </div>
+
+            {% endif %}
+
             <ul class="nav-links">
 
                 {% if current_user.is_authenticated %}
@@ -38,11 +63,15 @@
                 <li><a href="#" class="quicksand-regular">Recipes</a></li>
                 <li><a href="#" class="quicksand-regular">Ingredients</a></li>
 
-
                 <li>
                     <details class="dropdown">
-                        <summary class="quicksand-regular dropdown-trigger"><u>{{ current_user.username }}</u></summary>
+                        <summary class="quicksand-regular dropdown-trigger">{{ current_user.username }}<span class="chevron">⌄</span></summary>
                         <div class="dropdown-menu">
+                            <div class="user-dropdown quicksand-regular">
+                                <strong>{{ current_user.username }}</strong>
+                                <span>{{ current_user.email }}</span>
+                            </div>
+                            <hr>
                             <form method="POST" action="{{ url_for('auth.logout') }}">
                                 <button type="submit" class="quicksand-regular">Logout</button>
                             </form>
@@ -147,6 +176,8 @@
                 {% endif %}
             </ul>
         </nav>
+
+        <div class="spacer-small"></div>
 
         {% block content %}
         {% endblock %}
