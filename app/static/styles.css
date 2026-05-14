@@ -16,7 +16,7 @@
 
     /* Border Radius */
     --small-radius: 10px;
-    --medium-radius: 18px;
+    --medium-radius: 16px;
     --large-radius: 24px;
 
     /* Headers */
@@ -105,9 +105,11 @@ body {
 nav {
     position: sticky;
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(300px, 500px) auto;
     align-items: center;
     padding: var(--paddingbar);
+    gap: 20px;
+    width: 100%;
 
 
     /* Visual Design  */
@@ -173,11 +175,10 @@ footer {
 
 /* Classes */
 .nav-links {
-    display: grid;
-    grid-auto-flow: column;
-    justify-content: right;
+    display: flex;
     align-items: center;
-    gap: 6%;
+    justify-content: right;
+    gap: 16px;
     list-style: none;
 }
 
@@ -190,15 +191,15 @@ footer {
 
     .logo p {
         font-weight: bold;
-        font-size: 25px;
+        font-size: 20px;
     }
 
 .search-bar {
-    display: grid;
-    grid-auto-flow: column;
-    justify-content: left;
+    width: 100%;
+    display: flex;
     align-items: center;
-    margin-left: 10%;
+    margin-left: 3%;
+    gap: 12px;
 }
 
     #search-form input {
@@ -209,35 +210,217 @@ footer {
         max-width: 20vw;
     }
 
+        #search-filter {
+        flex: 1;
+
+        border: none;
+        outline: none;
+
+        background: transparent;
+
+        font-size: 0.88rem;
+    }
+
+    #search-filter:focus {
+        outline: none;
+        border-color: #d8dee6;
+        box-shadow: 0 0 0 2px rgba(148,163,184,.15);
+    }
+
+    .search-icon {
+    color: #64748b;
+    font-size: 0.9rem;
+    }   
+
+    #clear-search {
+    border: none;
+    background: transparent;
+
+    cursor: pointer;
+
+    color: #94a3b8;
+
+    font-size: 1rem;
+    }
+
 .dropdown {
     position: relative;
     display: inline-block;
 }
+    .dropdown[open] .chevron, .category-dropdown[open] .chevron {
+        transform: 
+        translateY(-15%);
+    }
+
+    .dropdown[open] .dropdown-menu {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+        pointer-events: auto;
+    }
+
+    .chevron {
+        transform: 
+        translateY(40%)
+        rotate(180deg);
+        transition: transform .15s ease;
+    }
+
+.user-dropdown {
+    padding: var(--padding);
+}
+    .user-dropdown strong {
+        display: block;
+        font-size: 0.95rem;
+    }
+
+    .user-dropdown span {
+        font-size: 0.82rem;
+        color: #64748b;
+    }
+
+    .dropdown-menu hr {
+        border: none;
+        border-top: 1px solid #ececec;
+        margin: 4px 0;
+    }
+
+.category-dropdown {
+    position: relative;
+    width: fit-content;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    width: fit-content;
+    padding: 6px 8px;
+
+    background: white;
+
+    border: 1px solid #d8dee6;
+    border-radius: 14px;
+
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease;
+}
+    .search-form:focus-within {
+        border-color: #d8dee6;
+        box-shadow:
+        0 0 0 1px rgba(148,163,184,.15);
+    }
 
 .dropdown-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+
+    padding: 8px 12px;
+    border-radius: var(--small-radius);
+    transition: 
+    background .15s ease
+    color .15s ease;
+
     cursor: pointer;
-    list-style: none;
-    padding: (--padding);
     user-select: none;
 }
+    .dropdown-trigger:hover {
+        background: #f5f5f5;
+    }
+
     .dropdown-trigger::-webkit-details-marker {
-        display: none;
+    display: none;
     }
 
 .dropdown-menu {
+    /* Positioning */
     position: absolute;
-    top: calc(100% + 8px);
+    top: calc(100% + 1px);
     right: 0;
-    min-width: 160px;
-    background-color: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: var(--medium-radius);
-    box-shadow: var(--shadow);
+
     z-index: 100;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+
+    /* Sizing */
+    min-width: 180px;
+    padding: 6px;
+
+    /* Appearance */
+    background-color: #ffffff;
+    border: 1px solid #d8dee6;
+    border-radius: var(--medium-radius);
+    box-shadow: var(--shadow);
+
+    transform:
+        translateY(-4px)
+        scale(.98);
+
+    pointer-events: none;
+
+    transition:
+        opacity .15s ease,
+        transform .15s ease;
 }
+    .dropdown-menu button {
+        width: 100%;
+        border: none;
+        background: transparent;
+        color: #e0700d;
+        font-weight: bold;
+        
+        padding: 10px 10px;
+        text-align: right;
+        border-radius: var(--small-radius);
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+
+    .dropdown-menu button:hover {
+        background: #f5f5f5;
+    }
+
+.category-menu {
+    /* Positioning */
+    position: absolute;
+    top: calc(100% + 1px);
+    
+    min-width: 140px;
+    width: max-content;
+
+    background: white;
+    border: 1px solid #d8dee6;
+    border-radius: var(--small-radius);
+}
+    .category-menu button {
+        width: 100%;
+        padding: 10px 12px;
+        text-align: left;
+        white-space: nowrap;
+        text-transform: capitalize;
+
+        border: none;
+        background: transparent;
+        color: black;
+    }
+
+    #category-filter {
+        min-width: 110px;
+
+        padding: 10px 12px;
+        border: 1px solid #d8dee6;
+        border-radius: var(--medium-radius);
+
+        background: white;
+        cursor: pointer;
+    }
 
 .introduction-title {
     display: grid;
@@ -650,19 +833,28 @@ z-index: 5;
     margin-bottom: 1.5rem;
 }
 
+/* Media Queries */
 @media only screen and (max-width: 900px) {
     .recipes-grid {
         grid-template-columns: 1fr;
     }
 }
 
-/* Media Queries */
-
-
-
-
 /* Extra Small Devices */
 @media only screen and (max-width:600px) {
 
 
+}
+
+/* Animations */
+@keyframes dropdownIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px) scale(.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
