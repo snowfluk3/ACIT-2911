@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<main>
+    <section class="introduction">
+        <div>
+            <p class="elms-sans-regular h1">Recipe Suggestions</p>
+            <p class="elms-sans-regular h2">Generate recipes from your pantry ingredients.</p>
+        </div>
+    </section>
+
+    <section id="recipes-section">
+        {% include "_recipes_section.html" %}
+    </section>
+</main>
+
+{% endblock %}

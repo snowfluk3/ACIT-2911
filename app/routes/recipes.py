@@ -106,6 +106,17 @@ def recipes_rendered():
     return render_template("_recipes.html", recipes=recipes)
 
 
+@recipe_bp.route("/page")
+@login_required
+def recipes_page():
+    user_id = int(current_user.id)
+    recipes = [recipe_to_dict(r) for r in
+               Recipe.select().where(Recipe.user_id == user_id).order_by(Recipe.id.desc())]
+    for r in recipes:
+        r["generated_label"] = _relative_date(r["created_at"])
+    return render_template("recipes.html", recipes=recipes, gen_status=_gen_status)
+
+
 @recipe_bp.route("/", methods=["GET"])
 def list_recipes():
     return jsonify([r.__data__ for r in Recipe.select()])

@@ -59,9 +59,9 @@
 
                 {% if current_user.is_authenticated %}
 
-                <li><a href="#" class="quicksand-regular">Pantry</a></li>
-                <li><a href="#" class="quicksand-regular">Recipes</a></li>
-                <li><a href="#" class="quicksand-regular">Ingredients</a></li>
+                <li><a href="{{ url_for('templates.dashboard') }}" class="quicksand-regular">Ingredients</a></li>
+                <li><a href="{{ url_for('recipes.recipes_page') }}" class="quicksand-regular">Recipes</a></li>
+                <li><a href="#" class="quicksand-regular">Food</a></li>
 
                 <li>
                     <details class="dropdown">
