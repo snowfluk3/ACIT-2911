@@ -823,6 +823,16 @@ z-index: 5;
     background-color: var(--yellow-warn);
 }
 
+.stat-card {
+    background: var(--card);
+    border: var(--border);
+    border-radius: var(--medium-radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
 /* Media Queries */
 @media only screen and (max-width: 900px) {
     .recipes-grid {

@@ -3,6 +3,7 @@ from flask import Blueprint, render_template
 from flask_login import current_user, login_required
 from ..models.model import Ingredient, Recipe
 from . import recipes as recipes_mod
+from .ingredients import _stats_context
 
 template_bp = Blueprint("templates", __name__)
 
@@ -22,6 +23,7 @@ def dashboard():
     for r in recipes:
         r["generated_label"] = recipes_mod._relative_date(r["created_at"])
     today = date.today()
+    stats = _stats_context()
     return render_template(
         "dashboard.html",
         items=items,
@@ -29,4 +31,5 @@ def dashboard():
         gen_status=recipes_mod._gen_status,
         today=today,
         warning_days=today + timedelta(days=3),
+        **stats,
     )

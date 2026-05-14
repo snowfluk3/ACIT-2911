@@ -1,0 +1,19 @@
+<section class="pantry-section quicksand-regular">
+    <h1 class="">Stats</h1>
+        <p><strong>Total Items: </strong>{{ total }}</p>
+        <br>
+        <p><strong>Top Categories:</strong></p>
+        {% if top_categories %}
+            <ol>
+            {% for name, count in top_categories %}
+                <li>
+                    <span>{{ name or "Uncategorized" }}</span>
+                    <span>{{ count }}</span>
+                </li>
+            {% endfor %}
+            </ol>
+        {% else %}
+            <p>No items yet</p>
+        {% endif %}
+    </div>
+</section>
