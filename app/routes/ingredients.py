@@ -1,10 +1,31 @@
 from datetime import date, timedelta
 from flask import Blueprint, jsonify, request, render_template
+from peewee import fn
 from ..models.model import Ingredient
 
 ingredients_bp = Blueprint("ingredients", __name__, url_prefix="/ingredients")
 
 _OOB_CLEAR = '<div id="item-form-container" hx-swap-oob="innerHTML"></div>'
+
+
+def _stats_context():
+    total = Ingredient.select().count()
+    top_categories = list(
+        Ingredient.select(Ingredient.category, fn.COUNT(Ingredient.id).alias("n"))
+        .group_by(Ingredient.category)
+        .order_by(fn.COUNT(Ingredient.id).desc())
+        .limit(3)
+        .tuples()
+    )
+    return dict(total=total, top_categories=top_categories)
+
+
+def _stats_html():
+    return render_template("_stats.html", **_stats_context())
+
+
+def _stats_oob():
+    return f'<div id="pantry-stats" hx-swap-oob="innerHTML">{_stats_html()}</div>'
 
 
 def _items_html():
@@ -49,7 +70,7 @@ def new_ingredient():
             expiry_date=data.get("expiry_date") or None,
             notes=data.get("notes") or None,
         )
-        return _items_html() + _OOB_CLEAR
+        return _items_html() + _OOB_CLEAR + _stats_oob()
 
     data = request.get_json()
     ingredient = Ingredient.create(
@@ -91,7 +112,7 @@ def update_ingredient(id):
         if "notes" in data:
             ingredient.notes = data["notes"] or None
         ingredient.save()
-        return _items_html() + _OOB_CLEAR
+        return _items_html() + _OOB_CLEAR + _stats_oob()
 
     data = request.get_json()
     for field in ("name", "quantity", "unit", "category", "expiry_date", "notes"):
@@ -110,5 +131,5 @@ def delete_ingredient(id):
         return jsonify({"error": f"Ingredient {id} not found"}), 404
     ingredient.delete_instance()
     if request.headers.get("HX-Request"):
-        return _items_html(), 200
+        return _items_html() + _stats_oob(), 200
     return "", 204
