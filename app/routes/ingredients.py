@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 from flask import Blueprint, jsonify, request, render_template
 from peewee import fn
+from flask_login import current_user
 from ..models.model import Ingredient
 
 ingredients_bp = Blueprint("ingredients", __name__, url_prefix="/ingredients")
@@ -63,6 +64,7 @@ def new_ingredient():
     if request.headers.get("HX-Request"):
         data = request.form
         Ingredient.create(
+            user=current_user,
             name=data["name"],
             quantity=float(data["quantity"]),
             unit=data.get("unit", ""),
@@ -74,6 +76,7 @@ def new_ingredient():
 
     data = request.get_json()
     ingredient = Ingredient.create(
+        user=current_user,
         name=data["name"],
         quantity=data["quantity"],
         unit=data["unit"],
