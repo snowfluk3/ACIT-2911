@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 from flask import Blueprint, jsonify, request, render_template
 from peewee import fn
-from flask_login import current_user
+from flask_login import current_user, login_required
 from ..models.model import Ingredient
 
 ingredients_bp = Blueprint("ingredients", __name__, url_prefix="/ingredients")
@@ -9,10 +9,28 @@ ingredients_bp = Blueprint("ingredients", __name__, url_prefix="/ingredients")
 _OOB_CLEAR = '<div id="item-form-container" hx-swap-oob="innerHTML"></div>'
 
 
-def _stats_context():
-    total = Ingredient.select().count()
+def _user_id():
+    return int(current_user.id)
+
+
+def _user_ingredients(user_id=None):
+    owner_id = user_id if user_id is not None else _user_id()
+    return Ingredient.select().where(Ingredient.user_id == owner_id)
+
+
+def _get_user_ingredient(id):
+    return Ingredient.get_or_none(
+        (Ingredient.id == id) &
+        (Ingredient.user_id == _user_id())
+    )
+
+
+def _stats_context(user_id=None):
+    ingredients = _user_ingredients(user_id)
+    total = ingredients.count()
     top_categories = list(
         Ingredient.select(Ingredient.category, fn.COUNT(Ingredient.id).alias("n"))
+        .where(Ingredient.user_id == (user_id if user_id is not None else _user_id()))
         .group_by(Ingredient.category)
         .order_by(fn.COUNT(Ingredient.id).desc())
         .limit(3)
@@ -32,34 +50,39 @@ def _stats_oob():
 def _items_html():
     today = date.today()
     # Passes 'today' and 'warning_days'. Can be checked by: 'if item.expiry_date <= warning_days'
-    return render_template("_pantry_items.html", items=list(Ingredient.select().dicts()), today=today, warning_days=today + timedelta(days=3),)
+    return render_template("_pantry_items.html", items=list(_user_ingredients().dicts()), today=today, warning_days=today + timedelta(days=3),)
 
 
 @ingredients_bp.route("/new", methods=["GET"])
+@login_required
 def new_ingredient_form():
     return render_template("_ingredient_form.html", item=None)
 
 
 @ingredients_bp.route("/<int:id>/edit", methods=["GET"])
+@login_required
 def edit_ingredient_form(id):
-    ingredient = Ingredient.get_or_none(Ingredient.id == id)
+    ingredient = _get_user_ingredient(id)
     if ingredient is None:
         return "<p class='error-message'>Item not found</p>", 404
     return render_template("_ingredient_form.html", item=ingredient.__data__)
 
 
 @ingredients_bp.route("/clear-form", methods=["GET"])
+@login_required
 def clear_ingredient_form():
     return ""
 
 
 @ingredients_bp.route("", methods=["GET"])
+@login_required
 def list_ingredients():
-    ingredients = [i.__data__ for i in Ingredient.select()]
+    ingredients = [i.__data__ for i in _user_ingredients()]
     return jsonify(ingredients)
 
 
 @ingredients_bp.route("", methods=["POST"])
+@login_required
 def new_ingredient():
     if request.headers.get("HX-Request"):
         data = request.form
@@ -90,16 +113,18 @@ def new_ingredient():
 
 
 @ingredients_bp.route("/<int:id>", methods=["GET"])
+@login_required
 def get_ingredient(id):
-    ingredient = Ingredient.get_or_none(Ingredient.id == id)
+    ingredient = _get_user_ingredient(id)
     if ingredient is None:
         return jsonify({"error": f"Ingredient {id} not found"}), 404
     return jsonify(ingredient.__data__)
 
 
 @ingredients_bp.route("/<int:id>", methods=["PUT"])
+@login_required
 def update_ingredient(id):
-    ingredient = Ingredient.get_or_none(Ingredient.id == id)
+    ingredient = _get_user_ingredient(id)
     if ingredient is None:
         if request.headers.get("HX-Request"):
             return "<p class='error-message'>Item not found</p>", 404
@@ -128,8 +153,9 @@ def update_ingredient(id):
 
 
 @ingredients_bp.route("/<int:id>", methods=["DELETE"])
+@login_required
 def delete_ingredient(id):
-    ingredient = Ingredient.get_or_none(Ingredient.id == id)
+    ingredient = _get_user_ingredient(id)
     if ingredient is None:
         if request.headers.get("HX-Request"):
             return "<p class='error-message'>Item not found</p>", 404

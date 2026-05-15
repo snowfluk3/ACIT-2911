@@ -118,21 +118,25 @@ def recipes_page():
 
 
 @recipe_bp.route("/", methods=["GET"])
+@login_required
 def list_recipes():
-    return jsonify([r.__data__ for r in Recipe.select()])
+    user_id = int(current_user.id)
+    return jsonify([r.__data__ for r in Recipe.select().where(Recipe.user_id == user_id)])
 
 
 @recipe_bp.route("/<int:id>", methods=["GET"])
+@login_required
 def get_recipe(id):
-    recipe = Recipe.get_or_none(Recipe.id == id)
+    recipe = Recipe.get_or_none((Recipe.id == id) & (Recipe.user_id == int(current_user.id)))
     if recipe is None:
         return jsonify({"error": f"Recipe {id} not found"}), 404
     return jsonify(recipe_to_dict(recipe))
 
 
 @recipe_bp.route("/<int:id>", methods=["DELETE"])
+@login_required
 def delete_recipe(id):
-    recipe = Recipe.get_or_none(Recipe.id == id)
+    recipe = Recipe.get_or_none((Recipe.id == id) & (Recipe.user_id == int(current_user.id)))
     if recipe is None:
         return jsonify({"error": f"Recipe {id} not found"}), 404
     RecipeIngredient.delete().where(RecipeIngredient.recipe == recipe).execute()
@@ -148,7 +152,7 @@ def recipes_generate():
     global _gen_status
     user_id = int(current_user.id)
     if _gen_status["state"] != "generating":
-        ingredients = [i.__data__ for i in Ingredient.select()]
+        ingredients = [i.__data__ for i in Ingredient.select().where(Ingredient.user_id == user_id)]
         _gen_status = {"state": "generating", "error": None}
         threading.Thread(target=_generate_worker, args=(ingredients, user_id), daemon=True).start()
 
