@@ -37,6 +37,7 @@ CREATE TABLE food (
     user_id INTEGER NOT NULL,
     name TEXT NOT NULL,
     emoji TEXT NOT NULL DEFAULT '🍽️',
+    food_type TEXT NOT NULL DEFAULT 'ready_to_eat',
     description TEXT,
     serving_size TEXT,
     category TEXT NOT NULL,

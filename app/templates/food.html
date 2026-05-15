@@ -1,31 +1,38 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<main>
-    <section class="introduction">
-        <div>
-            <p class="elms-sans-regular h1">Food</p>
-        </div>
-    </section>
-
-    <section class="pantry-section">
-        <div class="section-header">
-            <div>
-                <h2 class="elms-sans-regular h1">Food Items</h2>
-                <p class="quicksand-regular">View, add, edit, and delete ready-to-eat food items.</p>
-            </div>
+<main class="dashboard-page">
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <p class="sidebar-kicker quicksand-regular">Food Storage</p>
+            <h1 class="elms-sans-regular">Food Items</h1>
+            <p class="quicksand-regular">Store ready-to-eat meals, leftovers, snacks, and prepared foods separately from pantry ingredients.</p>
             <button class="quicksand-regular"
                 hx-get="/food/new"
                 hx-target="#food-form-container"
                 hx-swap="innerHTML">Add Item</button>
-        </div>
+        </aside>
 
-        <div id="food-items" class="pantry-items-grid">
-            {% include "_food_items.html" %}
-        </div>
+        <section class="pantry-section dashboard-main">
+            <div class="section-header">
+                <div>
+                    <p class="section-kicker quicksand-regular">Food</p>
+                    <h2 class="elms-sans-regular h1">My Food</h2>
+                    <p class="quicksand-regular">Click a card to flip it over and see serving, expiry, notes, and actions.</p>
+                </div>
+                <button class="quicksand-regular"
+                    hx-get="/food/new"
+                    hx-target="#food-form-container"
+                    hx-swap="innerHTML">Add Item</button>
+            </div>
 
-        <div id="food-form-container" class="item-form-container"></div>
-    </section>
+            <div id="food-items" class="pantry-items-grid">
+                {% include "_food_items.html" %}
+            </div>
+
+            <div id="food-form-container" class="item-form-container"></div>
+        </section>
+    </div>
 </main>
 
 {% endblock %}

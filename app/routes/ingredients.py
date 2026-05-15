@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from flask import Blueprint, jsonify, request, render_template
+from flask import Blueprint, jsonify, redirect, request, render_template, url_for
 from peewee import fn
 from flask_login import current_user, login_required
 from ..models.model import Ingredient
@@ -77,6 +77,9 @@ def clear_ingredient_form():
 @ingredients_bp.route("", methods=["GET"])
 @login_required
 def list_ingredients():
+    if request.accept_mimetypes.accept_html:
+        return redirect(url_for("templates.dashboard"))
+
     ingredients = [i.__data__ for i in _user_ingredients()]
     return jsonify(ingredients)
 
