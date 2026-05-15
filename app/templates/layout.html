@@ -88,11 +88,6 @@
                 <li class="quicksand-regular"><a href="#">Home</a></li>
                 <li class="quicksand-regular"><a href="#">About</a></li>
                 <li class="quicksand-regular"><a href="#">Contacts</a></li>
-                
-                <div id="overlay" class="overlay"
-                    hx-on:click="document.getElementById('login-popup').classList.remove('show');
-                                document.getElementById('register-popup').classList.remove('show');
-                                document.getElementById('overlay').classList.remove('show');"></div>
 
                 <li>
                     <button type="button" id="login-btn" class="quicksand-regular"
@@ -100,7 +95,16 @@
                                     document.getElementById('overlay').classList.add('show');">Login</button>
                 </li>
 
-                <div id="login-popup" class="popup-login">
+                {% endif %}
+            </ul>
+        </nav>
+
+        <div id="overlay" class="overlay"
+                    hx-on:click="document.getElementById('login-popup').classList.remove('show');
+                                document.getElementById('register-popup').classList.remove('show');
+                                document.getElementById('overlay').classList.remove('show');"></div>
+
+        <div id="login-popup" class="popup-login">
 
                     <button id="close-btn" class="close-btn"
                         hx-on:click="document.getElementById('login-popup').classList.remove('show');
@@ -176,10 +180,6 @@
                         <button type="submit" class="quicksand-regular">Create Account</button>
                     </form>
                 </div>
-
-                {% endif %}
-            </ul>
-        </nav>
 
         <div class="spacer-small"></div>
 
