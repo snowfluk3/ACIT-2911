@@ -1110,11 +1110,11 @@ body.dark-mode .expiry-chip--unknown {
     justify-self: start;
     border: none;
     border-radius: 999px;
-    padding: 6px 10px;
+    padding: 8px 14px;
     background: var(--surface-2);
     color: var(--muted);
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 800;
 }
 
@@ -1330,10 +1330,11 @@ input[type="date"].item-input {
 
 .recipes-grid {
     margin-top: 0;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 }
 
 .pantry-card.recipe-card {
-    --card-height: 340px;
+    --card-height: 520px;
 }
 
 .recipe-card-media {
@@ -1377,6 +1378,7 @@ body.dark-mode .recipe-meta-chip {
 }
 
 .recipe-card-scroll {
+    flex: 1;
     min-height: 0;
     overflow-y: auto;
     padding-right: 2px;
@@ -1556,6 +1558,10 @@ footer {
     .pantry-items-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 14px;
+    }
+
+    .recipes-grid {
+        grid-template-columns: 1fr;
     }
 
     .pantry-card-media {
