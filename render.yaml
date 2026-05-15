@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: snack-stash-storeroom
+    runtime: python
+    buildCommand: pip install uv && uv sync --no-dev
+    startCommand: uv run gunicorn run:app
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false

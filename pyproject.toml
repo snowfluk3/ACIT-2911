@@ -10,6 +10,7 @@ dependencies = [
     "peewee>=4.0.5",
     "python-dotenv>=1.2.2",
     "anthropic>=0.52.0",
+    "gunicorn>=23.0.0",
 ]
 
 [dependency-groups]
