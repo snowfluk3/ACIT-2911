@@ -1,43 +1,43 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<main>
-    <section class="introduction">
-        <div>
-            <p class="elms-sans-regular h1">For your Pantry Tracking Needs!</p>
-            <p class="elms-sans-regular h2">Track your pantry items before they disappear!</p>
-        </div>
-    </section>
-
+<main class="dashboard-page">
     {% if current_user.is_authenticated %}
-    <section class="pantry-section">
-        <div class="section-header">
-            <div>
-                <h2 class="elms-sans-regular h1">Pantry Items</h2>
-                <p class="quicksand-regular">View, add, edit, and delete items from your pantry directly on the home page.</p>
-            </div>
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <p class="sidebar-kicker quicksand-regular">Pantry Tracker</p>
+            <h1 class="elms-sans-regular">Snack Stash</h1>
+            <p class="quicksand-regular">Keep your ingredients organized, searchable, and ready before anything goes to waste.</p>
             <button class="quicksand-regular"
                 hx-get="/ingredients/new"
                 hx-target="#item-form-container"
                 hx-swap="innerHTML">Add Item</button>
-        </div>
+        </aside>
 
-        <div id="pantry-items" class="pantry-items-grid">
-            {% include "_pantry_items.html" %}
-        </div>
+        <section class="pantry-section dashboard-main">
+            <div class="section-header">
+                <div>
+                    <p class="section-kicker quicksand-regular">Inventory</p>
+                    <h2 class="elms-sans-regular h1">My Pantry</h2>
+                    <p class="quicksand-regular">Browse item cards, then click a card to see the full details.</p>
+                </div>
+                <button class="quicksand-regular"
+                    hx-get="/ingredients/new"
+                    hx-target="#item-form-container"
+                    hx-swap="innerHTML">Add Item</button>
+            </div>
 
-        <div id="item-form-container" class="item-form-container"></div>
-    </section>
+            <div id="pantry-items" class="pantry-items-grid">
+                {% include "_pantry_items.html" %}
+            </div>
+
+            <div id="item-form-container" class="item-form-container"></div>
+        </section>
+    </div>
 
     <div id="pantry-stats">
         {% include "_stats.html" %}
     </div>
-
-    <div class="spacer-medium"></div>
-
-    <h2 class="elms-sans-regular h1">Recipe Suggestions</h2>
-
-    <div class="spacer-small"></div>
     {% endif %}
 </main>
 
