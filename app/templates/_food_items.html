@@ -1,0 +1,43 @@
+{% if items %}
+  {% for item in items %}
+  <article class="pantry-card">
+    <div class="card-header">
+      <div>
+        <h3 class="elms-sans-regular">{{ item.name }}</h3>
+        <p class="quicksand-regular">{{ item.category or "Uncategorized" }}</p>
+      </div>
+      <div class="card-actions">
+        <button class="card-edit quicksand-regular"
+          hx-get="/food/{{ item.id }}/edit"
+          hx-target="#food-form-container"
+          hx-swap="innerHTML">Edit</button>
+        <button class="card-delete quicksand-regular"
+          hx-delete="/food/{{ item.id }}"
+          hx-target="#food-items"
+          hx-swap="innerHTML"
+          hx-confirm="Delete this food item?">Delete</button>
+      </div>
+    </div>
+{% if item.serving_size %}
+    <p class="quicksand-regular">Serving: {{ item.serving_size }}</p>
+    {% endif %}
+    {% if item.description %}
+    <p class="quicksand-regular notes">{{ item.description }}</p>
+    {% endif %}
+    <p class="quicksand-regular">Expiry: {{ item.expiry_date or "None" }}</p>
+    {% if item.notes %}
+    <p class="quicksand-regular notes">Notes: {{ item.notes }}</p>
+    {% endif %}
+    {% if item.expiry_date and item.expiry_date < today %}
+      <div class="warning-badge expired-badge">Expired!</div>
+    {% elif item.expiry_date and item.expiry_date <= warning_days %}
+      <div class="warning-badge near-expiry-badge">Expires in {{ (item.expiry_date - today).days }} days!</div>
+    {% endif %}
+  </article>
+  {% endfor %}
+{% else %}
+  <div class="empty-state quicksand-regular">
+    <p>No food items yet.</p>
+    <p>Click "Add Item" to create your first entry.</p>
+  </div>
+{% endif %}

@@ -663,6 +663,16 @@ z-index: 5;
     border: 1px solid #cfd8dc;
 }
 
+select.item-input {
+    appearance: auto;
+    -webkit-appearance: auto;
+    cursor: pointer;
+}
+
+input[type="date"].item-input {
+    cursor: pointer;
+}
+
 .form-actions {
     display: flex;
     gap: 1rem;

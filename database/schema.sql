@@ -36,7 +36,6 @@ CREATE TABLE food (
     user_id INTEGER NOT NULL,
     name TEXT NOT NULL,
     description TEXT,
-    food_type TEXT NOT NULL CHECK (food_type IN ('snack', 'ready_to_eat')),
     serving_size TEXT,
     category TEXT NOT NULL,
     expiry_date TEXT,
