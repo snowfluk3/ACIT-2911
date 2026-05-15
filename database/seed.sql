@@ -1,123 +1,59 @@
--- USERS
-INSERT INTO users (username, email, password_hash)
-VALUES
-('kenyu', 'ken@example.com', 'hashed_password_123'),
-('alice', 'alice@example.com', 'hashed_password_456'),
-('bob', 'bob@example.com', 'hashed_password_789');
+-- Seed data for Snack Stash Storeroom
+-- Passwords are hashed with Werkzeug's scrypt.
+-- Both demo accounts use the password: password123
+--
+-- To apply:
+--   sqlite3 database/database.db < database/schema.sql
+--   sqlite3 database/database.db < database/seed.sql
 
--- INGREDIENTS
-INSERT INTO ingredients (
-    user_id,
-    name,
-    emoji,
-    quantity,
-    unit,
-    category,
-    expiry_date,
-    notes
-)
-VALUES
-(1, 'Milk', '🥛', 2, 'L', 'Dairy', '2026-05-20', '2% milk'),
-(1, 'Eggs', '🥚', 12, 'pcs', 'Protein', '2026-05-25', 'Free range'),
-(1, 'Rice', '🍚', 5, 'kg', 'Grains', '2027-01-01', 'Jasmine rice'),
-(2, 'Chicken Breast', '🍗', 1.5, 'kg', 'Meat', '2026-05-18', 'Boneless'),
-(2, 'Broccoli', '🥦', 3, 'pcs', 'Vegetables', '2026-05-17', 'Fresh'),
-(3, 'Cheddar Cheese', '🧀', 500, 'g', 'Dairy', '2026-06-01', 'Sharp cheddar');
+PRAGMA foreign_keys = ON;
 
--- FOOD
-INSERT INTO food (
-    user_id,
-    name,
-    emoji,
-    food_type,
-    description,
-    serving_size,
-    category,
-    expiry_date,
-    notes
-)
-VALUES
-(1, 'Frozen Pizza', '🍕', 'ready_to_eat', 'Pepperoni frozen pizza', '1 pizza', 'Frozen Food', '2026-08-01', 'Keep frozen'),
-(1, 'Caesar Salad', '🥗', 'prepared_meal', 'Fresh salad bowl', '1 bowl', 'Salad', '2026-05-16', 'Eat soon'),
-(2, 'Chocolate Cake', '🍰', 'dessert', 'Birthday cake slice', '1 slice', 'Dessert', '2026-05-19', 'Contains nuts'),
-(3, 'Sushi Pack', '🍣', 'ready_to_eat', 'Assorted sushi tray', '12 pcs', 'Japanese Food', '2026-05-16', 'Raw fish');
+-- Users
+-- password_hash value = generate_password_hash("password123")
+INSERT INTO users (username, email, password_hash, created_at, updated_at) VALUES
+    ('demo',  'demo@example.com',  'scrypt:32768:8:1$gzkSQP1SCuKqTR2q$55182a1cf75caa7e9d293c0481704354523be96dc41249c87461ed87e460451ffdc49ae9eff884bdee1b76461f1c2316e4f21f2953c0ba7be68a0f9c120c3f11', datetime('now'), datetime('now')),
+    ('alice', 'alice@example.com', 'scrypt:32768:8:1$XhEy8OPFnpHu37Ri$d526bcf1df7c81b21498128652c16c97f60ccc19909c3a3e3d66a0dfda4adf1f65488e80d3140eaacb9c13e198c65081e119169ed891ff696e497be90a58a0cd', datetime('now'), datetime('now'));
 
--- RECIPES
-INSERT INTO recipes (
-    user_id,
-    title,
-    description,
-    prep_time_minutes,
-    cook_time_minutes,
-    servings,
-    tips
-)
-VALUES
-(
-    1,
-    'Chicken Fried Rice',
-    'Simple homemade fried rice with chicken and vegetables',
-    15,
-    20,
-    4,
-    'Use cold rice for better texture'
-),
-(
-    2,
-    'Cheesy Broccoli Bake',
-    'Oven baked broccoli with cheddar cheese',
-    10,
-    30,
-    3,
-    'Add breadcrumbs for crunch'
-);
+-- Ingredients for demo (user_id = 1)
+INSERT INTO ingredients (user_id, name, emoji, quantity, unit, category, expiry_date, notes, created_at, updated_at) VALUES
+    (1, 'All-Purpose Flour',  '🌾', 2.0,  'kg',  'Dry Goods',   '2026-12-01', NULL,                        datetime('now'), datetime('now')),
+    (1, 'Granulated Sugar',   '🍬', 1.0,  'kg',  'Dry Goods',   '2027-06-01', NULL,                        datetime('now'), datetime('now')),
+    (1, 'Olive Oil',          '🫒', 750.0,'ml',  'Oils & Fats', '2026-08-15', 'Extra virgin',              datetime('now'), datetime('now')),
+    (1, 'Chicken Breast',     '🍗', 600.0,'g',   'Meat',        '2026-05-17', 'Thaw before use',           datetime('now'), datetime('now')),
+    (1, 'Garlic',             '🧄', 3.0,  'cloves','Produce',   '2026-05-25', NULL,                        datetime('now'), datetime('now')),
+    (1, 'Roma Tomatoes',      '🍅', 4.0,  'units','Produce',    '2026-05-18', NULL,                        datetime('now'), datetime('now')),
+    (1, 'Eggs',               '🥚', 6.0,  'units','Dairy',      '2026-05-22', NULL,                        datetime('now'), datetime('now')),
+    (1, 'Whole Milk',         '🥛', 1.0,  'L',   'Dairy',       '2026-05-19', NULL,                        datetime('now'), datetime('now')),
+    (1, 'Cheddar Cheese',     '🧀', 250.0,'g',   'Dairy',       '2026-06-10', NULL,                        datetime('now'), datetime('now')),
+    (1, 'Soy Sauce',          '🍶', 300.0,'ml',  'Condiments',  NULL,         'Low sodium',                datetime('now'), datetime('now')),
+    (1, 'Basmati Rice',       '🍚', 1.5,  'kg',  'Dry Goods',   '2027-01-01', NULL,                        datetime('now'), datetime('now')),
+    (1, 'Onion',              '🧅', 3.0,  'units','Produce',    '2026-05-28', NULL,                        datetime('now'), datetime('now')),
+    (1, 'Cumin',              '🫙', 50.0, 'g',   'Spices',      '2027-03-01', NULL,                        datetime('now'), datetime('now')),
+    (1, 'Paprika',            '🌶️', 40.0, 'g',   'Spices',      '2027-03-01', 'Smoked variety',            datetime('now'), datetime('now')),
+    (1, 'Canned Chickpeas',   '🥫', 2.0,  'cans','Canned Goods','2027-09-01', NULL,                        datetime('now'), datetime('now'));
 
--- RECIPE INGREDIENTS
-INSERT INTO recipe_ingredients (
-    recipe_id,
-    item,
-    amount,
-    unit,
-    preparation
-)
-VALUES
-(1, 'Rice', '3', 'cups', 'Cooked'),
-(1, 'Chicken Breast', '300', 'g', 'Diced'),
-(1, 'Eggs', '2', 'pcs', 'Beaten'),
-(1, 'Soy Sauce', '2', 'tbsp', NULL),
+-- Ingredients for alice (user_id = 2)
+INSERT INTO ingredients (user_id, name, emoji, quantity, unit, category, expiry_date, notes, created_at, updated_at) VALUES
+    (2, 'Pasta',              '🍝', 500.0,'g',   'Dry Goods',   '2027-04-01', 'Spaghetti',                 datetime('now'), datetime('now')),
+    (2, 'Butter',             '🧈', 200.0,'g',   'Oils & Fats', '2026-06-01', NULL,                        datetime('now'), datetime('now')),
+    (2, 'Lemon',              '🍋', 3.0,  'units','Produce',    '2026-05-20', NULL,                        datetime('now'), datetime('now')),
+    (2, 'Parmesan',           '🧀', 100.0,'g',   'Dairy',       '2026-07-01', 'Grated',                    datetime('now'), datetime('now')),
+    (2, 'Spinach',            '🥬', 150.0,'g',   'Produce',     '2026-05-16', 'Baby spinach',              datetime('now'), datetime('now')),
+    (2, 'Canned Tomatoes',    '🥫', 2.0,  'cans','Canned Goods','2027-11-01', 'Crushed',                   datetime('now'), datetime('now')),
+    (2, 'Black Pepper',       '🧂', 30.0, 'g',   'Spices',      '2027-05-01', 'Whole peppercorns',         datetime('now'), datetime('now')),
+    (2, 'Salt',               '🧂', 500.0,'g',   'Spices',      NULL,         NULL,                        datetime('now'), datetime('now')),
+    (2, 'Bacon',              '🥓', 200.0,'g',   'Meat',        '2026-05-18', NULL,                        datetime('now'), datetime('now'));
 
-(2, 'Broccoli', '2', 'pcs', 'Chopped'),
-(2, 'Cheddar Cheese', '200', 'g', 'Shredded'),
-(2, 'Milk', '1', 'cup', NULL);
+-- Food (ready-to-eat) for demo (user_id = 1)
+INSERT INTO food (user_id, name, emoji, food_type, description, serving_size, category, expiry_date, notes, created_at, updated_at) VALUES
+    (1, 'Greek Yogurt',       '🍦', 'ready_to_eat', 'Plain full-fat yogurt',           '200g',  'Dairy',      '2026-05-20', NULL,              datetime('now'), datetime('now')),
+    (1, 'Instant Oatmeal',    '🥣', 'ready_to_eat', 'Quick-cook oats, plain',          '1 pack','Dry Goods',  '2026-11-01', 'Add boiling water',datetime('now'), datetime('now')),
+    (1, 'Protein Bar',        '🍫', 'ready_to_eat', 'Chocolate chip, 20g protein',     '1 bar', 'Snacks',     '2026-09-15', NULL,              datetime('now'), datetime('now')),
+    (1, 'Orange Juice',       '🧃', 'ready_to_eat', 'Not from concentrate',            '250ml', 'Beverages',  '2026-05-19', 'Refrigerate after opening', datetime('now'), datetime('now')),
+    (1, 'Sourdough Bread',    '🍞', 'ready_to_eat', 'Sliced loaf from local bakery',   '2 slices','Bakery',   '2026-05-17', NULL,              datetime('now'), datetime('now'));
 
--- RECIPE MISSING INGREDIENTS
-INSERT INTO recipe_missing_ingredients (
-    recipe_id,
-    item,
-    amount,
-    unit,
-    substitute
-)
-VALUES
-(1, 'Green Onion', '2', 'stalks', 'Regular onion'),
-(1, 'Sesame Oil', '1', 'tbsp', 'Olive oil'),
-(2, 'Breadcrumbs', '1', 'cup', 'Crushed crackers');
-
--- RECIPE INSTRUCTIONS
-INSERT INTO recipe_instructions (
-    recipe_id,
-    step_number,
-    instruction
-)
-VALUES
-(1, 1, 'Heat oil in a large pan over medium heat.'),
-(1, 2, 'Cook diced chicken until fully cooked.'),
-(1, 3, 'Add eggs and scramble lightly.'),
-(1, 4, 'Add rice and soy sauce, then stir fry everything together.'),
-(1, 5, 'Serve hot with green onions.'),
-
-(2, 1, 'Preheat oven to 375F.'),
-(2, 2, 'Steam broccoli until slightly tender.'),
-(2, 3, 'Place broccoli in baking dish and add cheese.'),
-(2, 4, 'Pour milk evenly over the dish.'),
-(2, 5, 'Bake for 30 minutes until golden brown.');
+-- Food (ready-to-eat) for alice (user_id = 2)
+INSERT INTO food (user_id, name, emoji, food_type, description, serving_size, category, expiry_date, notes, created_at, updated_at) VALUES
+    (2, 'Hummus',             '🥙', 'ready_to_eat', 'Store-bought classic hummus',     '3 tbsp','Condiments',  '2026-05-21', NULL,              datetime('now'), datetime('now')),
+    (2, 'Rice Cakes',         '🍘', 'ready_to_eat', 'Lightly salted',                  '3 cakes','Snacks',    '2026-10-01', NULL,              datetime('now'), datetime('now')),
+    (2, 'Sparkling Water',    '💧', 'ready_to_eat', 'Unflavoured 330ml cans',          '330ml', 'Beverages',  '2027-01-01', NULL,              datetime('now'), datetime('now'));
