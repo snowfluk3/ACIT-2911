@@ -3,20 +3,19 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Home</title>
+        <title>Snack Stash Storeroom</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
         <link rel="icon" type="image/x-icon" href="/favicon.ico">
         <!-- Imported Links -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link
-        href="https://fonts.googleapis.com/css2?family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@300..700&display=swap"
-        rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
         <script src="https://unpkg.com/htmx.org@1.9.12" crossorigin="anonymous"></script>
     </head>
-    <body>
+    <body class="light-mode">
         <nav>
             <div class="logo">
+                <span class="logo-mark" aria-hidden="true"></span>
                 <p class="elms-sans-regular h1">Snack Stash Storeroom</p>
             </div>
 
@@ -56,6 +55,11 @@
             {% endif %}
 
             <ul class="nav-links">
+                <li>
+                    <button type="button" id="theme-toggle" class="theme-toggle quicksand-regular" aria-label="Toggle dark mode">
+                        Dark
+                    </button>
+                </li>
 
                 {% if current_user.is_authenticated %}
 
@@ -199,5 +203,92 @@
 
         {% block scripts %}
         {% endblock %}
+
+        <script>
+            (function () {
+                const themeKey = "snack-stash-theme";
+                const themeToggle = document.getElementById("theme-toggle");
+                const searchInput = document.getElementById("search-filter");
+                const clearSearch = document.getElementById("clear-search");
+
+                function applyTheme(theme) {
+                    const nextTheme = theme === "light" ? "light" : "dark";
+                    document.body.classList.toggle("dark-mode", nextTheme === "dark");
+                    document.body.classList.toggle("light-mode", nextTheme === "light");
+
+                    if (themeToggle) {
+                        themeToggle.textContent = nextTheme === "dark" ? "Light" : "Dark";
+                        themeToggle.setAttribute(
+                            "aria-label",
+                            nextTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+                        );
+                    }
+
+                    localStorage.setItem(themeKey, nextTheme);
+                }
+
+                function filterCards() {
+                    if (!searchInput) return;
+
+                    const query = searchInput.value.trim().toLowerCase();
+                    document.querySelectorAll("[data-search]").forEach(function (card) {
+                        const cardText = card.dataset.search || "";
+                        card.classList.toggle("is-hidden-by-search", query && !cardText.includes(query));
+                    });
+                }
+
+                function wireFlipCards() {
+                    document.querySelectorAll("[data-card-flip]").forEach(function (trigger) {
+                        if (trigger.dataset.flipReady === "true") return;
+                        trigger.dataset.flipReady = "true";
+
+                        trigger.addEventListener("click", function () {
+                            const card = trigger.closest(".pantry-card");
+                            if (card) {
+                                card.classList.add("is-flipped");
+                            }
+                        });
+                    });
+
+                    document.querySelectorAll("[data-card-unflip]").forEach(function (trigger) {
+                        if (trigger.dataset.flipReady === "true") return;
+                        trigger.dataset.flipReady = "true";
+
+                        trigger.addEventListener("click", function () {
+                            const card = trigger.closest(".pantry-card");
+                            if (card) {
+                                card.classList.remove("is-flipped");
+                            }
+                        });
+                    });
+                }
+
+                applyTheme(localStorage.getItem(themeKey) || "light");
+                wireFlipCards();
+
+                if (themeToggle) {
+                    themeToggle.addEventListener("click", function () {
+                        applyTheme(document.body.classList.contains("dark-mode") ? "light" : "dark");
+                    });
+                }
+
+                if (searchInput) {
+                    searchInput.addEventListener("input", filterCards);
+                }
+
+                if (clearSearch) {
+                    clearSearch.addEventListener("click", function () {
+                        searchInput.value = "";
+                        filterCards();
+                        searchInput.focus();
+                    });
+                }
+
+                document.body.addEventListener("htmx:afterSwap", function () {
+                    filterCards();
+                    wireFlipCards();
+                });
+            })();
+        </script>
     </body>
 </html>

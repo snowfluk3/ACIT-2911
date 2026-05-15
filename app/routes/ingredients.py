@@ -66,6 +66,7 @@ def new_ingredient():
         Ingredient.create(
             user=current_user,
             name=data["name"],
+            emoji=data.get("emoji") or "🥫",
             quantity=float(data["quantity"]),
             unit=data.get("unit", ""),
             category=data.get("category", ""),
@@ -78,6 +79,7 @@ def new_ingredient():
     ingredient = Ingredient.create(
         user=current_user,
         name=data["name"],
+        emoji=data.get("emoji") or "🥫",
         quantity=data["quantity"],
         unit=data["unit"],
         category=data["category"],
@@ -105,9 +107,9 @@ def update_ingredient(id):
 
     if request.headers.get("HX-Request"):
         data = request.form
-        for field in ("name", "unit", "category"):
+        for field in ("name", "emoji", "unit", "category"):
             if field in data:
-                setattr(ingredient, field, data[field])
+                setattr(ingredient, field, data[field] or ("🥫" if field == "emoji" else ""))
         if "quantity" in data:
             ingredient.quantity = float(data["quantity"])
         if "expiry_date" in data:
@@ -118,9 +120,9 @@ def update_ingredient(id):
         return _items_html() + _OOB_CLEAR + _stats_oob()
 
     data = request.get_json()
-    for field in ("name", "quantity", "unit", "category", "expiry_date", "notes"):
+    for field in ("name", "emoji", "quantity", "unit", "category", "expiry_date", "notes"):
         if field in data:
-            setattr(ingredient, field, data[field])
+            setattr(ingredient, field, data[field] or ("🥫" if field == "emoji" else data[field]))
     ingredient.save()
     return jsonify(ingredient.__data__)
 

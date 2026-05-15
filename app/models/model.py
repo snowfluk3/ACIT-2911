@@ -37,6 +37,7 @@ class Ingredient(BaseModel):
     id = AutoField()
     user = ForeignKeyField(User, backref="ingredients")
     name = CharField()
+    emoji = CharField(default="🥫")
     quantity = FloatField()
     unit = CharField()
     category = CharField()
@@ -53,6 +54,7 @@ class Food(BaseModel):
     id = AutoField()
     user = ForeignKeyField(User, backref="foods")
     name = CharField()
+    emoji = CharField(default="🍽️")
     description = CharField(null=True)
     food_type = CharField()
     serving_size = CharField(null=True)
@@ -115,6 +117,14 @@ class RecipeInstruction(BaseModel):
         table_name = "recipe_instructions"
 
 
+def _ensure_column(table_name, column_name, column_sql):
+    existing_columns = {column.name for column in db.get_columns(table_name)}
+    if column_name not in existing_columns:
+        db.execute_sql(f"ALTER TABLE {table_name} ADD COLUMN {column_sql}")
+
+
 def init_db():
     with db:
         db.create_tables([Ingredient, Food, Recipe, RecipeIngredient, RecipeMissingIngredient, RecipeInstruction, User])
+        _ensure_column("ingredients", "emoji", "emoji TEXT NOT NULL DEFAULT '🥫'")
+        _ensure_column("food", "emoji", "emoji TEXT NOT NULL DEFAULT '🍽️'")

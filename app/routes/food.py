@@ -65,6 +65,7 @@ def new_food():
         Food.create(
             user=current_user,
             name=data["name"],
+            emoji=data.get("emoji") or "🍽️",
             food_type="ready_to_eat",
             category=data["category"],
             description=data.get("description") or None,
@@ -78,6 +79,7 @@ def new_food():
     item = Food.create(
         user=current_user,
         name=data["name"],
+        emoji=data.get("emoji") or "🍽️",
         food_type=data.get("food_type", "ready_to_eat"),
         category=data["category"],
         description=data.get("description"),
@@ -107,9 +109,9 @@ def update_food(id):
 
     if request.headers.get("HX-Request"):
         data = request.form
-        for field in ("name", "category", "description", "serving_size"):
+        for field in ("name", "emoji", "category", "description", "serving_size"):
             if field in data:
-                setattr(item, field, data[field] or None)
+                setattr(item, field, data[field] or ("🍽️" if field == "emoji" else None))
         if "expiry_date" in data:
             item.expiry_date = data["expiry_date"] or None
         if "notes" in data:
@@ -118,9 +120,9 @@ def update_food(id):
         return _items_html() + _OOB_CLEAR
 
     data = request.get_json()
-    for field in ("name", "food_type", "category", "description", "serving_size", "expiry_date", "notes"):
+    for field in ("name", "emoji", "food_type", "category", "description", "serving_size", "expiry_date", "notes"):
         if field in data:
-            setattr(item, field, data[field])
+            setattr(item, field, data[field] or ("🍽️" if field == "emoji" else data[field]))
     item.save()
     return jsonify(item.__data__)
 

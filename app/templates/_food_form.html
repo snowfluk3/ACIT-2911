@@ -13,7 +13,12 @@
   <input id="food-name" name="name" type="text" class="item-input quicksand-regular"
     value="{{ item.name if item else '' }}" required>
 
-<label class="quicksand-regular" for="food-category">Category</label>
+  <label class="quicksand-regular" for="food-emoji">Emoji</label>
+  <input id="food-emoji" name="emoji" type="text" class="item-input quicksand-regular emoji-input"
+    placeholder="🍽️"
+    value="{{ item.emoji if item and item.emoji else '🍽️' }}">
+
+  <label class="quicksand-regular" for="food-category">Category</label>
   <input id="food-category" name="category" type="text" class="item-input quicksand-regular"
     placeholder="e.g. Frozen, Canned, Fresh"
     value="{{ item.category if item else '' }}" required>

@@ -13,6 +13,11 @@
   <input id="item-name" name="name" type="text" class="item-input quicksand-regular"
     value="{{ item.name if item else '' }}" required>
 
+  <label class="quicksand-regular" for="item-emoji">Emoji</label>
+  <input id="item-emoji" name="emoji" type="text" class="item-input quicksand-regular emoji-input"
+    placeholder="🥫"
+    value="{{ item.emoji if item and item.emoji else '🥫' }}">
+
   <label class="quicksand-regular" for="item-quantity">Quantity</label>
   <input id="item-quantity" name="quantity" type="number" step="0.1" class="item-input quicksand-regular"
     value="{{ item.quantity if item else '' }}" required>
