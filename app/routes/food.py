@@ -65,7 +65,7 @@ def new_food():
         Food.create(
             user=current_user,
             name=data["name"],
-            food_type=data["food_type"],
+            food_type="ready_to_eat",
             category=data["category"],
             description=data.get("description") or None,
             serving_size=data.get("serving_size") or None,
@@ -78,7 +78,7 @@ def new_food():
     item = Food.create(
         user=current_user,
         name=data["name"],
-        food_type=data["food_type"],
+        food_type=data.get("food_type", "ready_to_eat"),
         category=data["category"],
         description=data.get("description"),
         serving_size=data.get("serving_size"),
@@ -107,7 +107,7 @@ def update_food(id):
 
     if request.headers.get("HX-Request"):
         data = request.form
-        for field in ("name", "food_type", "category", "description", "serving_size"):
+        for field in ("name", "category", "description", "serving_size"):
             if field in data:
                 setattr(item, field, data[field] or None)
         if "expiry_date" in data:

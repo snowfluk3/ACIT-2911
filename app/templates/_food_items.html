@@ -18,8 +18,7 @@
           hx-confirm="Delete this food item?">Delete</button>
       </div>
     </div>
-    <p class="quicksand-regular">Type: {{ item.food_type }}</p>
-    {% if item.serving_size %}
+{% if item.serving_size %}
     <p class="quicksand-regular">Serving: {{ item.serving_size }}</p>
     {% endif %}
     {% if item.description %}

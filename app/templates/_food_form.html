@@ -13,12 +13,7 @@
   <input id="food-name" name="name" type="text" class="item-input quicksand-regular"
     value="{{ item.name if item else '' }}" required>
 
-  <label class="quicksand-regular" for="food-type">Type</label>
-  <input id="food-type" name="food_type" type="text" class="item-input quicksand-regular"
-    placeholder="e.g. Snack, Meal, Beverage"
-    value="{{ item.food_type if item else '' }}" required>
-
-  <label class="quicksand-regular" for="food-category">Category</label>
+<label class="quicksand-regular" for="food-category">Category</label>
   <input id="food-category" name="category" type="text" class="item-input quicksand-regular"
     placeholder="e.g. Frozen, Canned, Fresh"
     value="{{ item.category if item else '' }}" required>
