@@ -8,11 +8,26 @@ food_bp = Blueprint("food", __name__, url_prefix="/food")
 _OOB_CLEAR = '<div id="food-form-container" hx-swap-oob="innerHTML"></div>'
 
 
+def _user_id():
+    return int(current_user.id)
+
+
+def _user_food():
+    return Food.select().where(Food.user_id == _user_id())
+
+
+def _get_user_food(id):
+    return Food.get_or_none(
+        (Food.id == id) &
+        (Food.user_id == _user_id())
+    )
+
+
 def _items_html():
     today = date.today()
     return render_template(
         "_food_items.html",
-        items=list(Food.select().where(Food.user == current_user).dicts()),
+        items=list(_user_food().dicts()),
         today=today,
         warning_days=today + timedelta(days=3),
     )
@@ -22,7 +37,7 @@ def _items_html():
 @login_required
 def food_page():
     today = date.today()
-    items = list(Food.select().where(Food.user == current_user).dicts())
+    items = list(_user_food().dicts())
     return render_template(
         "food.html",
         items=items,
@@ -40,20 +55,22 @@ def new_food_form():
 @food_bp.route("/<int:id>/edit", methods=["GET"])
 @login_required
 def edit_food_form(id):
-    item = Food.get_or_none(Food.id == id)
+    item = _get_user_food(id)
     if item is None:
         return "<p class='error-message'>Item not found</p>", 404
     return render_template("_food_form.html", item=item.__data__)
 
 
 @food_bp.route("/clear-form", methods=["GET"])
+@login_required
 def clear_food_form():
     return ""
 
 
 @food_bp.route("", methods=["GET"])
+@login_required
 def list_food():
-    items = [f.__data__ for f in Food.select()]
+    items = [f.__data__ for f in _user_food()]
     return jsonify(items)
 
 
@@ -91,8 +108,9 @@ def new_food():
 
 
 @food_bp.route("/<int:id>", methods=["GET"])
+@login_required
 def get_food(id):
-    item = Food.get_or_none(Food.id == id)
+    item = _get_user_food(id)
     if item is None:
         return jsonify({"error": f"Food {id} not found"}), 404
     return jsonify(item.__data__)
@@ -101,7 +119,7 @@ def get_food(id):
 @food_bp.route("/<int:id>", methods=["PUT"])
 @login_required
 def update_food(id):
-    item = Food.get_or_none(Food.id == id)
+    item = _get_user_food(id)
     if item is None:
         if request.headers.get("HX-Request"):
             return "<p class='error-message'>Item not found</p>", 404
@@ -130,7 +148,7 @@ def update_food(id):
 @food_bp.route("/<int:id>", methods=["DELETE"])
 @login_required
 def delete_food(id):
-    item = Food.get_or_none(Food.id == id)
+    item = _get_user_food(id)
     if item is None:
         if request.headers.get("HX-Request"):
             return "<p class='error-message'>Item not found</p>", 404
