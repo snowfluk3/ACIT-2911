@@ -165,7 +165,7 @@ nav {
     top: 0;
     z-index: 50;
     display: grid;
-    grid-template-columns: auto minmax(300px, 500px) auto;
+    grid-template-columns: minmax(205px, 1fr) minmax(260px, 500px) minmax(205px, 1fr);
     align-items: center;
     gap: 20px;
     width: 100%;
@@ -218,10 +218,15 @@ nav {
 
 .search-bar {
     grid-column: 2;
+    position: relative;
+    z-index: 1;
     width: 100%;
+    max-width: 500px;
+    min-width: 0;
     display: flex;
     align-items: center;
-    margin-left: 3%;
+    justify-self: center;
+    margin-left: 0;
     gap: 12px;
 }
 
@@ -230,7 +235,7 @@ nav {
     align-items: center;
     gap: 8px;
     width: 100%;
-    min-width: 220px;
+    min-width: 0;
     padding: 10px 12px;
     background: var(--surface);
     border: var(--border);
@@ -280,13 +285,21 @@ nav {
 
 .nav-links {
     grid-column: 3;
+    position: relative;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    justify-self: end;
     gap: 10px;
+    min-width: max-content;
     margin: 0;
     padding: 0;
     list-style: none;
+}
+
+.nav-links li {
+    flex: 0 0 auto;
 }
 
 .nav-links a,
@@ -596,6 +609,7 @@ body.dark-mode .empty-stat {
 body.dark-mode .features h2,
 body.dark-mode main > h2,
 body.dark-mode .pantry-stats h2,
+body.dark-mode .section-header h2,
 body.dark-mode .introduction-title h1,
 body.dark-mode .logo p {
     color: var(--text);
@@ -731,6 +745,10 @@ body.dark-mode .stats-list span {
 
 .section-header h2 {
     margin: 4px 0 0;
+    color: var(--text);
+    line-height: 1.28;
+    padding-block: 3px;
+    overflow: visible;
 }
 
 .section-header p {
@@ -764,20 +782,30 @@ body.dark-mode .stats-list span {
 
 .pantry-items-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
     gap: 22px;
     align-items: start;
 }
 
 .pantry-card {
+    --card-height: 286px;
+    position: relative;
     min-width: 0;
-    min-height: 286px;
+    height: var(--card-height);
+    min-height: var(--card-height);
     perspective: 1000px;
+}
+
+.pantry-card-toggle {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .pantry-card-inner {
     position: relative;
-    min-height: 286px;
+    width: 100%;
+    height: 100%;
     transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
     transform-style: preserve-3d;
 }
@@ -786,12 +814,17 @@ body.dark-mode .stats-list span {
     transform: rotateY(180deg);
 }
 
+.pantry-card-toggle:checked ~ .pantry-card-inner {
+    transform: rotateY(180deg);
+}
+
 .pantry-card-face {
     position: absolute;
     inset: 0;
     display: grid;
     width: 100%;
-    min-height: 286px;
+    height: 100%;
+    min-height: 0;
     overflow: hidden;
     background: var(--surface);
     border: var(--border);
@@ -803,11 +836,23 @@ body.dark-mode .stats-list span {
 }
 
 .pantry-card-front {
+    appearance: none;
+    -webkit-appearance: none;
+    grid-template-rows: auto 1fr;
     padding: 0;
     border: var(--border);
+    font: inherit;
     text-align: left;
     cursor: pointer;
     transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+}
+
+.pantry-card.is-flipped .pantry-card-front {
+    pointer-events: none;
+}
+
+.pantry-card-toggle:checked ~ .pantry-card-inner .pantry-card-front {
+    pointer-events: none;
 }
 
 .pantry-card:not(.is-flipped):hover .pantry-card-front {
@@ -829,6 +874,15 @@ body.dark-mode .stats-list span {
     padding: 14px;
     transform: rotateY(180deg);
     overflow-y: auto;
+    pointer-events: none;
+}
+
+.pantry-card.is-flipped .pantry-card-back {
+    pointer-events: auto;
+}
+
+.pantry-card-toggle:checked ~ .pantry-card-inner .pantry-card-back {
+    pointer-events: auto;
 }
 
 .pantry-card-media {
@@ -1275,48 +1329,74 @@ input[type="date"].item-input {
 }
 
 .recipes-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-    margin-top: 16px;
+    margin-top: 0;
 }
 
-.recipe-card {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    background: var(--surface);
-    border: var(--border);
-    border-radius: 12px;
-    padding: 18px;
-    box-shadow: 0 10px 26px rgba(30, 55, 90, 0.06);
+.pantry-card.recipe-card {
+    --card-height: 340px;
 }
 
-.recipe-card-title {
+.recipe-card-media {
+    background:
+        linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, var(--surface-2)), var(--surface-2)),
+        var(--surface-2);
+}
+
+.recipe-meta-chip {
+    position: absolute;
+    z-index: 2;
+    top: 12px;
+    left: 12px;
+    border-radius: 999px;
+    padding: 7px 10px;
+    background: rgba(255, 255, 255, 0.92);
     color: var(--accent);
-    font-size: 21px;
+    font-size: 11px;
     font-weight: 800;
+    line-height: 1.2;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
 }
 
-.recipe-card-generated,
-.recipe-card-meta,
+body.dark-mode .recipe-meta-chip {
+    background: color-mix(in srgb, var(--accent) 16%, var(--surface));
+}
+
+.recipe-card-back {
+    gap: 9px;
+}
+
+.recipe-card-description,
 .recipe-card-tips {
     color: var(--muted);
     font-size: 13px;
+    line-height: 1.55;
+    margin: 0;
+}
+
+.recipe-meta-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.recipe-card-scroll {
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 2px;
 }
 
 .recipe-card-section-label {
     color: var(--text);
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 800;
+    margin: 10px 0 6px;
 }
 
 .recipe-card-ingredient-item,
 .recipe-card-missing-item,
 .recipe-card-instructions {
     color: var(--muted);
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: 12.5px;
+    line-height: 1.55;
+    margin: 0 0 4px;
 }
 
 .recipe-card-missing-item {
@@ -1324,13 +1404,17 @@ input[type="date"].item-input {
 }
 
 .recipe-card-instructions {
-    padding-left: 20px;
+    padding-left: 18px;
 }
 
 .recipe-card-tips {
     border-top: var(--border);
-    padding-top: 8px;
+    padding-top: 10px;
     font-style: italic;
+}
+
+.recipe-card-actions {
+    grid-template-columns: 1fr;
 }
 
 .warning-badge {

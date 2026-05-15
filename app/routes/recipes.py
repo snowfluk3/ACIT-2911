@@ -1,6 +1,6 @@
 import threading
 from datetime import date
-from flask import Blueprint, jsonify, render_template, request
+from flask import Blueprint, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from ..models.model import Recipe, RecipeIngredient, RecipeInstruction, RecipeMissingIngredient, Ingredient
 from ..extensions.recipe import generate_recipes
@@ -120,6 +120,9 @@ def recipes_page():
 @recipe_bp.route("/", methods=["GET"])
 @login_required
 def list_recipes():
+    if request.accept_mimetypes.accept_html:
+        return redirect(url_for("recipes.recipes_page"))
+
     user_id = int(current_user.id)
     return jsonify([r.__data__ for r in Recipe.select().where(Recipe.user_id == user_id)])
 
@@ -136,13 +139,16 @@ def get_recipe(id):
 @recipe_bp.route("/<int:id>", methods=["DELETE"])
 @login_required
 def delete_recipe(id):
-    recipe = Recipe.get_or_none((Recipe.id == id) & (Recipe.user_id == int(current_user.id)))
+    user_id = int(current_user.id)
+    recipe = Recipe.get_or_none((Recipe.id == id) & (Recipe.user_id == user_id))
     if recipe is None:
         return jsonify({"error": f"Recipe {id} not found"}), 404
     RecipeIngredient.delete().where(RecipeIngredient.recipe == recipe).execute()
     RecipeMissingIngredient.delete().where(RecipeMissingIngredient.recipe == recipe).execute()
     RecipeInstruction.delete().where(RecipeInstruction.recipe == recipe).execute()
     recipe.delete_instance()
+    if request.headers.get("HX-Request"):
+        return _render_section(user_id), 200
     return "", 204
 
 

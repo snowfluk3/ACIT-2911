@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from flask import Blueprint, jsonify, render_template, request
+from flask import Blueprint, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
 from ..models.model import Food
 
@@ -70,6 +70,9 @@ def clear_food_form():
 @food_bp.route("", methods=["GET"])
 @login_required
 def list_food():
+    if request.accept_mimetypes.accept_html:
+        return redirect(url_for("food.food_page"))
+
     items = [f.__data__ for f in _user_food()]
     return jsonify(items)
 

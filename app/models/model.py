@@ -128,3 +128,4 @@ def init_db():
         db.create_tables([Ingredient, Food, Recipe, RecipeIngredient, RecipeMissingIngredient, RecipeInstruction, User])
         _ensure_column("ingredients", "emoji", "emoji TEXT NOT NULL DEFAULT '🥫'")
         _ensure_column("food", "emoji", "emoji TEXT NOT NULL DEFAULT '🍽️'")
+        _ensure_column("food", "food_type", "food_type TEXT NOT NULL DEFAULT 'ready_to_eat'")

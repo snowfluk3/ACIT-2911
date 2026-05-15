@@ -1,40 +1,96 @@
-{% for recipe in recipes %}
-<div class="recipe-card">
-    <p class="elms-sans-regular recipe-card-title">{{ recipe.title }}</p>
-    <p class="quicksand-regular recipe-card-generated">Generated {{ recipe.generated_label }}</p>
-    <p class="quicksand-regular">{{ recipe.description }}</p>
-    <p class="quicksand-regular recipe-card-meta">
-        Prep: {{ recipe.prep_time_minutes }} min  |
-        Cook: {{ recipe.cook_time_minutes }} min  |
-        Total: {{ recipe.prep_time_minutes + recipe.cook_time_minutes }} min  |
-        Serves: {{ recipe.servings }}
-    </p>
+{% if recipes %}
+  {% for recipe in recipes %}
+    {% set total_time = recipe.prep_time_minutes + recipe.cook_time_minutes %}
+    {% set recipe_search = recipe.title ~ ' ' ~ (recipe.description or '') %}
 
-    <p class="elms-sans-regular recipe-card-section-label">Pantry Ingredients</p>
-    {% for ing in recipe.ingredients_used %}
-    <p class="quicksand-regular recipe-card-ingredient-item">
-        &bull; {{ ing.amount }}{% if ing.unit %} {{ ing.unit }}{% endif %} {{ ing.item }}{% if ing.preparation %}, {{ ing.preparation }}{% endif %}
-    </p>
-    {% endfor %}
+    <article class="pantry-card recipe-card"
+      data-search="{{ recipe_search|lower }}">
+      <input type="checkbox" class="pantry-card-toggle" id="recipe-card-{{ recipe.id }}">
+      <div class="pantry-card-inner">
+        <label class="pantry-card-face pantry-card-front" for="recipe-card-{{ recipe.id }}" data-card-flip
+          aria-label="View recipe details for {{ recipe.title }}">
+          <span class="pantry-card-media recipe-card-media">
+            <span class="pantry-item-icon" aria-hidden="true">🍳</span>
+            <span class="recipe-meta-chip quicksand-regular">{{ total_time }} min</span>
+          </span>
 
-    {% if recipe.missing_ingredients %}
-    <p class="elms-sans-regular recipe-card-section-label">You'll Also Need</p>
-    {% for ing in recipe.missing_ingredients %}
-    <p class="quicksand-regular recipe-card-missing-item">
-        &bull; {{ ing.amount }}{% if ing.unit %} {{ ing.unit }}{% endif %} {{ ing.item }}{% if ing.substitute %} (sub: {{ ing.substitute }}){% endif %}
-    </p>
-    {% endfor %}
-    {% endif %}
+          <span class="pantry-card-main">
+            <span>
+              <strong class="elms-sans-regular">{{ recipe.title }}</strong>
+              <small class="quicksand-regular">Generated {{ recipe.generated_label }}</small>
+            </span>
+            <span class="pantry-card-quantity quicksand-regular">Serves {{ recipe.servings }}</span>
+          </span>
+        </label>
 
-    <p class="elms-sans-regular recipe-card-section-label">Instructions</p>
-    <ol class="quicksand-regular recipe-card-instructions">
-        {% for step in recipe.instructions %}
-        <li>{{ step.instruction }}</li>
-        {% endfor %}
-    </ol>
+        <div class="pantry-card-face pantry-card-back recipe-card-back">
+          <label for="recipe-card-{{ recipe.id }}" class="card-back-button quicksand-regular" data-card-unflip>Back</label>
 
-    {% if recipe.tips %}
-    <p class="quicksand-regular recipe-card-tips">Tip: {{ recipe.tips }}</p>
-    {% endif %}
-</div>
-{% endfor %}
+          <p class="dialog-eyebrow quicksand-regular">Recipe</p>
+          <h3 class="elms-sans-regular">🍳 {{ recipe.title }}</h3>
+
+          {% if recipe.description %}
+            <p class="quicksand-regular recipe-card-description">{{ recipe.description }}</p>
+          {% endif %}
+
+          <div class="pantry-detail-list quicksand-regular recipe-meta-list">
+            <div>
+              <span>Prep</span>
+              <strong>{{ recipe.prep_time_minutes }} min</strong>
+            </div>
+            <div>
+              <span>Cook</span>
+              <strong>{{ recipe.cook_time_minutes }} min</strong>
+            </div>
+            <div>
+              <span>Serves</span>
+              <strong>{{ recipe.servings }}</strong>
+            </div>
+          </div>
+
+          <div class="recipe-card-scroll">
+            <p class="elms-sans-regular recipe-card-section-label">Pantry Ingredients</p>
+            {% for ing in recipe.ingredients_used %}
+              <p class="quicksand-regular recipe-card-ingredient-item">
+                {{ ing.amount }}{% if ing.unit %} {{ ing.unit }}{% endif %} {{ ing.item }}{% if ing.preparation %}, {{ ing.preparation }}{% endif %}
+              </p>
+            {% endfor %}
+
+            {% if recipe.missing_ingredients %}
+              <p class="elms-sans-regular recipe-card-section-label">You'll Also Need</p>
+              {% for ing in recipe.missing_ingredients %}
+                <p class="quicksand-regular recipe-card-missing-item">
+                  {{ ing.amount }}{% if ing.unit %} {{ ing.unit }}{% endif %} {{ ing.item }}{% if ing.substitute %} (sub: {{ ing.substitute }}){% endif %}
+                </p>
+              {% endfor %}
+            {% endif %}
+
+            <p class="elms-sans-regular recipe-card-section-label">Instructions</p>
+            <ol class="quicksand-regular recipe-card-instructions">
+              {% for step in recipe.instructions %}
+                <li>{{ step.instruction }}</li>
+              {% endfor %}
+            </ol>
+
+            {% if recipe.tips %}
+              <p class="quicksand-regular recipe-card-tips">Tip: {{ recipe.tips }}</p>
+            {% endif %}
+          </div>
+
+          <div class="card-actions recipe-card-actions">
+            <button class="card-delete quicksand-regular"
+              hx-delete="/recipes/{{ recipe.id }}"
+              hx-target="#recipes-section-inner"
+              hx-swap="outerHTML"
+              hx-confirm="Delete this recipe?">Delete</button>
+          </div>
+        </div>
+      </div>
+    </article>
+  {% endfor %}
+{% else %}
+  <div class="empty-state quicksand-regular">
+    <p>No recipes yet.</p>
+    <p>Click "Generate Recipes" to create recipes from your pantry.</p>
+  </div>
+{% endif %}

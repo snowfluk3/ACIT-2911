@@ -6,11 +6,18 @@
     hx-swap="outerHTML"
   {% endif %}>
 
-  <button class="quicksand-regular generate-btn"
-    {% if gen_status['state'] == "generating" %}disabled{% endif %}
-    hx-post="/recipes/generate"
-    hx-target="#recipes-section-inner"
-    hx-swap="outerHTML">Generate Recipes</button>
+  <div class="section-header">
+    <div>
+      <p class="section-kicker quicksand-regular">Recipes</p>
+      <h2 class="elms-sans-regular h1">My Recipes</h2>
+      <p class="quicksand-regular">Click a recipe card to flip it over and view ingredients, instructions, and tips.</p>
+    </div>
+    <button class="quicksand-regular generate-btn"
+      {% if gen_status['state'] == "generating" %}disabled{% endif %}
+      hx-post="/recipes/generate"
+      hx-target="#recipes-section-inner"
+      hx-swap="outerHTML">Generate Recipes</button>
+  </div>
 
   {% if gen_status['state'] == "generating" %}
   <div class="recipes-loading">
@@ -24,7 +31,7 @@
   </div>
   {% endif %}
 
-  <div class="recipes-grid">
+  <div class="pantry-items-grid recipes-grid">
     {% include "_recipes.html" %}
   </div>
 

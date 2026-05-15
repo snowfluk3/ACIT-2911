@@ -20,8 +20,9 @@
 
     <article class="pantry-card pantry-card--{{ status_class }}"
       data-search="{{ (emoji ~ ' ' ~ item.name ~ ' ' ~ item_category ~ ' ' ~ item_description ~ ' ' ~ (item.serving_size or '') ~ ' ' ~ item_notes)|lower }}">
+      <input type="checkbox" class="pantry-card-toggle" id="food-card-{{ item.id }}">
       <div class="pantry-card-inner">
-        <button type="button" class="pantry-card-face pantry-card-front" data-card-flip
+        <label class="pantry-card-face pantry-card-front" for="food-card-{{ item.id }}" data-card-flip
           aria-label="View details for {{ item.name }}">
           <span class="pantry-card-media">
             <span class="pantry-item-icon" aria-hidden="true">{{ emoji }}</span>
@@ -35,10 +36,10 @@
             </span>
             <span class="pantry-card-quantity quicksand-regular">{{ item.serving_size or "Not set" }}</span>
           </span>
-        </button>
+        </label>
 
         <div class="pantry-card-face pantry-card-back">
-          <button type="button" class="card-back-button quicksand-regular" data-card-unflip>Back</button>
+          <label for="food-card-{{ item.id }}" class="card-back-button quicksand-regular" data-card-unflip>Back</label>
 
           <p class="dialog-eyebrow quicksand-regular">{{ item_category }}</p>
           <h3 class="elms-sans-regular">{{ emoji }} {{ item.name }}</h3>
