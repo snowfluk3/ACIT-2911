@@ -901,7 +901,6 @@ body.dark-mode .stats-list span {
 
 .pantry-item-icon {
     position: relative;
-    z-index: 1;
     width: 72px;
     height: 72px;
     display: grid;
@@ -915,7 +914,6 @@ body.dark-mode .stats-list span {
 
 .expiry-chip {
     position: absolute;
-    z-index: 2;
     top: 12px;
     left: 12px;
     right: 12px;
@@ -1346,7 +1344,6 @@ input[type="date"].item-input {
 
 .recipe-meta-chip {
     position: absolute;
-    z-index: 2;
     top: 12px;
     left: 12px;
     border-radius: 999px;
