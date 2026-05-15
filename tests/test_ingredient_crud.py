@@ -49,8 +49,15 @@ def create_ingredient(client, **overrides):
     assert response.status_code == 201
     return response.get_json()
 
+def register_and_login(client, username="Fossil", email="test_user@example.com"):
+    client.post("/register", data={
+        "username": username,
+        "email": email,
+        "password": "password"
+    })
 
 def test_create_ingredient(client):
+    register_and_login(client)
     ingredient = create_ingredient(client)
 
     assert ingredient["name"] == "Milk"
@@ -60,7 +67,9 @@ def test_create_ingredient(client):
     assert ingredient["notes"] == "Opened carton"
 
 
+
 def test_get_ingredient(client):
+    register_and_login(client)
     created = create_ingredient(client, name="Eggs", quantity=12, unit="pcs", category="Protein")
 
     response = client.get(f"/ingredients/{created['id']}")
@@ -70,6 +79,7 @@ def test_get_ingredient(client):
 
 
 def test_update_ingredient(client):
+    register_and_login(client)
     created = create_ingredient(client, name="Rice", quantity=5, unit="kg", category="Grain")
 
     response = client.put(
@@ -84,6 +94,7 @@ def test_update_ingredient(client):
 
 
 def test_delete_ingredient(client):
+    register_and_login(client)
     created = create_ingredient(client, name="Bread", quantity=1, unit="loaf", category="Bakery")
 
     delete_response = client.delete(f"/ingredients/{created['id']}")
@@ -92,3 +103,29 @@ def test_delete_ingredient(client):
     assert delete_response.status_code == 204
     assert get_response.status_code == 404
     assert get_response.get_json() == {"error": f"Ingredient {created['id']} not found"}
+
+
+def test_ingredients_are_scoped_to_logged_in_user(client):
+    register_and_login(client, username="UserOne", email="one@example.com")
+    user_one_item = create_ingredient(client, name="Private Milk", category="Dairy")
+
+    client.post("/logout")
+    register_and_login(client, username="UserTwo", email="two@example.com")
+
+    list_response = client.get("/ingredients")
+    assert list_response.status_code == 200
+    assert list_response.get_json() == []
+
+    get_response = client.get(f"/ingredients/{user_one_item['id']}")
+    update_response = client.put(f"/ingredients/{user_one_item['id']}", json={"name": "Stolen Milk"})
+    delete_response = client.delete(f"/ingredients/{user_one_item['id']}")
+
+    assert get_response.status_code == 404
+    assert update_response.status_code == 404
+    assert delete_response.status_code == 404
+
+    own_item = create_ingredient(client, name="Private Rice", category="Grain")
+    own_list = client.get("/ingredients").get_json()
+
+    assert [item["name"] for item in own_list] == ["Private Rice"]
+    assert own_item["name"] == "Private Rice"

@@ -1,0 +1,90 @@
+{% if items %}
+  {% for item in items %}
+    {% set item_category = item.category or "Uncategorized" %}
+    {% set item_description = item.description or "" %}
+    {% set item_notes = item.notes or "" %}
+    {% set emoji = item.emoji or "🍽️" %}
+
+    {% set status_class = "fresh" %}
+    {% set status_label = "Fresh" %}
+    {% if item.expiry_date and item.expiry_date < today %}
+      {% set status_class = "expired" %}
+      {% set status_label = "Expired" %}
+    {% elif item.expiry_date and item.expiry_date <= warning_days %}
+      {% set status_class = "warning" %}
+      {% set status_label = "Expires in " ~ (item.expiry_date - today).days ~ " days" %}
+    {% elif not item.expiry_date %}
+      {% set status_class = "unknown" %}
+      {% set status_label = "No expiry" %}
+    {% endif %}
+
+    <article class="pantry-card pantry-card--{{ status_class }}"
+      data-search="{{ (emoji ~ ' ' ~ item.name ~ ' ' ~ item_category ~ ' ' ~ item_description ~ ' ' ~ (item.serving_size or '') ~ ' ' ~ item_notes)|lower }}">
+      <input type="checkbox" class="pantry-card-toggle" id="food-card-{{ item.id }}">
+      <div class="pantry-card-inner">
+        <label class="pantry-card-face pantry-card-front" for="food-card-{{ item.id }}" data-card-flip
+          aria-label="View details for {{ item.name }}">
+          <span class="pantry-card-media">
+            <span class="pantry-item-icon" aria-hidden="true">{{ emoji }}</span>
+            <span class="expiry-chip expiry-chip--{{ status_class }}">{{ status_label }}</span>
+          </span>
+
+          <span class="pantry-card-main">
+            <span>
+              <strong class="elms-sans-regular">{{ item.name }}</strong>
+              <small class="quicksand-regular">{{ item_category }}</small>
+            </span>
+            <span class="pantry-card-quantity quicksand-regular">{{ item.serving_size or "Not set" }}</span>
+          </span>
+        </label>
+
+        <div class="pantry-card-face pantry-card-back">
+          <label for="food-card-{{ item.id }}" class="card-back-button quicksand-regular" data-card-unflip>Back</label>
+
+          <p class="dialog-eyebrow quicksand-regular">{{ item_category }}</p>
+          <h3 class="elms-sans-regular">{{ emoji }} {{ item.name }}</h3>
+
+          <div class="pantry-detail-list quicksand-regular">
+            <div>
+              <span>Serving</span>
+              <strong>{{ item.serving_size or "Not set" }}</strong>
+            </div>
+            <div>
+              <span>Expiry</span>
+              <strong>{{ item.expiry_date or "None" }}</strong>
+            </div>
+            {% if item_description %}
+              <div class="detail-notes">
+                <span>Description</span>
+                <strong>{{ item_description }}</strong>
+              </div>
+            {% endif %}
+            {% if item_notes %}
+              <div class="detail-notes">
+                <span>Notes</span>
+                <strong>{{ item_notes }}</strong>
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="card-actions">
+            <button class="card-edit quicksand-regular"
+              hx-get="/food/{{ item.id }}/edit"
+              hx-target="#food-form-container"
+              hx-swap="innerHTML">Edit</button>
+            <button class="card-delete quicksand-regular"
+              hx-delete="/food/{{ item.id }}"
+              hx-target="#food-items"
+              hx-swap="innerHTML"
+              hx-confirm="Delete this food item?">Delete</button>
+          </div>
+        </div>
+      </div>
+    </article>
+  {% endfor %}
+{% else %}
+  <div class="empty-state quicksand-regular">
+    <p>No food items yet.</p>
+    <p>Click "Add Item" to create your first entry.</p>
+  </div>
+{% endif %}

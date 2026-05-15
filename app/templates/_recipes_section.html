@@ -1,0 +1,38 @@
+<div id="recipes-section-inner"
+  {% if gen_status['state'] == "generating" %}
+    hx-get="/recipes/poll-status"
+    hx-trigger="every 2s"
+    hx-target="#recipes-section-inner"
+    hx-swap="outerHTML"
+  {% endif %}>
+
+  <div class="section-header">
+    <div>
+      <p class="section-kicker quicksand-regular">Recipes</p>
+      <h2 class="elms-sans-regular h1">My Recipes</h2>
+      <p class="quicksand-regular">Click a recipe card to flip it over and view ingredients, instructions, and tips.</p>
+    </div>
+    <button class="quicksand-regular generate-btn"
+      {% if gen_status['state'] == "generating" %}disabled{% endif %}
+      hx-post="/recipes/generate"
+      hx-target="#recipes-section-inner"
+      hx-swap="outerHTML">Generate Recipes</button>
+  </div>
+
+  {% if gen_status['state'] == "generating" %}
+  <div class="recipes-loading">
+    <p class="quicksand-regular">Generating recipes from your pantry...</p>
+  </div>
+  {% endif %}
+
+  {% if gen_status['state'] == "error" %}
+  <div class="recipes-error">
+    <p class="quicksand-regular">Could not generate recipes: {{ gen_status['error'] }}</p>
+  </div>
+  {% endif %}
+
+  <div class="pantry-items-grid recipes-grid">
+    {% include "_recipes.html" %}
+  </div>
+
+</div>

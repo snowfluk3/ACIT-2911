@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from flask import Flask
 from .extensions.extensions import login_manager, db
 
@@ -9,6 +11,11 @@ def create_app():
     from .models.model import init_db
     init_db()
     login_manager.init_app(app)
+
+    @app.context_processor
+    def inject_asset_version():
+        styles_path = Path(app.static_folder) / "styles.css"
+        return {"asset_version": int(styles_path.stat().st_mtime)}
 
     # Load User
     from .models.model import User

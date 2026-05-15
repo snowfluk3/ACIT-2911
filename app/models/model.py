@@ -35,14 +35,16 @@ class User(UserMixin, BaseModel):
 
 class Ingredient(BaseModel):
     id = AutoField()
+    user = ForeignKeyField(User, backref="ingredients")
     name = CharField()
+    emoji = CharField(default="🥫")
     quantity = FloatField()
     unit = CharField()
     category = CharField()
     expiry_date = DateField(null=True)
     notes = CharField(null=True)
-    created_at = DateField(default=datetime.now)
-    updated_at = DateField(default=datetime.now)
+    created_at = DateTimeField(default=datetime.now)
+    updated_at = DateTimeField(default=datetime.now)
 
     class Meta:
         table_name = "ingredients"
@@ -50,15 +52,17 @@ class Ingredient(BaseModel):
 
 class Food(BaseModel):
     id = AutoField()
+    user = ForeignKeyField(User, backref="foods")
     name = CharField()
+    emoji = CharField(default="🍽️")
     description = CharField(null=True)
     food_type = CharField()
     serving_size = CharField(null=True)
     category = CharField()
     expiry_date = DateField(null=True)
     notes = CharField(null=True)
-    created_at = DateField(default=datetime.now)
-    updated_at = DateField(default=datetime.now)
+    created_at = DateTimeField(default=datetime.now)
+    updated_at = DateTimeField(default=datetime.now)
 
     class Meta:
         table_name = "food"
@@ -66,14 +70,14 @@ class Food(BaseModel):
 
 class Recipe(BaseModel):
     id = AutoField()
-    user_id = IntegerField()
+    user = ForeignKeyField(User, backref="recipes")
     title = CharField()
     description = CharField(null=True)
     prep_time_minutes = IntegerField()
     cook_time_minutes = IntegerField()
     servings = IntegerField()
     tips = CharField(null=True)
-    created_at = DateField(default=datetime.now)
+    created_at = DateTimeField(default=datetime.now)
 
     class Meta:
         table_name = "recipes"
@@ -113,6 +117,15 @@ class RecipeInstruction(BaseModel):
         table_name = "recipe_instructions"
 
 
+def _ensure_column(table_name, column_name, column_sql):
+    existing_columns = {column.name for column in db.get_columns(table_name)}
+    if column_name not in existing_columns:
+        db.execute_sql(f"ALTER TABLE {table_name} ADD COLUMN {column_sql}")
+
+
 def init_db():
     with db:
         db.create_tables([Ingredient, Food, Recipe, RecipeIngredient, RecipeMissingIngredient, RecipeInstruction, User])
+        _ensure_column("ingredients", "emoji", "emoji TEXT NOT NULL DEFAULT '🥫'")
+        _ensure_column("food", "emoji", "emoji TEXT NOT NULL DEFAULT '🍽️'")
+        _ensure_column("food", "food_type", "food_type TEXT NOT NULL DEFAULT 'ready_to_eat'")

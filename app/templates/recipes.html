@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<main class="dashboard-page">
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <p class="sidebar-kicker quicksand-regular">Recipe Box</p>
+            <h1 class="elms-sans-regular">Saved Recipes</h1>
+            <p class="quicksand-regular">Generate recipe ideas from your own pantry, then keep the saved recipes here for later.</p>
+        </aside>
+
+        <section id="recipes-section" class="pantry-section dashboard-main">
+            {% include "_recipes_section.html" %}
+        </section>
+    </div>
+</main>
+
+{% endblock %}
