@@ -1,16 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<main>
-    <section class="introduction two-grid">
+<main class="index-main">
         <div>
-            <p class="elms-sans-regular h1">For your Pantry Tracking Needs!</p>
+            <p class="syne-title h1">Snack Stash Storeroom</p>
             <p class="elms-sans-regular h2">Track your pantry items before they disappear!</p>
         </div>
-        <div class="container introduction-title">
-            <h1 class="elms-sans-regular h1">Snack Stash Storeroom</h1>
-        </div>
-    </section>
 
     <div class="spacer-large"></div>
 
@@ -30,10 +25,9 @@
         <div>
             <h2 class="elms-sans-regular h2">Recipe Generation</h2>
             <p class="quicksand-regular">
-                Users can generate recipes by providing an image in the "Recipes" section of their pantry list. <br>
-                These recipes are simple, and meant to give users an idea on how they want to create a new recipe. <br>
+                Users can generate recipes by providing an image in the "Recipes" section of their pantry list.
+                These recipes are simple, and meant to give users an idea on how they want to create a new recipe.
                 Suggestions can also be given to develop a recipe based on ingredients on a user's pantry.
-            </p><br><br><br><br><br><br><br>                    
         </div>
         <div class="spacer-medium features">
             <img src="{{ url_for('static', filename='images/recipe-icon.png') }}" alt="img">
