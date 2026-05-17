@@ -241,6 +241,7 @@ nav {
     letter-spacing: -0.04em;
     overflow: visible;
     white-space: nowrap;
+    cursor: pointer;
 }
 
 .search-bar {
