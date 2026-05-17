@@ -386,15 +386,23 @@ nav button:hover,
     display: none;
 }
 
-.chevron {
+.arrow {
     display: inline-block;
-    transform: translateY(6%) rotate(180deg);
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
     transition: transform 0.16s ease;
+    vertical-align: middle;
+    margin-left: 4px;
+    margin-bottom: 2px;
 }
 
-.dropdown[open] .chevron,
-.category-dropdown[open] .chevron {
-    transform: translateY(-8%);
+.dropdown[open] .arrow,
+.category-dropdown[open] .arrow {
+    transform: rotate(-135deg);
+    margin-bottom: -2px;
 }
 
 .dropdown-menu,
@@ -1410,15 +1418,21 @@ input[type="date"].item-input {
     padding: 4px 10px;
 }
 
-.recipe-accordion-chevron {
-    color: var(--muted-2);
-    font-size: 1.1rem;
+.recipe-accordion-arrow {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid var(--muted-2);
+    border-bottom: 2px solid var(--muted-2);
+    transform: rotate(45deg);
     transition: transform 0.18s ease;
     flex-shrink: 0;
+    margin-bottom: 3px;
 }
 
-.recipe-accordion[open] .recipe-accordion-chevron {
-    transform: rotate(180deg);
+.recipe-accordion[open] .recipe-accordion-arrow {
+    transform: rotate(-135deg);
+    margin-bottom: -3px;
 }
 
 .recipe-accordion-body {
