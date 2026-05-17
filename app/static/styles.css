@@ -315,7 +315,7 @@ nav {
     z-index: 2;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    
     justify-self: end;
     gap: 10px;
     min-width: max-content;
@@ -1534,20 +1534,34 @@ footer {
         align-items: flex-start;
         flex-direction: column;
     }
-}
 
-@media only screen and (max-width: 700px) {
     nav {
-        padding: 14px 16px;
-        gap: 12px;
+        grid-template-columns: 1fr;
+        padding: 14px 20px;
     }
 
     .logo {
-        min-width: 0;
+        grid-column: 1;
     }
 
-    .logo p {
-        font-size: 15px;
+    .search-bar {
+        grid-column: 1;
+        max-width: 100%;
+        justify-self: stretch;
+    }
+
+    .nav-links {
+        grid-column: 1;
+        justify-content: flex-start;
+        justify-self: start;
+        min-width: 0;
+        flex-wrap: wrap;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .logo {
+        min-width: 0;
     }
 
     .nav-links {
@@ -1615,8 +1629,12 @@ footer {
     }
 }
 
-@media only screen and (max-width: 430px) {
+@media only screen and (max-width: 450px) {
     .pantry-items-grid {
         grid-template-columns: 1fr;
+    }
+
+    .logo p {
+    font-size: 24px;
     }
 }
