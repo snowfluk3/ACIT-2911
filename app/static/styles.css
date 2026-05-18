@@ -408,6 +408,7 @@ nav button:hover,
     text-align: left;
     text-transform: none;
     box-shadow: none;
+    cursor: pointer;
 }
 
 .dropdown-menu button:hover,

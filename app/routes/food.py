@@ -13,13 +13,13 @@ def _user_id():
 
 
 def _user_food():
-    return Food.select().where(Food.user_id == _user_id())
+    return Food.select().where(Food.user_id == _user_id()) #type: ignore
 
 
 def _get_user_food(id):
     return Food.get_or_none(
         (Food.id == id) &
-        (Food.user_id == _user_id())
+        (Food.user_id == _user_id()) #type: ignore
     )
 
 

@@ -19,41 +19,6 @@
                 <p class="elms-sans-regular h1">Snack Stash Storeroom</p>
             </div>
 
-            {% if current_user.is_authenticated %}
-
-            <div class="search-bar">
-                <form id="search-form" class="search-form">
-                    <span class="search-icon">⌕</span>
-
-                    <input 
-                    id="search-filter" 
-                    type="text" 
-                    name="filter" 
-                    placeholder="Search items..." 
-                    class="quicksand-regular">
-
-                    <button type="button" id="clear-search">×</button>
-                </form>
-                
-                <details class="category-dropdown">
-
-                    <summary class="dropdown-trigger elms-sans-regular">
-                        All
-                        <span class="chevron">⌄</span>
-                    </summary>
-
-                    <div class="category-menu">
-                        <button type="button" class="quicksand-regular">All</button>
-                        <button type="button" class="quicksand-regular" disabled>
-                            Categories soon
-                        </button>
-                    </div>
-
-                </details>
-            </div>
-
-            {% endif %}
-
             <ul class="nav-links">
                 <li>
                     <button type="button" id="theme-toggle" class="theme-toggle quicksand-regular" aria-label="Toggle dark mode">
@@ -227,16 +192,6 @@
                     localStorage.setItem(themeKey, nextTheme);
                 }
 
-                function filterCards() {
-                    if (!searchInput) return;
-
-                    const query = searchInput.value.trim().toLowerCase();
-                    document.querySelectorAll("[data-search]").forEach(function (card) {
-                        const cardText = card.dataset.search || "";
-                        card.classList.toggle("is-hidden-by-search", query && !cardText.includes(query));
-                    });
-                }
-
                 function wireFlipCards() {
                     document.querySelectorAll("[data-card-flip]").forEach(function (trigger) {
                         if (trigger.dataset.flipReady === "true") return;
@@ -272,20 +227,14 @@
                     });
                 }
 
-                if (searchInput) {
-                    searchInput.addEventListener("input", filterCards);
-                }
-
                 if (clearSearch) {
                     clearSearch.addEventListener("click", function () {
                         searchInput.value = "";
-                        filterCards();
                         searchInput.focus();
                     });
                 }
 
                 document.body.addEventListener("htmx:afterSwap", function () {
-                    filterCards();
                     wireFlipCards();
                 });
             })();

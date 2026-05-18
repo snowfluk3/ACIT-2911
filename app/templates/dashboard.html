@@ -3,6 +3,53 @@
 
 <main class="dashboard-page">
     {% if current_user.is_authenticated %}
+
+    <div class="search-bar">
+        <form 
+        id="search-form" 
+        class="search-form"
+        hx-get="/ingredients/filter"
+        hx-target="#pantry-items"
+        hx-trigger="input delay:300ms"
+        hx-include="#search-form"
+        onsubmit="return false">
+            <span class="search-icon">⌕</span>
+            <input 
+            id="search-filter" 
+            type="text"
+            name="search" 
+            placeholder="Search ingredients..." 
+            class="quicksand-regular">
+
+            <button type="button" id="clear-search">×</button>
+
+            <input
+            type="hidden"
+            name="category"
+            id="category-input"
+            value="All">
+        </form>
+
+        <details class="category-dropdown">
+
+            <summary id="category-trigger" class="dropdown-trigger elms-sans-regular">
+                <span id="category-label">All</span>
+                <span class="chevron">⌄</span>
+            </summary>
+
+            <div class="category-menu">
+                <button type="button" class="quicksand-regular" data-category="All">All</button>
+
+                {% for category in categories %}
+
+                <button type="button" class="quicksand-regular" data-category="{{ category }}">{{ category }}</button>
+
+                {% endfor %}
+            </div>
+
+        </details>
+    </div>
+
     <div class="dashboard-shell">
         <aside class="dashboard-sidebar">
             <p class="sidebar-kicker quicksand-regular">Pantry Tracker</p>
@@ -41,4 +88,34 @@
     {% endif %}
 </main>
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll(".category-menu button").forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+        const category = btn.dataset.category;
+
+        // 1. update hidden input
+        document.getElementById("category-input").value = category;
+
+        // 2. trigger HTMX request
+        htmx.ajax("GET", "/ingredients/filter", {
+            target: "#pantry-items",
+            swap: "innerHTML",
+            values: {
+                search: document.getElementById("search-filter").value,
+                category: category
+            }
+        });
+
+        // optional: update dropdown label
+        document.getElementById("category-label").textContent = category;
+
+    });
+
+});
+</script>
 {% endblock %}

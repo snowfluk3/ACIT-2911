@@ -2,6 +2,42 @@
 {% block content %}
 
 <main class="dashboard-page">
+    <div class="search-bar">
+        <form 
+        id="search-form" 
+        class="search-form"
+        hx-get="{{ filter_route }}"
+        hx-target="#items-container"
+        hx-trigger="keyup changed delay:300ms"
+        hx-include="#search-form">
+            <span class="search-icon">⌕</span>
+            <input 
+            id="search-filter" 
+            type="text"
+            name="search" 
+            placeholder="Search recipes..." 
+            class="quicksand-regular">
+
+            <button type="button" id="clear-search">×</button>
+        </form>
+        
+        <details class="category-dropdown">
+
+            <summary class="dropdown-trigger elms-sans-regular">
+                All
+                <span class="chevron">⌄</span>
+            </summary>
+
+            <div class="category-menu">
+                <button type="button" class="quicksand-regular">All</button>
+                <button type="button" class="quicksand-regular" disabled>
+                    Categories soon
+                </button>
+            </div>
+
+        </details>
+    </div>
+
     <div class="dashboard-shell">
         <aside class="dashboard-sidebar">
             <p class="sidebar-kicker quicksand-regular">Recipe Box</p>
