@@ -9,14 +9,12 @@
         <!-- Imported Links -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-        <script src="https://unpkg.com/htmx.org@1.9.12" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap" rel="stylesheet">        <script src="https://unpkg.com/htmx.org@1.9.12" crossorigin="anonymous"></script>
     </head>
     <body class="light-mode">
         <nav>
             <div class="logo">
-                <span class="logo-mark" aria-hidden="true"></span>
-                <p class="elms-sans-regular h1">Snack Stash Storeroom</p>
+                <p class="elms-sans-regular h1" onclick="window.location.href='/'">🥫Snack Stash Storeroom</p>
             </div>
 
             {% if current_user.is_authenticated %}
@@ -39,7 +37,7 @@
 
                     <summary class="dropdown-trigger elms-sans-regular">
                         All
-                        <span class="chevron">⌄</span>
+                        <span class="arrow"></span>
                     </summary>
 
                     <div class="category-menu">
@@ -69,7 +67,7 @@
 
                 <li>
                     <details class="dropdown">
-                        <summary class="quicksand-regular dropdown-trigger">{{ current_user.username }}<span class="chevron">⌄</span></summary>
+                        <summary class="quicksand-regular dropdown-trigger">{{ current_user.username }}<span class="arrow"></span></summary>
                         <div class="dropdown-menu">
                             <div class="user-dropdown quicksand-regular">
                                 <strong>{{ current_user.username }}</strong>
