@@ -1,7 +1,9 @@
 from datetime import date, timedelta
 from flask import Blueprint, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required
+from peewee import fn
 from ..models.model import Food
+from ..routes.templates import category_names
 
 food_bp = Blueprint("food", __name__, url_prefix="/food")
 
@@ -12,8 +14,9 @@ def _user_id():
     return int(current_user.id)
 
 
-def _user_food():
-    return Food.select().where(Food.user_id == _user_id()) #type: ignore
+def _user_food(user_id=None):
+    owner_id = user_id if user_id is not None else _user_id()
+    return Food.select().where(Food.user_id == owner_id) #type: ignore
 
 
 def _get_user_food(id):
@@ -38,8 +41,11 @@ def _items_html():
 def food_page():
     today = date.today()
     items = list(_user_food().dicts())
+
+    food_categories = category_names(Food, current_user.id)
     return render_template(
         "food.html",
+        food_categories=food_categories,
         items=items,
         today=today,
         warning_days=today + timedelta(days=3),
@@ -160,3 +166,25 @@ def delete_food(id):
     if request.headers.get("HX-Request"):
         return _items_html(), 200
     return "", 204
+
+
+# Filtering
+@food_bp.route("/filter", methods=["GET"])
+@login_required
+def _filter_foods():
+    today = date.today()
+    user_id = _user_id()
+    search = request.args.get("search", "").strip().lower()
+    category = request.args.get("category", "All")
+
+    query = _user_food(user_id)
+
+    if search:
+        query = query.where(
+            fn.LOWER(Food.name).contains(search)
+        )
+
+    if category != "All":
+        query = query.where(Food.category == category)
+
+    return render_template("_food_items.html", items=list(query.dicts()), today=today, warning_days=today + timedelta(days=3),)

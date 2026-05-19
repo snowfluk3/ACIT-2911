@@ -1,0 +1,7 @@
+<div class="category-menu">
+    <button type="button" class="quicksand-regular" data-category="All">All</button>
+
+    {% for category in ingredient_categories %}
+    <button type="button" data-category="{{ category }}">{{ category }}</button>
+    {% endfor %}
+</div>

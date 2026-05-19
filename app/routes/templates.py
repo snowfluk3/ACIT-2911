@@ -2,11 +2,11 @@ from datetime import date, timedelta
 from flask import Blueprint, render_template
 from flask_login import current_user, login_required
 from ..models.model import Recipe, Ingredient
+from ..extensions.extensions import category_names
 from . import recipes as recipes_mod
 from .ingredients import _stats_context, _user_ingredients
 
 template_bp = Blueprint("templates", __name__)
-
 
 @template_bp.route("/")
 def index():
@@ -26,17 +26,13 @@ def dashboard():
     stats = _stats_context(user_id)
 
     # Dynamically generate categories
-    categories = (_user_ingredients(user_id).select(Ingredient.category).distinct())
-
-    category_names = [
-        item.category for item in categories if item.category
-    ]
+    ingredient_categories = category_names(Ingredient, user_id)
 
     return render_template(
         "dashboard.html",
         items=items,
         recipes=recipes,
-        categories=category_names,
+        ingredient_categories=ingredient_categories,
         gen_status=recipes_mod._gen_status,
         today=today,
         warning_days=today + timedelta(days=3),

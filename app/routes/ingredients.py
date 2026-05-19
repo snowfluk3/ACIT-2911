@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, redirect, request, render_template, url_fo
 from peewee import fn
 from flask_login import current_user, login_required
 from ..models.model import Ingredient
+from ..extensions.extensions import category_names
 
 ingredients_bp = Blueprint("ingredients", __name__, url_prefix="/ingredients")
 
@@ -173,7 +174,7 @@ def delete_ingredient(id):
 @ingredients_bp.route("/filter", methods=["GET"])
 def _filter_ingredients():
     today = date.today()
-    user_id = int(current_user.id)
+    user_id = _user_id()
     search = request.args.get("search", "").strip().lower()
     category = request.args.get("category", "All")
 

@@ -37,14 +37,10 @@
                 <span class="chevron">⌄</span>
             </summary>
 
-            <div class="category-menu">
-                <button type="button" class="quicksand-regular" data-category="All">All</button>
-
-                {% for category in categories %}
-
-                <button type="button" class="quicksand-regular" data-category="{{ category }}">{{ category }}</button>
-
-                {% endfor %}
+            <div id="ingredient-categories" hx-swap-oob="true">
+                <div class="category-menu">
+                    {% include "_ingredient_categories.html" %}
+                </div>
             </div>
 
         </details>
@@ -115,7 +111,15 @@ document.querySelectorAll(".category-menu button").forEach(btn => {
         document.getElementById("category-label").textContent = category;
 
     });
-
 });
+
+document.getElementById("clear-search").addEventListener("click", () => {
+        document.getElementById("search-filter");
+
+        document.getElementById("category-input").value = "All";
+        document.getElementById("category-label").textContent = "All";
+
+        htmx.trigger("#search-filter", "input")
+    });
 </script>
 {% endblock %}
