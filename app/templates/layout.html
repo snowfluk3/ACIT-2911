@@ -16,17 +16,19 @@
       href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap"
       rel="stylesheet"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@300..700&display=swap" 
+    rel="stylesheet">
     <script
       src="https://unpkg.com/htmx.org@1.9.12"
       crossorigin="anonymous"
     ></script>
   </head>
   <body class="light-mode">
+    <a href="#main-content" class="skip-link quicksand-regular">Skip to main content</a>
+
     <nav>
       <div class="logo">
-        <p class="elms-sans-regular h1" onclick="window.location.href = '/'">
-          🥫Snack Stash Storeroom
-        </p>
+        <a href="/" class="elms-sans-regular h1">🥫Snack Stash Storeroom</a>
       </div>
 
       {% if current_user.is_authenticated %}
@@ -149,6 +151,7 @@
       <button
         id="close-btn"
         class="close-btn"
+        aria-label="Close login dialogue"
         hx-on:click="document.getElementById('login-popup').classList.remove('show');
                                     document.getElementById('overlay').classList.remove('show');
                                     document.getElementById('login-form').reset();"
@@ -185,12 +188,12 @@
           />
           <span
             id="toggle-password"
+            aria-label="Show password"
             class="toggle-eye elms-sans-regular"
             hx-on:click="var f=document.getElementById('password-field');
-                                            f.type=f.type==='password'?'text':'password';
-                                            this.innerText=f.type==='password'?'Show':'Hide';"
-            >Show</span
-          >
+            f.type=f.type==='password'?'text':'password';
+            this.innerText=f.type==='password'?'Show':'Hide';
+            this.setAttribute('aria-label',f.type==='password'?'Show password':'Hide password');">Show</span>
         </div>
         <div id="login-error" class="error-login quicksand-regular"></div>
         <button type="submit" class="quicksand-regular">Confirm</button>
@@ -216,12 +219,11 @@
       <button
         id="close-reg-button"
         class="close-btn"
+        aria-label="Close registration dialogue"
         hx-on:click="document.getElementById('register-popup').classList.remove('show');
-                                    document.getElementById('overlay').classList.remove('show');
-                                    document.getElementById('register-form').reset();"
-      >
-        &times;
-      </button>
+        document.getElementById('overlay').classList.remove('show');
+        document.getElementById('register-form').reset();
+        this.setAttribute('aria-label',f.type==='password'?'Show password':'Hide password');">&times;</button>
 
       <form
         id="register-form"
@@ -264,11 +266,11 @@
           <span
             id="register-toggle-password"
             class="toggle-eye elms-sans-regular"
+            aria-label="Show password"
             hx-on:click="var f=document.getElementById('register-password-field');
-                                            f.type=f.type==='password'?'text':'password';
-                                            this.innerText=f.type==='password'?'Show':'Hide';"
-            >Show</span
-          >
+            f.type=f.type==='password'?'text':'password';
+            this.innerText=f.type==='password'?'Show':'Hide';
+            this.setAttribute('aria-label',f.type==='password'?'Show password':'Hide password');">Show</span>
         </div>
 
         <div id="register-error" class="error-login quicksand-regular"></div>
