@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify, redirect, request, render_template, url_fo
 from peewee import fn
 from flask_login import current_user, login_required
 from ..models.model import Ingredient
-from ..extensions.extensions import category_names
+from ..extensions.extensions import category_names, _categories_oob
 
 ingredients_bp = Blueprint("ingredients", __name__, url_prefix="/ingredients")
 
@@ -100,7 +100,11 @@ def new_ingredient():
             expiry_date=data.get("expiry_date") or None,
             notes=data.get("notes") or None,
         )
-        return _items_html() + _OOB_CLEAR + _stats_oob()
+
+        ingredient_categories = category_names(Ingredient, _user_id())
+        return _items_html() + _OOB_CLEAR + _stats_oob() + _categories_oob(
+            "_ingredient_categories_oob.html", 
+            ingredient_categories)
 
     data = request.get_json()
     ingredient = Ingredient.create(
@@ -146,7 +150,12 @@ def update_ingredient(id):
         if "notes" in data:
             ingredient.notes = data["notes"] or None
         ingredient.save()
-        return _items_html() + _OOB_CLEAR + _stats_oob()
+
+        ingredient_categories = category_names(Ingredient, _user_id())
+        return _items_html() + _OOB_CLEAR + _stats_oob() + _categories_oob(
+            "_ingredient_categories_oob.html",
+            ingredient_categories
+        )
 
     data = request.get_json()
     for field in ("name", "emoji", "quantity", "unit", "category", "expiry_date", "notes"):
@@ -165,8 +174,10 @@ def delete_ingredient(id):
             return "<p class='error-message'>Item not found</p>", 404
         return jsonify({"error": f"Ingredient {id} not found"}), 404
     ingredient.delete_instance()
+
+    ingredient_categories = category_names(Ingredient, _user_id())
     if request.headers.get("HX-Request"):
-        return _items_html() + _stats_oob(), 200
+        return _items_html() + _stats_oob() + _categories_oob("_ingredient_categories_oob.html", ingredient_categories), 200
     return "", 204
 
 

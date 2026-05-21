@@ -32,7 +32,7 @@ def dashboard():
         "dashboard.html",
         items=items,
         recipes=recipes,
-        ingredient_categories=ingredient_categories,
+        categories=ingredient_categories,
         gen_status=recipes_mod._gen_status,
         today=today,
         warning_days=today + timedelta(days=3),

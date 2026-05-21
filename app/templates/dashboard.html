@@ -37,10 +37,8 @@
                 <span class="chevron">⌄</span>
             </summary>
 
-            <div id="ingredient-categories" hx-swap-oob="true">
-                <div class="category-menu">
-                    {% include "_ingredient_categories.html" %}
-                </div>
+            <div id="ingredient-categories">
+                {% include "_ingredient_categories.html" %}
             </div>
 
         </details>
@@ -88,31 +86,23 @@
 
 {% block scripts %}
 <script>
-document.querySelectorAll(".category-menu button").forEach(btn => {
+document.body.addEventListener("click", (e) => {
+    const btn = e.target.closest(".category-menu button")
 
-    btn.addEventListener("click", () => {
+    if (!btn) {
+        const category = btn.dataset.category
 
-        const category = btn.dataset.category;
+        document.getElementById("category-input").value = category
+        document.getElementById("cateogry-label").textContent = category
 
-        // 1. update hidden input
-        document.getElementById("category-input").value = category;
+        htmx.trigger("#search-filter", "input")
+    }
 
-        // 2. trigger HTMX request
-        htmx.ajax("GET", "/ingredients/filter", {
-            target: "#pantry-items",
-            swap: "innerHTML",
-            values: {
-                search: document.getElementById("search-filter").value,
-                category: category
-            }
-        });
+    // optional: update dropdown label
+    document.getElementById("category-label").textContent = category;
+})
 
-        // optional: update dropdown label
-        document.getElementById("category-label").textContent = category;
-
-    });
-});
-
+// Clear search filter
 document.getElementById("clear-search").addEventListener("click", () => {
         document.getElementById("search-filter");
 

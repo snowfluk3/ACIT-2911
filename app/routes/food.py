@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify, redirect, render_template, request, url_fo
 from flask_login import current_user, login_required
 from peewee import fn
 from ..models.model import Food
-from ..routes.templates import category_names
+from ..extensions.extensions import category_names, _categories_oob
 
 food_bp = Blueprint("food", __name__, url_prefix="/food")
 
@@ -45,7 +45,7 @@ def food_page():
     food_categories = category_names(Food, current_user.id)
     return render_template(
         "food.html",
-        food_categories=food_categories,
+        categories=food_categories,
         items=items,
         today=today,
         warning_days=today + timedelta(days=3),
@@ -99,7 +99,12 @@ def new_food():
             expiry_date=data.get("expiry_date") or None,
             notes=data.get("notes") or None,
         )
-        return _items_html() + _OOB_CLEAR
+
+        food_categories = category_names(Food, _user_id())
+        return _items_html() + _OOB_CLEAR + _categories_oob(
+            "_food_categories_oob.html",
+            food_categories
+        )
 
     data = request.get_json()
     item = Food.create(
@@ -144,7 +149,11 @@ def update_food(id):
         if "notes" in data:
             item.notes = data["notes"] or None
         item.save()
-        return _items_html() + _OOB_CLEAR
+        food_categories = category_names(Food, _user_id())
+        return _items_html() + _OOB_CLEAR + _categories_oob(
+            "_food_categories_oob.html",
+            food_categories
+        )
 
     data = request.get_json()
     for field in ("name", "emoji", "food_type", "category", "description", "serving_size", "expiry_date", "notes"):
@@ -163,8 +172,9 @@ def delete_food(id):
             return "<p class='error-message'>Item not found</p>", 404
         return jsonify({"error": f"Food {id} not found"}), 404
     item.delete_instance()
+    food_categories = category_names(Food, _user_id())
     if request.headers.get("HX-Request"):
-        return _items_html(), 200
+        return _items_html() + _categories_oob("_food_categories_oob.html", food_categories), 200
     return "", 204
 
 
