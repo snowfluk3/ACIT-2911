@@ -1,20 +1,13 @@
 <form
   class="item-form"
-  {%
-  if
-  item
-  %}
-  hx-put="/ingredients/{{ item.id }}"
-  {%
-  else
-  %}
-  hx-post="/ingredients"
-  {%
-  endif
-  %}
+  {% if item %}
+    hx-put="/ingredients/{{ item.id }}"
+  {% else %}
+    hx-post="/ingredients"
+  {% endif %}
   hx-target="#pantry-items"
-  hx-swap="innerHTML"
->
+  hx-swap="innerHTML">
+  
   <h3 class="elms-sans-regular h2">
     {{ "Edit Pantry Item" if item else "Add Pantry Item" }}
   </h3>

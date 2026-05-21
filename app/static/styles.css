@@ -384,6 +384,17 @@ nav button {
     border-color 0.16s ease;
 }
 
+.chevron {
+    display: inline-block;
+    transform: translateY(25%) rotate(180deg);
+    transition: transform 0.16s ease;
+}
+
+.dropdown[open] .chevron,
+.category-dropdown[open] .chevron {
+    transform: translateY(-8%);
+}
+
 .nav-links a,
 .dropdown-trigger {
   display: inline-flex;

@@ -96,7 +96,7 @@ def new_ingredient():
             emoji=data.get("emoji") or "🥫",
             quantity=float(data["quantity"]),
             unit=data.get("unit", ""),
-            category=data.get("category", ""),
+            category=data.get("category", "") or "Uncategorized",
             expiry_date=data.get("expiry_date") or None,
             notes=data.get("notes") or None,
         )

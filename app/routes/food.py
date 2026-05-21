@@ -93,7 +93,7 @@ def new_food():
             name=data["name"],
             emoji=data.get("emoji") or "🍽️",
             food_type="ready_to_eat",
-            category=data["category"],
+            category=data.get("category") or "Uncategorized",
             description=data.get("description") or None,
             serving_size=data.get("serving_size") or None,
             expiry_date=data.get("expiry_date") or None,

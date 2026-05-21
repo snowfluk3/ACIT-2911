@@ -13,15 +13,36 @@
   <input id="food-name" name="name" type="text" class="item-input quicksand-regular"
     value="{{ item.name if item else '' }}" required>
 
-  <label class="quicksand-regular" for="food-emoji">Emoji</label>
-  <input id="food-emoji" name="emoji" type="text" class="item-input quicksand-regular emoji-input"
-    placeholder="🍽️"
-    value="{{ item.emoji if item and item.emoji else '🍽️' }}">
+  <label class="quicksand-regular">Emoji</label>
+
+  <script type="module">
+    import 'https://unpkg.com/emoji-picker-element';
+  </script>
+
+  <div class="emoji-picker-wrapper">
+    <button type="button" class="emoji-trigger">
+      <span class="selected-emoji">
+        {{ item.emoji if item and item.emoji else '🍽️' }}
+      </span>
+      <span class="emoji-trigger-text">Choose emoji</span>
+    </button>
+
+    <div class="emoji-popover hidden">
+      <emoji-picker></emoji-picker>
+    </div>
+
+    <input
+      type="hidden"
+      class="item-emoji"
+      name="emoji"
+      value="{{ item.emoji if item and item.emoji else '🥫' }}"
+    />
+  </div>
 
   <label class="quicksand-regular" for="food-category">Category</label>
   <input id="food-category" name="category" type="text" class="item-input quicksand-regular"
     placeholder="e.g. Frozen, Canned, Fresh"
-    value="{{ item.category if item else '' }}" required>
+    value="{{ item.category if item else '' }}">
 
   <label class="quicksand-regular" for="food-description">Description</label>
   <input id="food-description" name="description" type="text" class="item-input quicksand-regular"

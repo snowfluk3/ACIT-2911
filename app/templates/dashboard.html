@@ -10,7 +10,7 @@
         class="search-form"
         hx-get="/ingredients/filter"
         hx-target="#pantry-items"
-        hx-trigger="input delay:300ms"
+        hx-trigger="input delay:150ms, change"
         hx-include="#search-form"
         onsubmit="return false">
             <span class="search-icon">⌕</span>
@@ -21,7 +21,14 @@
             placeholder="Search ingredients..." 
             class="quicksand-regular">
 
-            <button type="button" id="clear-search">×</button>
+            <button 
+            type="button" 
+            id="clear-search"
+            hx-get="/ingredients/filter"
+            hx-target="#pantry-items"
+            hx-include="#search-form"
+            hx-vals='{"search": "", "category": "All"}'
+            hx-on::after-request="document.getElementById('search-filter').value = ''">×</button>
 
             <input
             type="hidden"
@@ -87,29 +94,24 @@
 {% block scripts %}
 <script>
 document.body.addEventListener("click", (e) => {
-    const btn = e.target.closest(".category-menu button")
+    const btn = e.target.closest(".category-menu button");
 
-    if (!btn) {
-        const category = btn.dataset.category
+    if (!btn) return;
 
-        document.getElementById("category-input").value = category
-        document.getElementById("cateogry-label").textContent = category
+    const category = btn.dataset.category;
 
+    const input = document.getElementById("category-input");
+    const label = document.getElementById("category-label");
+
+    if (input) input.value = category;
+    if (label) label.textContent = category;
+
+    if (window.htmx) {
         htmx.trigger("#search-filter", "input")
     }
 
     // optional: update dropdown label
     document.getElementById("category-label").textContent = category;
-})
-
-// Clear search filter
-document.getElementById("clear-search").addEventListener("click", () => {
-        document.getElementById("search-filter");
-
-        document.getElementById("category-input").value = "All";
-        document.getElementById("category-label").textContent = "All";
-
-        htmx.trigger("#search-filter", "input")
-    });
+});
 </script>
 {% endblock %}

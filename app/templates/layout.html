@@ -31,97 +31,13 @@
         <a href="/" class="elms-sans-regular h1">🥫Snack Stash Storeroom</a>
       </div>
 
-      {% if current_user.is_authenticated %}
-
-      <div class="search-bar">
-        <form id="search-form" class="search-form">
-          <span class="search-icon">⌕</span>
-
-          <input
-            id="search-filter"
-            type="text"
-            name="filter"
-            placeholder="Search items..."
-            class="quicksand-regular"
-          />
-
-          <button type="button" id="clear-search">×</button>
-        </form>
-
-        <details class="category-dropdown">
-          <summary class="dropdown-trigger elms-sans-regular">
-            All
-            <span class="arrow"></span>
-          </summary>
-
-          <div class="category-menu">
-            <button type="button" class="quicksand-regular">All</button>
-            <button type="button" class="quicksand-regular" disabled>
-              Categories soon
-            </button>
-          </div>
-        </details>
-      </div>
-
-      {% endif %}
-
-      <ul class="nav-links">
-        <li>
-          <button
-            type="button"
-            id="theme-toggle"
-            class="theme-toggle quicksand-regular"
-            aria-label="Toggle dark mode"
-          >
-            Dark
-          </button>
-        </li>
-
-        {% if current_user.is_authenticated %}
-
-        <li>
-          <a
-            href="{{ url_for('templates.dashboard') }}"
-            class="quicksand-regular"
-            >Ingredients</a
-          >
-        </li>
-        <li>
-          <a
-            href="{{ url_for('recipes.recipes_page') }}"
-            class="quicksand-regular"
-            >Recipes</a
-          >
-        </li>
-        <li>
-          <a href="{{ url_for('food.food_page') }}" class="quicksand-regular"
-            >Food</a
-          >
-        </li>
-
-        <li>
-          <details class="dropdown">
-            <summary class="quicksand-regular dropdown-trigger">
-              {{ current_user.username }}<span class="arrow"></span>
-            </summary>
-            <div class="dropdown-menu">
-              <div class="user-dropdown quicksand-regular">
-                <strong>{{ current_user.username }}</strong>
-                <span>{{ current_user.email }}</span>
-              </div>
-              <hr />
-              <form method="POST" action="{{ url_for('auth.logout') }}">
-                <button type="submit" class="quicksand-regular">Logout</button>
-              </form>
-            </div>
-          </details>
-        </li>
-
             <ul class="nav-links">
                 <li>
-                    <button type="button" id="theme-toggle" class="theme-toggle quicksand-regular" aria-label="Toggle dark mode">
-                        Dark
-                    </button>
+                    <button 
+                    type="button" 
+                    id="theme-toggle" 
+                    class="theme-toggle quicksand-regular" a
+                    ria-label="Toggle dark mode">Dark</button>
                 </li>
 
                 {% if current_user.is_authenticated %}
@@ -317,15 +233,19 @@
       </ul>
     </footer>
 
-    {% block scripts %} {% endblock %}
+    {% block scripts %} 
+    {% endblock %}
 
     <script 
-      type="module"
+      type="module" 
       src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js">
+    </script>
+
+    <script>
+      // Logic I:
       (function () {
         const themeKey = 'snack-stash-theme';
         const themeToggle = document.getElementById('theme-toggle');
-        const clearSearch = document.getElementById('clear-search');
 
         function applyTheme(theme) {
           const nextTheme = theme === 'light' ? 'light' : 'dark';
@@ -343,19 +263,6 @@
           }
 
           localStorage.setItem(themeKey, nextTheme);
-        }
-
-        function filterCards() {
-          if (!searchInput) return;
-
-          const query = searchInput.value.trim().toLowerCase();
-          document.querySelectorAll('[data-search]').forEach(function (card) {
-            const cardText = card.dataset.search || '';
-            card.classList.toggle(
-              'is-hidden-by-search',
-              query && !cardText.includes(query),
-            );
-          });
         }
 
         function wireFlipCards() {
@@ -399,14 +306,6 @@
           });
         }
 
-        if (clearSearch) {
-          clearSearch.addEventListener('click', function () {
-            searchInput.value = '';
-            filterCards();
-            searchInput.focus();
-          });
-        }
-
         document.body.addEventListener('htmx:afterSwap', function (event) {
           filterCards();
           wireFlipCards();
@@ -421,6 +320,7 @@
         });
       })();
 
+    // Logic II:
     document.addEventListener('click', function (event) {
         const trigger = event.target.closest('.emoji-trigger');
 
