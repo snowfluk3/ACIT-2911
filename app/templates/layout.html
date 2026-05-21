@@ -387,9 +387,17 @@
           });
         }
 
-        document.body.addEventListener('htmx:afterSwap', function () {
+        document.body.addEventListener('htmx:afterSwap', function (event) {
           filterCards();
           wireFlipCards();
+          if (
+            event.detail.target.id === 'item-form-container' &&
+            event.detail.target.innerHTML.trim() !== ''
+          ) {
+            const navHeight = document.querySelector('nav')?.offsetHeight ?? 0;
+            const top = event.detail.target.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+            window.scrollTo({ behavior: 'smooth', top });
+          }
         });
       })();
     </script>
