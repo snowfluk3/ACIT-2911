@@ -478,16 +478,17 @@ nav button:hover,
 
 .dropdown-menu button,
 .category-menu button {
-  width: 100%;
-  min-height: 34px;
-  border: none;
-  background: transparent;
-  color: var(--muted);
-  font-weight: 700;
-  padding: 8px 10px;
-  text-align: left;
-  text-transform: none;
-  box-shadow: none;
+    width: 100%;
+    min-height: 34px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-weight: 700;
+    padding: 8px 10px;
+    text-align: left;
+    text-transform: none;
+    box-shadow: none;
+    cursor: pointer;
 }
 
 .dropdown-menu button:hover,

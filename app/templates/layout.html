@@ -117,32 +117,53 @@
           </details>
         </li>
 
-        {% else %}
+            <ul class="nav-links">
+                <li>
+                    <button type="button" id="theme-toggle" class="theme-toggle quicksand-regular" aria-label="Toggle dark mode">
+                        Dark
+                    </button>
+                </li>
 
-        <li class="quicksand-regular"><a href="#">Home</a></li>
-        <li class="quicksand-regular"><a href="#">About</a></li>
-        <li class="quicksand-regular"><a href="#">Contacts</a></li>
+                {% if current_user.is_authenticated %}
 
-        <li>
-          <button
-            type="button"
-            id="login-btn"
-            class="quicksand-regular"
-            hx-on:click="document.getElementById('login-popup').classList.add('show');
-                                    document.getElementById('overlay').classList.add('show');"
-          >
-            Login
-          </button>
-        </li>
+                <li><a href="{{ url_for('templates.dashboard') }}" class="quicksand-regular">Ingredients</a></li>
+                <li><a href="{{ url_for('recipes.recipes_page') }}" class="quicksand-regular">Recipes</a></li>
+                <li><a href="{{ url_for('food.food_page') }}" class="quicksand-regular">Food</a></li>
 
-        {% endif %}
-      </ul>
-    </nav>
+                <li>
+                    <details class="dropdown">
+                        <summary class="quicksand-regular dropdown-trigger">{{ current_user.username }}<span class="chevron">⌄</span></summary>
+                        <div class="dropdown-menu">
+                            <div class="user-dropdown quicksand-regular">
+                                <strong>{{ current_user.username }}</strong>
+                                <span>{{ current_user.email }}</span>
+                            </div>
+                            <hr>
+                            <form method="POST" action="{{ url_for('auth.logout') }}">
+                                <button type="submit" class="quicksand-regular">Logout</button>
+                            </form>
+                        </div>
+                    </details>
+                </li>   
 
-    <div
-      id="overlay"
-      class="overlay"
-      hx-on:click="document.getElementById('login-popup').classList.remove('show');
+                {% else %}
+
+                <li class="quicksand-regular"><a href="#">Home</a></li>
+                <li class="quicksand-regular"><a href="#">About</a></li>
+                <li class="quicksand-regular"><a href="#">Contacts</a></li>
+
+                <li>
+                    <button type="button" id="login-btn" class="quicksand-regular"
+                        hx-on:click="document.getElementById('login-popup').classList.add('show');
+                        document.getElementById('overlay').classList.add('show');">Login</button>
+                </li>
+
+                {% endif %}
+            </ul>
+        </nav>
+
+        <div id="overlay" class="overlay"
+                    hx-on:click="document.getElementById('login-popup').classList.remove('show');
                                 document.getElementById('register-popup').classList.remove('show');
                                 document.getElementById('overlay').classList.remove('show');"
     ></div>
@@ -298,11 +319,12 @@
 
     {% block scripts %} {% endblock %}
 
-    <script>
+    <script 
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js">
       (function () {
         const themeKey = 'snack-stash-theme';
         const themeToggle = document.getElementById('theme-toggle');
-        const searchInput = document.getElementById('search-filter');
         const clearSearch = document.getElementById('clear-search');
 
         function applyTheme(theme) {
@@ -377,10 +399,6 @@
           });
         }
 
-        if (searchInput) {
-          searchInput.addEventListener('input', filterCards);
-        }
-
         if (clearSearch) {
           clearSearch.addEventListener('click', function () {
             searchInput.value = '';
@@ -402,15 +420,8 @@
           }
         });
       })();
-    </script>
 
-    <script
-      type="module"
-      src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"
-    ></script>
-
-    <script>
-      document.addEventListener('click', function (event) {
+    document.addEventListener('click', function (event) {
         const trigger = event.target.closest('.emoji-trigger');
 
         if (trigger) {
@@ -439,6 +450,6 @@
         wrapper.querySelector('.item-emoji').value = emoji;
         wrapper.querySelector('.emoji-popover').classList.add('hidden');
       });
-    </script>
-  </body>
+      </script>
+    </body>
 </html>

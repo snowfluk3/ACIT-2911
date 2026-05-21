@@ -2,6 +2,48 @@
 {% block content %}
 
 <main class="dashboard-page" id="main-content" tabindex="-1">
+    {% if current_user.is_authenticated %}
+
+    <div class="search-bar">
+        <form 
+        id="search-form" 
+        class="search-form"
+        hx-get="/food/filter"
+        hx-target="#food-items"
+        hx-trigger="input delay:300ms"
+        hx-include="#search-form"
+        onsubmit="return false">
+            <span class="search-icon">⌕</span>
+            <input 
+            id="search-filter" 
+            type="text"
+            name="search" 
+            placeholder="Search foods..." 
+            class="quicksand-regular">
+
+            <button type="button" id="clear-search">×</button>
+
+            <input
+            type="hidden"
+            name="category"
+            id="category-input"
+            value="All">
+        </form>
+        
+        <details class="category-dropdown">
+
+            <summary id="category-trigger" class="dropdown-trigger elms-sans-regular">
+                <span id="category-label">All</span>
+                <span class="chevron">⌄</span>
+            </summary>
+
+            <div id="food-categories">
+                {% include "_food_categories.html" %}
+            </div>
+
+        </details>
+    </div>
+
     <div class="dashboard-shell">
         <aside class="dashboard-sidebar">
             <p class="sidebar-kicker quicksand-regular">Food Storage</p>
@@ -33,6 +75,40 @@
             <div id="food-form-container" class="item-form-container"></div>
         </section>
     </div>
+    {% endif %}
 </main>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.querySelectorAll(".category-menu button").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const category = btn.dataset.category;
+
+            document.getElementById("category-input").value = category;
+
+            htmx.ajax("GET", "/food/filter", {
+                target: "#food-items",
+                swap: "innerHTML",
+                values: {
+                    search: document.getElementById("search-filter").value,
+                    category: category
+                }
+            });
+
+            document.getElementById("category-label").textContent = category;
+        });
+    });
+
+    document.getElementById("clear-search").addEventListener("click", () => {
+        document.getElementById("search-filter");
+
+        document.getElementById("category-input").value = "All";
+        document.getElementById("category-label").textContent = "All";
+
+        htmx.trigger("#search-filter", "input")
+    });
+</script>
 
 {% endblock %}

@@ -2,9 +2,51 @@
 {% block content %}
 
 <main class="dashboard-page" id="main-content" tabindex="-1">
-    <section id="recipes-section" class="dashboard-main" style="width: 100%;">
-        {% include "_recipes_section.html" %}
-    </section>
+    {% if current_user.is_authenticated %}
+
+    <div class="search-bar">
+        <form 
+        id="search-form" 
+        class="search-form"
+        hx-get="/recipes/filter"
+        hx-target="#recipes-section"
+        hx-trigger="input delay:300ms"
+        hx-include="#search-form"
+        onsubmit="return false">
+            <span class="search-icon">⌕</span>
+            <input 
+            id="search-filter" 
+            type="text"
+            name="search" 
+            placeholder="Search recipes..." 
+            class="quicksand-regular">
+
+            <button type="button" id="clear-search">×</button>
+        </form>
+    </div>
+
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <p class="sidebar-kicker quicksand-regular">Recipe Box</p>
+            <h1 class="elms-sans-regular">Saved Recipes</h1>
+            <p class="quicksand-regular">Generate recipe ideas from your own pantry, then keep the saved recipes here for later.</p>
+        </aside>
+
+        <section id="recipes-section" class="pantry-section dashboard-main">
+            {% include "_recipes_section.html" %}
+        </section>
+    </div>
+    {% endif %}
 </main>
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById("clear-search").addEventListener("click", () => {
+        document.getElementById("search-filter");
+
+        htmx.trigger("#search-filter", "input")
+    })
+</script>
 {% endblock %}
