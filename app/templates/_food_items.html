@@ -69,10 +69,12 @@
 
           <div class="card-actions">
             <button class="card-edit quicksand-regular"
+              aria-label="Edit {{ item.name }}"
               hx-get="/food/{{ item.id }}/edit"
               hx-target="#food-form-container"
               hx-swap="innerHTML">Edit</button>
             <button class="card-delete quicksand-regular"
+              aria-label="Delete {{ item.name }}"
               hx-delete="/food/{{ item.id }}"
               hx-target="#food-items"
               hx-swap="innerHTML"

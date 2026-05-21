@@ -43,6 +43,31 @@ body.dark-mode {
     --h2: var(--text);
 }
 
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    z-index: 9999;
+    text-decoration: none;
+    padding: 0.75rem 1.25rem;
+    background: var(--surface);
+    color: var(--text);
+    border: 2px solid var(--accent);
+    border-radius: 0.5rem;
+}
+
+.skip-link:focus {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    width: auto;
+    height: auto;
+    overflow: visible;
+}
+
 *,
 *::before,
 *::after {
@@ -229,7 +254,7 @@ nav {
     transform: rotate(-45deg);
 }
 
-.logo p {
+.logo a {
     font-family: "Syne", sans-serif;
     font-optical-sizing: auto;
     font-weight: 700;
@@ -241,7 +266,6 @@ nav {
     letter-spacing: -0.04em;
     overflow: visible;
     white-space: nowrap;
-    cursor: pointer;
 }
 
 .search-bar {
@@ -645,7 +669,7 @@ body.dark-mode main > h2,
 body.dark-mode .pantry-stats h2,
 body.dark-mode .section-header h2,
 body.dark-mode .introduction-title h1,
-body.dark-mode .logo p {
+body.dark-mode .logo a {
     color: var(--text);
 }
 
@@ -765,6 +789,9 @@ body.dark-mode .stats-list span {
     user-select: none;
     font-size: 13px;
     font-weight: 700;
+    background: none;
+    border: none;
+    padding: 0;
 }
 
 /* Pantry and food sections */
@@ -902,6 +929,13 @@ body.dark-mode .stats-list span {
 .card-back-button:focus-visible {
     outline: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
     outline-offset: 3px;
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--accent) 50%, transparent);
+    outline-offset: 3px;
+    border-radius: 3px;
 }
 
 .pantry-card-back {
@@ -1717,7 +1751,7 @@ footer {
         grid-template-columns: 1fr;
     }
 
-    .logo p {
+    .logo a {
     font-size: 24px;
     }
 }

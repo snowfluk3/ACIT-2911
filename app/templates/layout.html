@@ -12,9 +12,10 @@
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap" rel="stylesheet">        <script src="https://unpkg.com/htmx.org@1.9.12" crossorigin="anonymous"></script>
     </head>
     <body class="light-mode">
+        <a href="#main-content" class="skip-link quicksand-regular">Skip to main content</a>
         <nav>
             <div class="logo">
-                <p class="elms-sans-regular h1" onclick="window.location.href='/'">🥫Snack Stash Storeroom</p>
+                <a href="/" class="elms-sans-regular h1">🥫Snack Stash Storeroom</a>
             </div>
 
             {% if current_user.is_authenticated %}
@@ -30,7 +31,7 @@
                     placeholder="Search items..." 
                     class="quicksand-regular">
 
-                    <button type="button" id="clear-search">×</button>
+                    <button type="button" id="clear-search" aria-label="Clear search">×</button>
                 </form>
                 
                 <details class="category-dropdown">
@@ -97,14 +98,14 @@
             </ul>
         </nav>
 
-        <div id="overlay" class="overlay"
+        <div id="overlay" class="overlay" aria-hidden="true"
                     hx-on:click="document.getElementById('login-popup').classList.remove('show');
                                 document.getElementById('register-popup').classList.remove('show');
                                 document.getElementById('overlay').classList.remove('show');"></div>
 
         <div id="login-popup" class="popup-login">
 
-                    <button id="close-btn" class="close-btn"
+                    <button id="close-btn" class="close-btn" aria-label="Close login dialog"
                         hx-on:click="document.getElementById('login-popup').classList.remove('show');
                                     document.getElementById('overlay').classList.remove('show');
                                     document.getElementById('login-form').reset();">&times;</button>
@@ -115,17 +116,19 @@
                         hx-swap="innerHTML">
                         <h3 class="elms-sans-regular h1">Login</h3>
                         <br>
-                        <p class="elms-sans-regular">Username / Email:</p>
-                        <input type="text" name="login_input"
+                        <label for="login-input" class="elms-sans-regular">Username / Email:</label>
+                        <input id="login-input" type="text" name="login_input"
                         placeholder="Username / Email" class="quicksand-regular" required>
-                        <p class="elms-sans-regular">Password:</p>
+                        <label for="password-field" class="elms-sans-regular">Password:</label>
                         <div class="password-wrapper">
                             <input id="password-field" type="password" name="password"
                             placeholder="Password" class="quicksand-regular" required>
-                            <span id="toggle-password" class="toggle-eye elms-sans-regular"
+                            <button type="button" id="toggle-password" class="toggle-eye elms-sans-regular"
+                                aria-label="Show password"
                                 hx-on:click="var f=document.getElementById('password-field');
                                             f.type=f.type==='password'?'text':'password';
-                                            this.innerText=f.type==='password'?'Show':'Hide';">Show</span>
+                                            this.textContent=f.type==='password'?'Show':'Hide';
+                                            this.setAttribute('aria-label',f.type==='password'?'Show password':'Hide password');">Show</button>
                         </div>
                         <div id="login-error" class="error-login quicksand-regular"></div>
                         <button type="submit" class="quicksand-regular">Confirm</button>
@@ -143,7 +146,7 @@
 
                 <div id="register-popup" class="popup-register">
 
-                    <button id="close-reg-button" class="close-btn"
+                    <button id="close-reg-button" class="close-btn" aria-label="Close registration dialog"
                         hx-on:click="document.getElementById('register-popup').classList.remove('show');
                                     document.getElementById('overlay').classList.remove('show');
                                     document.getElementById('register-form').reset();">&times;</button>
@@ -155,22 +158,24 @@
                         <h3 class="elms-sans-regular h1">Register</h3>
                         <br>
 
-                        <p class="elms-sans-regular">Username:</p>
-                        <input type="text" name="username"
+                        <label for="register-username" class="elms-sans-regular">Username:</label>
+                        <input id="register-username" type="text" name="username"
                         placeholder="Username" class="quicksand-regular" required>
 
-                        <p class="elms-sans-regular">Email:</p>
-                        <input type="text" name="email"
+                        <label for="register-email" class="elms-sans-regular">Email:</label>
+                        <input type="email" id="register-email" name="email"
                         placeholder="Email" class="quicksand-regular" required>
 
-                        <p class="elms-sans-regular">Password:</p>
+                        <label for="register-password-field" class="elms-sans-regular">Password:</label>
                         <div class="password-wrapper">
                             <input id="register-password-field" type="password" name="password"
                             placeholder="Password" class="quicksand-regular" required>
-                            <span id="register-toggle-password" class="toggle-eye elms-sans-regular"
+                            <button type="button" id="register-toggle-password" class="toggle-eye elms-sans-regular"
+                                aria-label="Show password"
                                 hx-on:click="var f=document.getElementById('register-password-field');
                                             f.type=f.type==='password'?'text':'password';
-                                            this.innerText=f.type==='password'?'Show':'Hide';">Show</span>
+                                            this.textContent=f.type==='password'?'Show':'Hide';
+                                            this.setAttribute('aria-label',f.type==='password'?'Show password':'Hide password');">Show</button>
                         </div>
 
                         <div id="register-error" class="error-login quicksand-regular"></div>
