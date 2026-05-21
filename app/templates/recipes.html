@@ -4,27 +4,6 @@
 <main class="dashboard-page" id="main-content" tabindex="-1">
     {% if current_user.is_authenticated %}
 
-    <div class="search-bar">
-        <form 
-        id="search-form" 
-        class="search-form"
-        hx-get="/recipes/filter"
-        hx-target="#recipes-section"
-        hx-trigger="input delay:300ms"
-        hx-include="#search-form"
-        onsubmit="return false">
-            <span class="search-icon">⌕</span>
-            <input 
-            id="search-filter" 
-            type="text"
-            name="search" 
-            placeholder="Search recipes..." 
-            class="quicksand-regular">
-
-            <button type="button" id="clear-search">×</button>
-        </form>
-    </div>
-
     <div class="dashboard-shell">
         <aside class="dashboard-sidebar">
             <p class="sidebar-kicker quicksand-regular">Recipe Box</p>
@@ -32,21 +11,74 @@
             <p class="quicksand-regular">Generate recipe ideas from your own pantry, then keep the saved recipes here for later.</p>
         </aside>
 
-        <section id="recipes-section" class="pantry-section dashboard-main">
-            {% include "_recipes_section.html" %}
+        <section class="pantry-section dashboard-main">
+            <div class="search-bar">
+                <form
+                id="search-form"
+                class="search-form"
+                hx-get="/recipes/filter"
+                hx-target="#recipes-list"
+                hx-trigger="input delay:300ms"
+                hx-include="#search-form"
+                onsubmit="return false">
+                    <span class="search-icon">⌕</span>
+                    <input
+                    id="search-filter"
+                    type="text"
+                    name="search"
+                    placeholder="Search recipes..."
+                    class="quicksand-regular">
+
+                    <button
+                    type="button"
+                    id="clear-search"
+                    hx-get="/recipes/filter"
+                    hx-target="#recipes-list"
+                    hx-vals='{"search": ""}'
+                    hx-on::after-request="document.getElementById('search-filter').value = ''">×</button>
+                </form>
+            </div>
+
+            <div id="recipes-section-inner"
+              {% if gen_status['state'] == "generating" %}
+                hx-get="/recipes/poll-status"
+                hx-trigger="every 2s"
+                hx-target="#recipes-section-inner"
+                hx-swap="outerHTML"
+              {% endif %}>
+
+                <div class="section-header">
+                    <div>
+                        <p class="section-kicker quicksand-regular">Recipes</p>
+                        <h2 class="elms-sans-regular h1">My Recipes</h2>
+                        <p class="quicksand-regular">Click a recipe to expand ingredients, instructions, and tips.</p>
+                    </div>
+                    <button class="quicksand-regular generate-btn"
+                        {% if gen_status['state'] == "generating" %}disabled{% endif %}
+                        hx-post="/recipes/generate"
+                        hx-target="#recipes-section-inner"
+                        hx-swap="outerHTML">Generate Recipes</button>
+                </div>
+
+                {% if gen_status['state'] == "generating" %}
+                <div class="recipes-loading">
+                    <p class="quicksand-regular">Generating recipes from your pantry...</p>
+                </div>
+                {% endif %}
+
+                {% if gen_status['state'] == "error" %}
+                <div class="recipes-error">
+                    <p class="quicksand-regular">Could not generate recipes: {{ gen_status['error'] }}</p>
+                </div>
+                {% endif %}
+
+                <div id="recipes-list" class="recipes-grid">
+                    {% include "_recipes.html" %}
+                </div>
+            </div>
         </section>
     </div>
     {% endif %}
 </main>
 
-{% endblock %}
-
-{% block scripts %}
-<script>
-    document.getElementById("clear-search").addEventListener("click", () => {
-        document.getElementById("search-filter");
-
-        htmx.trigger("#search-filter", "input")
-    })
-</script>
 {% endblock %}

@@ -210,10 +210,7 @@ nav {
   top: 0;
   z-index: 50;
   display: grid;
-  grid-template-columns: minmax(205px, 1fr) minmax(260px, 500px) minmax(
-      205px,
-      1fr
-    );
+  grid-template-columns: minmax(205px, 1fr) minmax(205px, 1fr);
   align-items: center;
   gap: 20px;
   width: 100%;
@@ -284,17 +281,14 @@ nav {
 }
 
 .search-bar {
-  grid-column: 2;
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 500px;
   min-width: 0;
   display: flex;
   align-items: center;
-  justify-self: center;
-  margin-left: 0;
   gap: 12px;
+  margin-bottom: 20px;
 }
 
 .search-form {
@@ -353,7 +347,7 @@ nav {
 }
 
 .nav-links {
-  grid-column: 3;
+  grid-column: 2;
   z-index: 2;
   display: flex;
   align-items: center;
@@ -557,7 +551,7 @@ main {
 
 .dashboard-sidebar {
   position: sticky;
-  top: 118px;
+  top: 107px;
   display: grid;
   gap: 12px;
   padding: 18px;
@@ -1654,16 +1648,6 @@ footer {
     padding: 16px 28px;
   }
 
-  .search-bar {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    margin-left: 0;
-  }
-
-  .nav-links {
-    grid-column: 2;
-  }
-
   .dashboard-shell {
     grid-template-columns: 1fr;
   }
@@ -1698,12 +1682,6 @@ footer {
 
   .logo {
     grid-column: 1;
-  }
-
-  .search-bar {
-    grid-column: 1;
-    max-width: 100%;
-    justify-self: stretch;
   }
 
   .nav-links {

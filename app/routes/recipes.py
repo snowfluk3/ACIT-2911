@@ -152,6 +152,20 @@ def delete_recipe(id):
     return "", 204
 
 
+@recipe_bp.route("/filter", methods=["GET"])
+@login_required
+def filter_recipes():
+    search = request.args.get("search", "").strip().lower()
+    user_id = int(current_user.id)
+    recipes = [recipe_to_dict(r) for r in
+               Recipe.select().where(Recipe.user_id == user_id).order_by(Recipe.id.desc())] #type: ignore
+    for r in recipes:
+        r["generated_label"] = _relative_date(r["created_at"])
+    if search:
+        recipes = [r for r in recipes if search in r["title"].lower()]
+    return render_template("_recipes.html", recipes=recipes)
+
+
 @recipe_bp.route("/generate", methods=["POST"])
 @login_required
 def recipes_generate():

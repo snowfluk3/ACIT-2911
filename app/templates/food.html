@@ -4,53 +4,6 @@
 <main class="dashboard-page" id="main-content" tabindex="-1">
     {% if current_user.is_authenticated %}
 
-    <div class="search-bar">
-        <form 
-        id="search-form" 
-        class="search-form"
-        hx-get="/food/filter"
-        hx-target="#food-items"
-        hx-trigger="input delay:150ms, change"
-        hx-include="#search-form"
-        onsubmit="return false">
-            <span class="search-icon">⌕</span>
-            <input 
-            id="search-filter" 
-            type="text"
-            name="search" 
-            placeholder="Search foods..." 
-            class="quicksand-regular">
-
-            <button 
-            type="button" 
-            id="clear-search"
-            hx-get="/food/filter"
-            hx-target="#food-items"
-            hx-include="#search-form"
-            hx-vals='{"search": "", "category": "All"}'
-            hx-on::after-request="document.getElementById('search-filter').value = ''">×</button>
-
-            <input
-            type="hidden"
-            name="category"
-            id="category-input"
-            value="All">
-        </form>
-        
-        <details class="category-dropdown">
-
-            <summary id="category-trigger" class="dropdown-trigger elms-sans-regular">
-                <span id="category-label">All</span>
-                <span class="chevron">⌄</span>
-            </summary>
-
-            <div id="food-categories">
-                {% include "_food_categories.html" %}
-            </div>
-
-        </details>
-    </div>
-
     <div class="dashboard-shell">
         <aside class="dashboard-sidebar">
             <p class="sidebar-kicker quicksand-regular">Food Storage</p>
@@ -73,6 +26,51 @@
                     hx-get="/food/new"
                     hx-target="#food-form-container"
                     hx-swap="innerHTML">Add Item</button>
+            </div>
+
+            <div class="search-bar">
+                <form
+                id="search-form"
+                class="search-form"
+                hx-get="/food/filter"
+                hx-target="#food-items"
+                hx-trigger="input delay:150ms, change"
+                hx-include="#search-form"
+                onsubmit="return false">
+                    <span class="search-icon">⌕</span>
+                    <input
+                    id="search-filter"
+                    type="text"
+                    name="search"
+                    placeholder="Search foods..."
+                    class="quicksand-regular">
+
+                    <button
+                    type="button"
+                    id="clear-search"
+                    hx-get="/food/filter"
+                    hx-target="#food-items"
+                    hx-include="#search-form"
+                    hx-vals='{"search": "", "category": "All"}'
+                    hx-on::after-request="document.getElementById('search-filter').value = ''">×</button>
+
+                    <input
+                    type="hidden"
+                    name="category"
+                    id="category-input"
+                    value="All">
+                </form>
+
+                <details class="category-dropdown">
+                    <summary id="category-trigger" class="dropdown-trigger elms-sans-regular">
+                        <span id="category-label">All</span>
+                        <span class="chevron">⌄</span>
+                    </summary>
+
+                    <div id="food-categories">
+                        {% include "_food_categories.html" %}
+                    </div>
+                </details>
             </div>
 
             <div id="food-items" class="pantry-items-grid">
@@ -105,10 +103,7 @@ document.body.addEventListener("click", (e) => {
     if (window.htmx) {
         htmx.trigger("#search-filter", "input")
     }
-
-    // optional: update dropdown label
-    document.getElementById("category-label").textContent = category;
-})
+});
 </script>
 
 {% endblock %}
