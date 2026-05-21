@@ -4,3 +4,4 @@
 __pycache__
 .pytest_cache
 project_proposal.md
+*.db
