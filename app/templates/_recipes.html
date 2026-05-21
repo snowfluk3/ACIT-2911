@@ -55,7 +55,6 @@
 
         <div class="recipe-accordion-footer">
           <button class="card-delete quicksand-regular"
-            aria-label="Delete recipe {{ recipe.title }}"
             hx-delete="/recipes/{{ recipe.id }}"
             hx-target="#recipes-section-inner"
             hx-swap="outerHTML"

@@ -83,20 +83,6 @@ today).days ~ " days" %} {% elif not item.expiry_date %} {% set status_class =
           Edit
         </button>
 
-          <div class="card-actions">
-            <button class="card-edit quicksand-regular"
-              aria-label="Edit {{ item.name }}"
-              hx-get="/ingredients/{{ item.id }}/edit"
-              hx-target="#item-form-container"
-              hx-swap="innerHTML">Edit</button>
-            <button class="card-delete quicksand-regular"
-              aria-label="Delete {{ item.name }}"
-              hx-delete="/ingredients/{{ item.id }}"
-              hx-target="#pantry-items"
-              hx-swap="innerHTML"
-              hx-confirm="Delete this pantry item?">Delete</button>
-          </div>
-        </div>
         <button
           class="card-delete quicksand-regular"
           hx-delete="/ingredients/{{ item.id }}"
