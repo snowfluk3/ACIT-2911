@@ -471,8 +471,6 @@ nav button:hover,
 }
 
 .category-menu {
-  left: 0;
-  right: auto;
   min-width: 150px;
 }
 
@@ -931,7 +929,7 @@ body.dark-mode .stats-list span {
 .pantry-card-front {
   appearance: none;
   -webkit-appearance: none;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: 1fr auto;
   padding: 0;
   border: var(--border);
   font: inherit;
@@ -987,8 +985,6 @@ a:focus-visible {
   position: relative;
   display: grid;
   place-items: center;
-  min-height: 150px;
-  aspect-ratio: 1 / 0.86;
   overflow: hidden;
   background:
     linear-gradient(
@@ -1653,7 +1649,7 @@ footer {
   }
 
   .dashboard-sidebar {
-    position: static;
+    display: none;
   }
 }
 
@@ -1736,10 +1732,6 @@ footer {
 
   .recipes-grid {
     grid-template-columns: 1fr;
-  }
-
-  .pantry-card-media {
-    min-height: 120px;
   }
 
   .pantry-item-icon {
