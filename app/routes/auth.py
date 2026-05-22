@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash
 
 auth_bp = Blueprint("auth", __name__)
 
-_ERROR_FRAGMENT = '<p class="quicksand-regular" style="color:red">{msg}</p>'
+_ERROR_FRAGMENT = '<p class="quicksand-regular" style="color:red"><strong>{{msg}}</strong></p>'
 
 
 def authenticate(identity, password):

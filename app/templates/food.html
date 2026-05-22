@@ -52,7 +52,10 @@
                     hx-target="#food-items"
                     hx-include="#search-form"
                     hx-vals='{"search": "", "category": "All"}'
-                    hx-on::after-request="document.getElementById('search-filter').value = ''">×</button>
+                    hx-on::after-request="document.getElementById('search-filter').value = ''"
+                    hx-on:click="
+                    document.getElementById('category-input').value = 'All';
+                    document.getElementById('category-label').textContent = 'All';">×</button>
 
                     <input
                     type="hidden"
