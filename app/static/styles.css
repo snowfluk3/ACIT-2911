@@ -87,6 +87,7 @@ body {
   background: var(--background);
   color: var(--text);
   font-family: 'Inter', sans-serif;
+  min-width: 371px;
 }
 
 body > main {
@@ -100,6 +101,11 @@ body > footer {
 .index-main {
   max-width: 900px;
 }
+
+.index-logo-header {
+  align-items: center;
+}
+
 
 button,
 input,
@@ -162,13 +168,17 @@ a {
   overflow: visible;
 }
 
+.title {
+  display: inline;
+}
+
 .syne-title {
   font-family: 'Syne', sans-serif;
   font-optical-sizing: auto;
   font-weight: 750;
   font-style: normal;
-  font-size: 65px;
-  color: var(--accent);
+  color: var(--h1);
+  font-size: clamp(24px, 3vw, 34px);
 }
 
 .small-text {
@@ -222,10 +232,31 @@ nav {
 
 .logo {
   grid-column: 1;
+  display: inline;
+  width: 30px;
+  background-image: url("app/static/images/logo.webp");
+}
+
+.logo-header {
   display: flex;
+  flex-direction: row;
+  gap: 8px;
   align-items: center;
-  gap: 10px;
-  min-width: 205px;
+}
+
+.logo-header img.logo {
+  transform: translateY(-4px);
+  flex-shrink: 0;
+  width: 30px;
+}
+
+.index-logo-header {
+  gap: 40px;
+}
+
+.index-logo-header img {
+  width: 160px;
+  transform: translateY(-10px);
 }
 
 .logo-mark {
@@ -1686,6 +1717,14 @@ footer {
     grid-template-columns: 1fr;
   }
 
+  .two-grid.features {
+    grid-template-columns: minmax(0, 1fr) 280px;
+  }
+
+  .features > div {
+    height: auto;
+  }
+
   .recipe-accordion-columns {
     grid-template-columns: 1fr;
   }
@@ -1714,6 +1753,20 @@ footer {
     justify-self: start;
     min-width: 0;
     flex-wrap: wrap;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .two-grid.features {
+    grid-template-columns: 1fr;
+  }
+
+  .two-grid.features .spacer-medium {
+    display: none;
+  }
+
+  .index-logo-header img {
+    width: 100px;
   }
 }
 
