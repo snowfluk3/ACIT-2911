@@ -14,5 +14,3 @@
 - Ken Yu | Development Team
 
 - Rajveer Khurana | Development Team
-
-FOr demo
