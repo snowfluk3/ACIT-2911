@@ -1,8 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<main class="dashboard-page">
+<main class="dashboard-page" id="main-content" tabindex="-1">
     {% if current_user.is_authenticated %}
+
     <div class="dashboard-shell">
         <aside class="dashboard-sidebar">
             <p class="sidebar-kicker quicksand-regular">Pantry Tracker</p>
@@ -27,6 +28,54 @@
                     hx-swap="innerHTML">Add Item</button>
             </div>
 
+            <div class="search-bar">
+                <form
+                id="search-form"
+                class="search-form"
+                hx-get="/ingredients/filter"
+                hx-target="#pantry-items"
+                hx-trigger="input delay:150ms, change"
+                hx-include="#search-form"
+                onsubmit="return false">
+                    <span class="search-icon">⌕</span>
+                    <input
+                    id="search-filter"
+                    type="text"
+                    name="search"
+                    placeholder="Search ingredients..."
+                    class="quicksand-regular">
+
+                    <button
+                    type="button"
+                    id="clear-search"
+                    hx-get="/ingredients/filter"
+                    hx-target="#pantry-items"
+                    hx-include="#search-form"
+                    hx-vals='{"search": "", "category": "All"}'
+                    hx-on::after-request="document.getElementById('search-filter').value = ''"
+                    hx-on:click="
+                    document.getElementById('category-input').value = 'All';
+                    document.getElementById('category-label').textContent = 'All';">×</button>
+
+                    <input
+                    type="hidden"
+                    name="category"
+                    id="category-input"
+                    value="All">
+                </form>
+
+                <details class="category-dropdown">
+                    <summary id="category-trigger" class="dropdown-trigger elms-sans-regular">
+                        <span id="category-label">All</span>
+                        <span class="chevron">⌄</span>
+                    </summary>
+
+                    <div id="ingredient-categories">
+                        {% include "_ingredient_categories.html" %}
+                    </div>
+                </details>
+            </div>
+
             <div id="pantry-items" class="pantry-items-grid">
                 {% include "_pantry_items.html" %}
             </div>
@@ -41,4 +90,29 @@
     {% endif %}
 </main>
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.body.addEventListener("click", (e) => {
+    const btn = e.target.closest(".category-menu button");
+
+    if (!btn) return;
+
+    const category = btn.dataset.category;
+
+    const input = document.getElementById("category-input");
+    const label = document.getElementById("category-label");
+
+    if (input) input.value = category;
+    if (label) label.textContent = category;
+
+    if (window.htmx) {
+        htmx.trigger("#search-filter", "input")
+    }
+
+    // optional: update dropdown label
+    document.getElementById("category-label").textContent = category;
+});
+</script>
 {% endblock %}

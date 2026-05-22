@@ -1,0 +1,229 @@
+{% extends "layout.html" %}
+
+{% block title %}
+About
+{% endblock %}
+
+{% block content %}
+
+<main class="contact-page">
+
+    <!-- HERO SECTION -->
+   <section class="contact-intro">
+
+    <div class="contact-icon">✉️</div>
+
+    <h1>We would love to hear from you</h1>
+
+    <h3>
+        Whether you have a question, a bug report, or just want to say hi — our team is ready to help.
+    </h3>
+
+</section>
+
+
+    <!-- CONTACT CARDS -->
+    <section class="contact-options">
+
+        <!-- EMAIL -->
+        <div class="option-card">
+
+            <div class="contact-icon">📧</div>
+
+            <h3>Email us</h3>
+
+            <p>
+                We aim to respond within 24 hours on business days.
+            </p>
+
+            <h4>hello@pantrytracker.app</h4>
+
+        </div>
+
+
+        <!-- LIVE CHAT -->
+        <div class="option-card">
+
+            <div class="contact-icon">💬</div>
+
+            <h3>Live Chat</h3>
+
+            <p>
+                Available Monday to Friday, 9 am to 6 pm EST.
+            </p>
+
+        </div>
+
+
+        <!-- OFFICE -->
+        <div class="option-card">
+
+            <div class="contact-icon">🏢</div>
+
+            <h3>Office</h3>
+
+            <p>
+                Come say hello if you are in the neighborhood.
+            </p>
+
+            <h4>340 West 28th St, New York, NY 10001</h4>
+
+        </div>
+
+
+        <!-- SUPPORT -->
+        <div class="option-card">
+
+            <div class="contact-icon">🕒</div>
+
+            <h3>Support hours</h3>
+
+            <p>
+                We keep food hours — early risers welcome.
+            </p>
+
+            <h4>Mon to Fri, 8 am till 7 pm EST</h4>
+
+        </div>
+
+    </section>
+
+
+    <!-- BOTTOM SECTION -->
+    <section class="contact-bottom">
+
+
+      <!-- SEND MESSAGE -->
+     <div class="message-box">
+        <h2>Send us a message</h2>
+
+        <form class="contact-form">
+
+            <div class="form-row">
+                <div class="input-group">
+                    <label>Name</label>
+                    <input type="text" placeholder="Jane Smith">
+                </div>
+
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="jane@example.com">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Subject</label>
+
+                <select>
+                    <option>Select a topic...</option>
+                    <option>Bug Report</option>
+                    <option>General Question</option>
+                    <option>Feedback</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Message</label>
+
+                <textarea placeholder="Tell us what's on your mind..."></textarea>
+            </div>
+
+            <button type="submit" class="send-btn">
+                ✈ Send message
+            </button>
+
+        </form>
+    </div>
+
+ 
+ 
+    <div class="faq-section">
+
+    <h2>Frequently asked questions</h2>
+
+    <div class="faq-item">
+
+        <button class="faq-question">
+            <span>Is Pantry Tracker free to use?</span>
+            <span>+</span>
+        </button>
+
+        <div class="faq-answer">
+            <p>
+                Yes! Our core features are completely free.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="faq-item">
+
+        <button class="faq-question">
+            <span>Can I share my pantry with family members?</span>
+            <span>+</span>
+        </button>
+
+        <div class="faq-answer">
+            <p>
+                Yes, you can share your pantry with others.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="faq-item">
+
+        <button class="faq-question">
+            <span>How do expiration alerts work?</span>
+            <span>+</span>
+        </button>
+
+        <div class="faq-answer">
+            <p>
+                Pantry Tracker sends reminders before food expires.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="faq-item">
+
+        <button class="faq-question">
+            <span>Is my data backed up?</span>
+            <span>+</span>
+        </button>
+
+        <div class="faq-answer">
+            <p>
+                Yes, your pantry data is securely stored.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+
+    <script>
+const faqItems = document.querySelectorAll(".faq-item");
+
+faqItems.forEach(item => {
+    const button = item.querySelector(".faq-question");
+
+    button.addEventListener("click", () => {
+        item.classList.toggle("active");
+    });
+});
+</script>
+<link rel="stylesheet" href="{{ url_for('static', filename='contact.css') }}">
+</main>
+
+{% endblock %}
+
+
+    
+
+
+
+
+

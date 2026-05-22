@@ -1,64 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Snack Stash Storeroom</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css', v=asset_version) }}">
-        <link rel="icon" type="image/x-icon" href="/favicon.ico">
-        <!-- Imported Links -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-        <script src="https://unpkg.com/htmx.org@1.9.12" crossorigin="anonymous"></script>
-    </head>
-    <body class="light-mode">
-        <nav>
-            <div class="logo">
-                <span class="logo-mark" aria-hidden="true"></span>
-                <p class="elms-sans-regular h1">Snack Stash Storeroom</p>
-            </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snack Stash Storeroom</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css', v=asset_version) }}"
+    />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <!-- Imported Links -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Quicksand:wght@300..700&display=swap" 
+    rel="stylesheet">
+    <script
+      src="https://unpkg.com/htmx.org@1.9.12"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body class="light-mode">
+    <a href="#main-content" class="skip-link quicksand-regular">Skip to main content</a>
 
-            {% if current_user.is_authenticated %}
-
-            <div class="search-bar">
-                <form id="search-form" class="search-form">
-                    <span class="search-icon">⌕</span>
-
-                    <input 
-                    id="search-filter" 
-                    type="text" 
-                    name="filter" 
-                    placeholder="Search items..." 
-                    class="quicksand-regular">
-
-                    <button type="button" id="clear-search">×</button>
-                </form>
-                
-                <details class="category-dropdown">
-
-                    <summary class="dropdown-trigger elms-sans-regular">
-                        All
-                        <span class="chevron">⌄</span>
-                    </summary>
-
-                    <div class="category-menu">
-                        <button type="button" class="quicksand-regular">All</button>
-                        <button type="button" class="quicksand-regular" disabled>
-                            Categories soon
-                        </button>
-                    </div>
-
-                </details>
-            </div>
-
-            {% endif %}
+    <nav>
+      <div class="logo">
+        <a href="/" class="elms-sans-regular h1"><div class="logo-header"><img src="{{ url_for('static', filename='images/logo.webp') }}" alt="" class="logo"><div class="title">Snack Stash Storeroom</div></div></a>
+      </div>
 
             <ul class="nav-links">
                 <li>
-                    <button type="button" id="theme-toggle" class="theme-toggle quicksand-regular" aria-label="Toggle dark mode">
-                        Dark
-                    </button>
+                    <button 
+                    type="button" 
+                    id="theme-toggle" 
+                    class="theme-toggle quicksand-regular" a
+                    ria-label="Toggle dark mode">Dark</button>
                 </li>
 
                 {% if current_user.is_authenticated %}
@@ -85,14 +64,14 @@
 
                 {% else %}
 
-                <li class="quicksand-regular"><a href="#">Home</a></li>
-                <li class="quicksand-regular"><a href="#">About</a></li>
-                <li class="quicksand-regular"><a href="#">Contacts</a></li>
+                <li class="quicksand-regular"><a href="{{ url_for('templates.index') }}">Home</a></li>
+                <li class="quicksand-regular"><a href="{{ url_for('templates.about') }}">About</a></li>
+                <li class="quicksand-regular"><a href="{{ url_for('templates.contact') }}">Contacts</a></li>
 
                 <li>
                     <button type="button" id="login-btn" class="quicksand-regular"
                         hx-on:click="document.getElementById('login-popup').classList.add('show');
-                                    document.getElementById('overlay').classList.add('show');">Login</button>
+                        document.getElementById('overlay').classList.add('show');">Login</button>
                 </li>
 
                 {% endif %}
@@ -102,193 +81,274 @@
         <div id="overlay" class="overlay"
                     hx-on:click="document.getElementById('login-popup').classList.remove('show');
                                 document.getElementById('register-popup').classList.remove('show');
-                                document.getElementById('overlay').classList.remove('show');"></div>
+                                document.getElementById('overlay').classList.remove('show');"
+    ></div>
 
-        <div id="login-popup" class="popup-login">
+    <div id="login-popup" class="popup-login">
+      <button
+        id="close-btn"
+        class="close-btn"
+        aria-label="Close login dialogue"
+        hx-on:click="document.getElementById('login-popup').classList.remove('show');
+        document.getElementById('overlay').classList.remove('show');
+        document.getElementById('login-form').reset();">&times;</button>
 
-                    <button id="close-btn" class="close-btn"
-                        hx-on:click="document.getElementById('login-popup').classList.remove('show');
-                                    document.getElementById('overlay').classList.remove('show');
-                                    document.getElementById('login-form').reset();">&times;</button>
-
-                    <form id="login-form" method="post"
-                        hx-post="{{ url_for('auth.login') }}"
-                        hx-target="#login-error"
-                        hx-swap="innerHTML">
-                        <h3 class="elms-sans-regular h1">Login</h3>
-                        <br>
-                        <p class="elms-sans-regular">Username / Email:</p>
-                        <input type="text" name="login_input"
-                        placeholder="Username / Email" class="quicksand-regular" required>
-                        <p class="elms-sans-regular">Password:</p>
-                        <div class="password-wrapper">
-                            <input id="password-field" type="password" name="password"
-                            placeholder="Password" class="quicksand-regular" required>
-                            <span id="toggle-password" class="toggle-eye elms-sans-regular"
-                                hx-on:click="var f=document.getElementById('password-field');
-                                            f.type=f.type==='password'?'text':'password';
-                                            this.innerText=f.type==='password'?'Show':'Hide';">Show</span>
-                        </div>
-                        <div id="login-error" class="error-login quicksand-regular"></div>
-                        <button type="submit" class="quicksand-regular">Confirm</button>
-                        <div id="registration">
-                            <br>
-                            <p class="quicksand-regular medium-text">Don't have an account?
-                                <a href="#" id="register-toggle" style="color: #e0700d;"
-                                    hx-on:click="event.preventDefault();
+      <form
+        id="login-form"
+        method="post"
+        hx-post="{{ url_for('auth.login') }}"
+        hx-target="#login-error"
+        hx-swap="innerHTML">
+        <h3 class="elms-sans-regular h1">Login</h3>
+        <p class="elms-sans-regular">Username / Email:</p>
+        <input
+          type="text"
+          name="login_input"
+          placeholder="Username / Email"
+          class="quicksand-regular"
+          required
+        />
+        <p class="elms-sans-regular">Password:</p>
+        <div class="password-wrapper">
+          <input
+            id="password-field"
+            type="password"
+            name="password"
+            placeholder="Password"
+            class="quicksand-regular"
+            required
+          />
+          <span
+            id="toggle-password"
+            aria-label="Show password"
+            class="toggle-eye elms-sans-regular"
+            hx-on:click="var f=document.getElementById('password-field');
+            f.type=f.type==='password'?'text':'password';
+            this.innerText=f.type==='password'?'Show':'Hide';
+            this.setAttribute('aria-label',f.type==='password'?'Show password':'Hide password');">Show</span>
+        </div>
+        <div id="login-error" class="error-login quicksand-regular"></div>
+        <button type="submit" class="quicksand-regular">Confirm</button>
+        <div id="registration">
+          <br />
+          <p class="quicksand-regular medium-text">
+            Don't have an account?
+            <a
+              href="#"
+              id="register-toggle"
+              style="color: #e0700d"
+              hx-on:click="event.preventDefault();
                                                 document.getElementById('login-popup').classList.remove('show');
-                                                document.getElementById('register-popup').classList.add('show');">Register here</a>
-                            </p>
-                        </div>
-                    </form>
-                </div>
+                                                document.getElementById('register-popup').classList.add('show');"
+              >Register here</a
+            >
+          </p>
+        </div>
+      </form>
+    </div>
 
-                <div id="register-popup" class="popup-register">
+    <div id="register-popup" class="popup-register">
+      <button
+        id="close-reg-button"
+        class="close-btn"
+        aria-label="Close registration dialogue"
+        hx-on:click="document.getElementById('register-popup').classList.remove('show');
+        document.getElementById('overlay').classList.remove('show');
+        document.getElementById('register-form').reset();
+        this.setAttribute('aria-label',f.type==='password'?'Show password':'Hide password');">&times;</button>
 
-                    <button id="close-reg-button" class="close-btn"
-                        hx-on:click="document.getElementById('register-popup').classList.remove('show');
-                                    document.getElementById('overlay').classList.remove('show');
-                                    document.getElementById('register-form').reset();">&times;</button>
+      <form
+        id="register-form"
+        method="post"
+        hx-post="{{ url_for('auth.register') }}"
+        hx-target="#register-error"
+        hx-swap="innerHTML"
+      >
+        <h3 class="elms-sans-regular h1">Register</h3>
 
-                    <form id="register-form" method="post"
-                        hx-post="{{ url_for('auth.register') }}"
-                        hx-target="#register-error"
-                        hx-swap="innerHTML">
-                        <h3 class="elms-sans-regular h1">Register</h3>
-                        <br>
+        <p class="elms-sans-regular">Username:</p>
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          class="quicksand-regular"
+          required
+        />
 
-                        <p class="elms-sans-regular">Username:</p>
-                        <input type="text" name="username"
-                        placeholder="Username" class="quicksand-regular" required>
+        <p class="elms-sans-regular">Email:</p>
+        <input
+          type="text"
+          name="email"
+          placeholder="Email"
+          class="quicksand-regular"
+          required
+        />
 
-                        <p class="elms-sans-regular">Email:</p>
-                        <input type="text" name="email"
-                        placeholder="Email" class="quicksand-regular" required>
+        <p class="elms-sans-regular">Password:</p>
+        <div class="password-wrapper">
+          <input
+            id="register-password-field"
+            type="password"
+            name="password"
+            placeholder="Password"
+            class="quicksand-regular"
+            required
+          />
+          <span
+            id="register-toggle-password"
+            class="toggle-eye elms-sans-regular"
+            aria-label="Show password"
+            hx-on:click="var f=document.getElementById('register-password-field');
+            f.type=f.type==='password'?'text':'password';
+            this.innerText=f.type==='password'?'Show':'Hide';
+            this.setAttribute('aria-label',f.type==='password'?'Show password':'Hide password');">Show</span>
+        </div>
 
-                        <p class="elms-sans-regular">Password:</p>
-                        <div class="password-wrapper">
-                            <input id="register-password-field" type="password" name="password"
-                            placeholder="Password" class="quicksand-regular" required>
-                            <span id="register-toggle-password" class="toggle-eye elms-sans-regular"
-                                hx-on:click="var f=document.getElementById('register-password-field');
-                                            f.type=f.type==='password'?'text':'password';
-                                            this.innerText=f.type==='password'?'Show':'Hide';">Show</span>
-                        </div>
+        <div id="register-error" class="error-login quicksand-regular"></div>
 
-                        <div id="register-error" class="error-login quicksand-regular"></div>
+        <button type="submit" class="quicksand-regular">Create Account</button>
+      </form>
+    </div>
 
-                        <button type="submit" class="quicksand-regular">Create Account</button>
-                    </form>
-                </div>
+    <div class="spacer-small"></div>
 
-        <div class="spacer-small"></div>
+    {% block content %} {% endblock %}
 
-        {% block content %}
-        {% endblock %}
+    <footer>
+      <div class="footer-message">
+        <p>I need my coffee</p>
+        <a 
+        id="msg"
+        href="#"
+        hx-on:click="
+        document.getElementById('msg').textContent = 'Sorry but there is no happiness'
+        this.classList.add('h1'); ">Click for happiness</a>
+      </div>
+      <ul class="footer-nav">
+        <li class="elms-sans-regular"><h1>Navigate</h1></li>
+        <li><a href="{{ url_for('templates.index') }}" class="quicksand-regular">Home</a></li>
+        <li><a href="{{ url_for('templates.about') }}" class="quicksand-regular">About</a></li>
+        <li><a href="{{ url_for('templates.contact') }}" class="quicksand-regular">Contacts</a></li>
+      </ul>
+    </footer>
 
-        <footer>
-            <div class="footer-connection">
-                <img src="" alt="Discord" class="elms-sans-regular">
-            </div>
-            <div class="footer-message">
+    {% block scripts %} 
+    {% endblock %}
 
-            </div>
-            <ul class="footer-nav">
-                <li class="elms-sans-regular"><h1>Navigate</h1></li>
-                <li><a href="#" class="quicksand-regular">Home</a></li>
-                <li><a href="#" class="quicksand-regular">About</a></li>
-                <li><a href="#" class="quicksand-regular">Contacts</a></li>
-            </ul>
-        </footer>
+    <script 
+      type="module" 
+      src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js">
+    </script>
 
-        {% block scripts %}
-        {% endblock %}
+    <script>
+      // Logic I:
+      (function () {
+        const themeKey = 'snack-stash-theme';
+        const themeToggle = document.getElementById('theme-toggle');
 
-        <script>
-            (function () {
-                const themeKey = "snack-stash-theme";
-                const themeToggle = document.getElementById("theme-toggle");
-                const searchInput = document.getElementById("search-filter");
-                const clearSearch = document.getElementById("clear-search");
+        function applyTheme(theme) {
+          const nextTheme = theme === 'light' ? 'light' : 'dark';
+          document.body.classList.toggle('dark-mode', nextTheme === 'dark');
+          document.body.classList.toggle('light-mode', nextTheme === 'light');
 
-                function applyTheme(theme) {
-                    const nextTheme = theme === "light" ? "light" : "dark";
-                    document.body.classList.toggle("dark-mode", nextTheme === "dark");
-                    document.body.classList.toggle("light-mode", nextTheme === "light");
+          if (themeToggle) {
+            themeToggle.textContent = nextTheme === 'dark' ? 'Light' : 'Dark';
+            themeToggle.setAttribute(
+              'aria-label',
+              nextTheme === 'dark'
+                ? 'Switch to light mode'
+                : 'Switch to dark mode',
+            );
+          }
 
-                    if (themeToggle) {
-                        themeToggle.textContent = nextTheme === "dark" ? "Light" : "Dark";
-                        themeToggle.setAttribute(
-                            "aria-label",
-                            nextTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"
-                        );
-                    }
+          localStorage.setItem(themeKey, nextTheme);
+        }
 
-                    localStorage.setItem(themeKey, nextTheme);
+        function wireFlipCards() {
+          document
+            .querySelectorAll('[data-card-flip]')
+            .forEach(function (trigger) {
+              if (trigger.dataset.flipReady === 'true') return;
+              trigger.dataset.flipReady = 'true';
+
+              trigger.addEventListener('click', function () {
+                const card = trigger.closest('.pantry-card');
+                if (card) {
+                  card.classList.add('is-flipped');
                 }
+              });
+            });
 
-                function filterCards() {
-                    if (!searchInput) return;
+          document
+            .querySelectorAll('[data-card-unflip]')
+            .forEach(function (trigger) {
+              if (trigger.dataset.flipReady === 'true') return;
+              trigger.dataset.flipReady = 'true';
 
-                    const query = searchInput.value.trim().toLowerCase();
-                    document.querySelectorAll("[data-search]").forEach(function (card) {
-                        const cardText = card.dataset.search || "";
-                        card.classList.toggle("is-hidden-by-search", query && !cardText.includes(query));
-                    });
+              trigger.addEventListener('click', function () {
+                const card = trigger.closest('.pantry-card');
+                if (card) {
+                  card.classList.remove('is-flipped');
                 }
+              });
+            });
+        }
 
-                function wireFlipCards() {
-                    document.querySelectorAll("[data-card-flip]").forEach(function (trigger) {
-                        if (trigger.dataset.flipReady === "true") return;
-                        trigger.dataset.flipReady = "true";
+        applyTheme(localStorage.getItem(themeKey) || 'light');
+        wireFlipCards();
 
-                        trigger.addEventListener("click", function () {
-                            const card = trigger.closest(".pantry-card");
-                            if (card) {
-                                card.classList.add("is-flipped");
-                            }
-                        });
-                    });
+        if (themeToggle) {
+          themeToggle.addEventListener('click', function () {
+            applyTheme(
+              document.body.classList.contains('dark-mode') ? 'light' : 'dark',
+            );
+          });
+        }
 
-                    document.querySelectorAll("[data-card-unflip]").forEach(function (trigger) {
-                        if (trigger.dataset.flipReady === "true") return;
-                        trigger.dataset.flipReady = "true";
+        document.body.addEventListener('htmx:afterSwap', function (event) {
+          filterCards();
+          wireFlipCards();
+          if (
+            event.detail.target.id === 'item-form-container' &&
+            event.detail.target.innerHTML.trim() !== ''
+          ) {
+            const navHeight = document.querySelector('nav')?.offsetHeight ?? 0;
+            const top = event.detail.target.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+            window.scrollTo({ behavior: 'smooth', top });
+          }
+        });
+      })();
 
-                        trigger.addEventListener("click", function () {
-                            const card = trigger.closest(".pantry-card");
-                            if (card) {
-                                card.classList.remove("is-flipped");
-                            }
-                        });
-                    });
-                }
+    // Logic II:
+    document.addEventListener('click', function (event) {
+        const trigger = event.target.closest('.emoji-trigger');
 
-                applyTheme(localStorage.getItem(themeKey) || "light");
-                wireFlipCards();
+        if (trigger) {
+          const wrapper = trigger.closest('.emoji-picker-wrapper');
+          const popover = wrapper.querySelector('.emoji-popover');
 
-                if (themeToggle) {
-                    themeToggle.addEventListener("click", function () {
-                        applyTheme(document.body.classList.contains("dark-mode") ? "light" : "dark");
-                    });
-                }
+          popover.classList.toggle('hidden');
+          return;
+        }
 
-                if (searchInput) {
-                    searchInput.addEventListener("input", filterCards);
-                }
+        if (!event.target.closest('.emoji-picker-wrapper')) {
+          document.querySelectorAll('.emoji-popover').forEach((popover) => {
+            popover.classList.add('hidden');
+          });
+        }
+      });
 
-                if (clearSearch) {
-                    clearSearch.addEventListener("click", function () {
-                        searchInput.value = "";
-                        filterCards();
-                        searchInput.focus();
-                    });
-                }
+      document.addEventListener('emoji-click', function (event) {
+        const wrapper = event.target.closest('.emoji-picker-wrapper');
 
-                document.body.addEventListener("htmx:afterSwap", function () {
-                    filterCards();
-                    wireFlipCards();
-                });
-            })();
-        </script>
+        if (!wrapper) return;
+
+        const emoji = event.detail.unicode;
+
+        wrapper.querySelector('.selected-emoji').textContent = emoji;
+        wrapper.querySelector('.item-emoji').value = emoji;
+        wrapper.querySelector('.emoji-popover').classList.add('hidden');
+      });
+      </script>
     </body>
 </html>

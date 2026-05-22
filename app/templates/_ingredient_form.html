@@ -1,4 +1,5 @@
-<form class="item-form"
+<form
+  class="item-form"
   {% if item %}
     hx-put="/ingredients/{{ item.id }}"
   {% else %}
@@ -6,46 +7,110 @@
   {% endif %}
   hx-target="#pantry-items"
   hx-swap="innerHTML">
-
-  <h3 class="elms-sans-regular h2">{{ "Edit Pantry Item" if item else "Add Pantry Item" }}</h3>
+  
+  <h3 class="elms-sans-regular h2">
+    {{ "Edit Pantry Item" if item else "Add Pantry Item" }}
+  </h3>
 
   <label class="quicksand-regular" for="item-name">Name</label>
-  <input id="item-name" name="name" type="text" class="item-input quicksand-regular"
-    value="{{ item.name if item else '' }}" required>
+  <input
+    id="item-name"
+    name="name"
+    type="text"
+    class="item-input quicksand-regular"
+    value="{{ item.name if item else '' }}"
+    required
+  />
 
-  <label class="quicksand-regular" for="item-emoji">Emoji</label>
-  <input id="item-emoji" name="emoji" type="text" class="item-input quicksand-regular emoji-input"
-    placeholder="🥫"
-    value="{{ item.emoji if item and item.emoji else '🥫' }}">
+  <!-- EMOJI PICKER -->
+  <label class="quicksand-regular">Emoji</label>
+
+  <script type="module">
+    import 'https://unpkg.com/emoji-picker-element';
+  </script>
+
+  <div class="emoji-picker-wrapper">
+    <button type="button" class="emoji-trigger">
+      <span class="selected-emoji">
+        {{ item.emoji if item and item.emoji else '🥫' }}
+      </span>
+      <span class="emoji-trigger-text">Choose emoji</span>
+    </button>
+
+    <div class="emoji-popover hidden">
+      <emoji-picker></emoji-picker>
+    </div>
+
+    <input
+      type="hidden"
+      class="item-emoji"
+      name="emoji"
+      value="{{ item.emoji if item and item.emoji else '🥫' }}"
+    />
+  </div>
 
   <label class="quicksand-regular" for="item-quantity">Quantity</label>
-  <input id="item-quantity" name="quantity" type="number" step="0.1" class="item-input quicksand-regular"
-    value="{{ item.quantity if item else '' }}" required>
+  <input
+    id="item-quantity"
+    name="quantity"
+    type="number"
+    step="0.1"
+    class="item-input quicksand-regular"
+    value="{{ item.quantity if item else '' }}"
+    required
+  />
 
   <label class="quicksand-regular" for="item-unit">Unit</label>
-  <input id="item-unit" name="unit" type="text" class="item-input quicksand-regular"
+  <input
+    id="item-unit"
+    name="unit"
+    type="text"
+    class="item-input quicksand-regular"
     placeholder="e.g. pcs, g, ml"
-    value="{{ item.unit if item else '' }}">
+    value="{{ item.unit if item else '' }}"
+  />
 
   <label class="quicksand-regular" for="item-category">Category</label>
-  <input id="item-category" name="category" type="text" class="item-input quicksand-regular"
+  <input
+    id="item-category"
+    name="category"
+    type="text"
+    class="item-input quicksand-regular"
     placeholder="e.g. Snacks, Dairy"
-    value="{{ item.category if item else '' }}">
+    value="{{ item.category if item else '' }}"
+  />
 
   <label class="quicksand-regular" for="item-expiry-date">Expiry Date</label>
-  <input id="item-expiry-date" name="expiry_date" type="date" class="item-input quicksand-regular"
-    value="{{ item.expiry_date if item else '' }}">
+  <input
+    id="item-expiry-date"
+    name="expiry_date"
+    type="date"
+    class="item-input quicksand-regular"
+    value="{{ item.expiry_date if item else '' }}"
+  />
 
   <label class="quicksand-regular" for="item-notes">Notes</label>
-  <textarea id="item-notes" name="notes" rows="3" class="item-input quicksand-regular">{{ item.notes if item else '' }}</textarea>
+  <textarea
+    id="item-notes"
+    name="notes"
+    rows="3"
+    class="item-input quicksand-regular"
+  >
+{{ item.notes if item else '' }}</textarea
+  >
 
   <div class="form-actions">
     <button type="submit" class="quicksand-regular">
       {{ "Update Item" if item else "Add Item" }}
     </button>
-    <button type="button" class="quicksand-regular"
+    <button
+      type="button"
+      class="quicksand-regular"
       hx-get="/ingredients/clear-form"
       hx-target="#item-form-container"
-      hx-swap="innerHTML">Cancel</button>
+      hx-swap="innerHTML"
+    >
+      Cancel
+    </button>
   </div>
 </form>

@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<main class="dashboard-page">
+<main class="dashboard-page" id="main-content" tabindex="-1">
+    {% if current_user.is_authenticated %}
+
     <div class="dashboard-shell">
         <aside class="dashboard-sidebar">
             <p class="sidebar-kicker quicksand-regular">Recipe Box</p>
@@ -9,10 +11,51 @@
             <p class="quicksand-regular">Generate recipe ideas from your own pantry, then keep the saved recipes here for later.</p>
         </aside>
 
-        <section id="recipes-section" class="pantry-section dashboard-main">
+        <section class="pantry-section dashboard-main">
+            <div class="section-header">
+                <div>
+                    <p class="section-kicker quicksand-regular">Recipes</p>
+                    <h2 class="elms-sans-regular h1">My Recipes</h2>
+                    <p class="quicksand-regular">Click a recipe to expand ingredients, instructions, and tips.</p>
+                </div>
+                <button class="quicksand-regular generate-btn"
+                    {% if gen_status['state'] == "generating" %}disabled{% endif %}
+                    hx-post="/recipes/generate"
+                    hx-target="#recipes-section-inner"
+                    hx-swap="outerHTML">Generate Recipes</button>
+            </div>
+
+            <div class="search-bar">
+                <form
+                id="search-form"
+                class="search-form"
+                hx-get="/recipes/filter"
+                hx-target="#recipes-list"
+                hx-trigger="input delay:300ms"
+                hx-include="#search-form"
+                onsubmit="return false">
+                    <span class="search-icon">⌕</span>
+                    <input
+                    id="search-filter"
+                    type="text"
+                    name="search"
+                    placeholder="Search recipes..."
+                    class="quicksand-regular">
+
+                    <button
+                    type="button"
+                    id="clear-search"
+                    hx-get="/recipes/filter"
+                    hx-target="#recipes-list"
+                    hx-vals='{"search": ""}'
+                    hx-on::after-request="document.getElementById('search-filter').value = ''">×</button>
+                </form>
+            </div>
+
             {% include "_recipes_section.html" %}
         </section>
     </div>
+    {% endif %}
 </main>
 
 {% endblock %}

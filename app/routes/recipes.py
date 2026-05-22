@@ -54,7 +54,7 @@ def _generate_worker(ingredients, user_id):
     try:
         db.connect()
         raw = generate_recipes(ingredients)
-        for r in raw:
+        for r in raw: #type: ignore
             save_recipe(r, user_id)
         _gen_status = {"state": "done", "error": None}
     except Exception as e:
@@ -79,7 +79,7 @@ def _relative_date(d):
 
 def _render_section(user_id):
     recipes = [recipe_to_dict(r) for r in
-               Recipe.select().where(Recipe.user_id == user_id).order_by(Recipe.id.desc())]
+                Recipe.select().where(Recipe.user_id == user_id).order_by(Recipe.id.desc())] #type: ignore
     for r in recipes:
         r["generated_label"] = _relative_date(r["created_at"])
     return render_template("_recipes_section.html", recipes=recipes, gen_status=_gen_status)
@@ -100,7 +100,7 @@ def poll_status():
 @login_required
 def recipes_rendered():
     user_id = int(current_user.id)
-    recipes = [recipe_to_dict(r) for r in Recipe.select().where(Recipe.user_id == user_id).order_by(Recipe.id.desc())]
+    recipes = [recipe_to_dict(r) for r in Recipe.select().where(Recipe.user_id == user_id).order_by(Recipe.id.desc())] #type: ignore
     for r in recipes:
         r["generated_label"] = _relative_date(r["created_at"])
     return render_template("_recipes.html", recipes=recipes)
@@ -111,7 +111,7 @@ def recipes_rendered():
 def recipes_page():
     user_id = int(current_user.id)
     recipes = [recipe_to_dict(r) for r in
-               Recipe.select().where(Recipe.user_id == user_id).order_by(Recipe.id.desc())]
+                Recipe.select().where(Recipe.user_id == user_id).order_by(Recipe.id.desc())] #type: ignore
     for r in recipes:
         r["generated_label"] = _relative_date(r["created_at"])
     return render_template("recipes.html", recipes=recipes, gen_status=_gen_status)
@@ -124,13 +124,13 @@ def list_recipes():
         return redirect(url_for("recipes.recipes_page"))
 
     user_id = int(current_user.id)
-    return jsonify([r.__data__ for r in Recipe.select().where(Recipe.user_id == user_id)])
+    return jsonify([r.__data__ for r in Recipe.select().where(Recipe.user_id == user_id)]) #type: ignore
 
 
 @recipe_bp.route("/<int:id>", methods=["GET"])
 @login_required
 def get_recipe(id):
-    recipe = Recipe.get_or_none((Recipe.id == id) & (Recipe.user_id == int(current_user.id)))
+    recipe = Recipe.get_or_none((Recipe.id == id) & (Recipe.user_id == int(current_user.id))) #type: ignore
     if recipe is None:
         return jsonify({"error": f"Recipe {id} not found"}), 404
     return jsonify(recipe_to_dict(recipe))
@@ -140,7 +140,7 @@ def get_recipe(id):
 @login_required
 def delete_recipe(id):
     user_id = int(current_user.id)
-    recipe = Recipe.get_or_none((Recipe.id == id) & (Recipe.user_id == user_id))
+    recipe = Recipe.get_or_none((Recipe.id == id) & (Recipe.user_id == user_id)) #type: ignore
     if recipe is None:
         return jsonify({"error": f"Recipe {id} not found"}), 404
     RecipeIngredient.delete().where(RecipeIngredient.recipe == recipe).execute()
@@ -152,13 +152,27 @@ def delete_recipe(id):
     return "", 204
 
 
+@recipe_bp.route("/filter", methods=["GET"])
+@login_required
+def filter_recipes():
+    search = request.args.get("search", "").strip().lower()
+    user_id = int(current_user.id)
+    recipes = [recipe_to_dict(r) for r in
+               Recipe.select().where(Recipe.user_id == user_id).order_by(Recipe.id.desc())] #type: ignore
+    for r in recipes:
+        r["generated_label"] = _relative_date(r["created_at"])
+    if search:
+        recipes = [r for r in recipes if search in r["title"].lower()]
+    return render_template("_recipes.html", recipes=recipes)
+
+
 @recipe_bp.route("/generate", methods=["POST"])
 @login_required
 def recipes_generate():
     global _gen_status
     user_id = int(current_user.id)
     if _gen_status["state"] != "generating":
-        ingredients = [i.__data__ for i in Ingredient.select().where(Ingredient.user_id == user_id)]
+        ingredients = [i.__data__ for i in Ingredient.select().where(Ingredient.user_id == user_id)] #type: ignore
         _gen_status = {"state": "generating", "error": None}
         threading.Thread(target=_generate_worker, args=(ingredients, user_id), daemon=True).start()
 

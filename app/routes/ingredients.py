@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, redirect, request, render_template, url_fo
 from peewee import fn
 from flask_login import current_user, login_required
 from ..models.model import Ingredient
+from ..extensions.extensions import category_names, _categories_oob
 
 ingredients_bp = Blueprint("ingredients", __name__, url_prefix="/ingredients")
 
@@ -15,13 +16,13 @@ def _user_id():
 
 def _user_ingredients(user_id=None):
     owner_id = user_id if user_id is not None else _user_id()
-    return Ingredient.select().where(Ingredient.user_id == owner_id)
+    return Ingredient.select().where(Ingredient.user_id == owner_id) #type: ignore
 
 
 def _get_user_ingredient(id):
     return Ingredient.get_or_none(
         (Ingredient.id == id) &
-        (Ingredient.user_id == _user_id())
+        (Ingredient.user_id == _user_id()) #type: ignore
     )
 
 
@@ -30,7 +31,7 @@ def _stats_context(user_id=None):
     total = ingredients.count()
     top_categories = list(
         Ingredient.select(Ingredient.category, fn.COUNT(Ingredient.id).alias("n"))
-        .where(Ingredient.user_id == (user_id if user_id is not None else _user_id()))
+        .where(Ingredient.user_id == (user_id if user_id is not None else _user_id())) # type: ignore
         .group_by(Ingredient.category)
         .order_by(fn.COUNT(Ingredient.id).desc())
         .limit(3)
@@ -95,11 +96,15 @@ def new_ingredient():
             emoji=data.get("emoji") or "🥫",
             quantity=float(data["quantity"]),
             unit=data.get("unit", ""),
-            category=data.get("category", ""),
+            category=data.get("category", "") or "Uncategorized",
             expiry_date=data.get("expiry_date") or None,
             notes=data.get("notes") or None,
         )
-        return _items_html() + _OOB_CLEAR + _stats_oob()
+
+        ingredient_categories = category_names(Ingredient, _user_id())
+        return _items_html() + _OOB_CLEAR + _stats_oob() + _categories_oob(
+            "_ingredient_categories_oob.html", 
+            ingredient_categories)
 
     data = request.get_json()
     ingredient = Ingredient.create(
@@ -145,7 +150,12 @@ def update_ingredient(id):
         if "notes" in data:
             ingredient.notes = data["notes"] or None
         ingredient.save()
-        return _items_html() + _OOB_CLEAR + _stats_oob()
+
+        ingredient_categories = category_names(Ingredient, _user_id())
+        return _items_html() + _OOB_CLEAR + _stats_oob() + _categories_oob(
+            "_ingredient_categories_oob.html",
+            ingredient_categories
+        )
 
     data = request.get_json()
     for field in ("name", "emoji", "quantity", "unit", "category", "expiry_date", "notes"):
@@ -164,6 +174,29 @@ def delete_ingredient(id):
             return "<p class='error-message'>Item not found</p>", 404
         return jsonify({"error": f"Ingredient {id} not found"}), 404
     ingredient.delete_instance()
+
+    ingredient_categories = category_names(Ingredient, _user_id())
     if request.headers.get("HX-Request"):
-        return _items_html() + _stats_oob(), 200
+        return _items_html() + _stats_oob() + _categories_oob("_ingredient_categories_oob.html", ingredient_categories), 200
     return "", 204
+
+
+# Filtering
+@ingredients_bp.route("/filter", methods=["GET"])
+def _filter_ingredients():
+    today = date.today()
+    user_id = _user_id()
+    search = request.args.get("search", "").strip().lower()
+    category = request.args.get("category", "All")
+
+    query = _user_ingredients(user_id)
+
+    if search:
+        query = query.where(
+            fn.LOWER(Ingredient.name).contains(search)
+        )
+
+    if category != "All":
+        query = query.where(Ingredient.category == category)
+
+    return render_template("_pantry_items.html", items=list(query.dicts()), today=today, warning_days=today + timedelta(days=3),)
