@@ -19,10 +19,12 @@
                     <p class="quicksand-regular">Click a recipe to expand ingredients, instructions, and tips.</p>
                 </div>
                 <button class="quicksand-regular generate-btn"
+                    id="generate-btn"
                     {% if gen_status['state'] == "generating" %}disabled{% endif %}
                     hx-post="/recipes/generate"
                     hx-target="#recipes-section-inner"
-                    hx-swap="outerHTML">Generate Recipes</button>
+                    hx-swap="outerHTML"
+                    hx-on::after-request="document.getElementById('generate-btn').disabled = true">Generate Recipes</button>
             </div>
 
             <div class="search-bar">
@@ -58,4 +60,14 @@
     {% endif %}
 </main>
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.body.addEventListener("htmx:afterSwap", function (e) {
+    if (e.detail.target.id !== "recipes-section-inner") return;
+    const btn = document.getElementById("generate-btn");
+    if (btn) btn.disabled = !!document.querySelector(".recipes-loading");
+});
+</script>
 {% endblock %}
