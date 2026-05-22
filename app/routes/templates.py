@@ -38,3 +38,12 @@ def dashboard():
         warning_days=today + timedelta(days=3),
         **stats,
     )
+
+@template_bp.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@template_bp.route("/contact")
+def contact():
+    return render_template("contact.html")
