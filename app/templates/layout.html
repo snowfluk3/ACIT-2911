@@ -64,9 +64,9 @@
 
                 {% else %}
 
-                <li class="quicksand-regular"><a href="#">Home</a></li>
-                <li class="quicksand-regular"><a href="#">About</a></li>
-                <li class="quicksand-regular"><a href="#">Contacts</a></li>
+                <li class="quicksand-regular"><a href="{{ url_for('templates.index') }}">Home</a></li>
+                <li class="quicksand-regular"><a href="{{ url_for('templates.about') }}">About</a></li>
+                <li class="quicksand-regular"><a href="{{ url_for('templates.contact') }}">Contacts</a></li>
 
                 <li>
                     <button type="button" id="login-btn" class="quicksand-regular"
@@ -226,9 +226,9 @@
       </div>
       <ul class="footer-nav">
         <li class="elms-sans-regular"><h1>Navigate</h1></li>
-        <li><a href="#" class="quicksand-regular">Home</a></li>
-        <li><a href="#" class="quicksand-regular">About</a></li>
-        <li><a href="#" class="quicksand-regular">Contacts</a></li>
+        <li><a href="{{ url_for('templates.index') }}" class="quicksand-regular">Home</a></li>
+        <li><a href="{{ url_for('templates.about') }}" class="quicksand-regular">About</a></li>
+        <li><a href="{{ url_for('templates.contact') }}" class="quicksand-regular">Contacts</a></li>
       </ul>
     </footer>
 
