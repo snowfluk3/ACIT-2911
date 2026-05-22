@@ -306,10 +306,10 @@
         }
 
         document.body.addEventListener('htmx:afterSwap', function (event) {
-          filterCards();
           wireFlipCards();
+          const formContainerIds = ['item-form-container', 'food-form-container'];
           if (
-            event.detail.target.id === 'item-form-container' &&
+            formContainerIds.includes(event.detail.target.id) &&
             event.detail.target.innerHTML.trim() !== ''
           ) {
             const navHeight = document.querySelector('nav')?.offsetHeight ?? 0;
