@@ -90,21 +90,16 @@
         class="close-btn"
         aria-label="Close login dialogue"
         hx-on:click="document.getElementById('login-popup').classList.remove('show');
-                                    document.getElementById('overlay').classList.remove('show');
-                                    document.getElementById('login-form').reset();"
-      >
-        &times;
-      </button>
+        document.getElementById('overlay').classList.remove('show');
+        document.getElementById('login-form').reset();">&times;</button>
 
       <form
         id="login-form"
         method="post"
         hx-post="{{ url_for('auth.login') }}"
         hx-target="#login-error"
-        hx-swap="innerHTML"
-      >
+        hx-swap="innerHTML">
         <h3 class="elms-sans-regular h1">Login</h3>
-        <br />
         <p class="elms-sans-regular">Username / Email:</p>
         <input
           type="text"
@@ -170,7 +165,6 @@
         hx-swap="innerHTML"
       >
         <h3 class="elms-sans-regular h1">Register</h3>
-        <br />
 
         <p class="elms-sans-regular">Username:</p>
         <input
@@ -221,10 +215,15 @@
     {% block content %} {% endblock %}
 
     <footer>
-      <div class="footer-connection">
-        <img src="" alt="Discord" class="elms-sans-regular" />
+      <div class="footer-message">
+        <p>I need my coffee</p>
+        <a 
+        id="msg"
+        href="#"
+        hx-on:click="
+        document.getElementById('msg').textContent = 'Sorry but there is no happiness'
+        this.classList.add('h1'); ">Click for happiness</a>
       </div>
-      <div class="footer-message"></div>
       <ul class="footer-nav">
         <li class="elms-sans-regular"><h1>Navigate</h1></li>
         <li><a href="#" class="quicksand-regular">Home</a></li>

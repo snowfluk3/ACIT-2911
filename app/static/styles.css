@@ -19,7 +19,7 @@
   --small-radius: 8px;
   --medium-radius: 12px;
   --large-radius: 18px;
-  --h1: var(--text);
+  --h1: #C84B00;
   --h2: var(--text);
 }
 
@@ -39,7 +39,7 @@ body.dark-mode {
   --success: #4ade80;
   --warning: #fbbf24;
   --danger: #fb7185;
-  --h1: var(--text);
+  --h1: #FF7F00;
   --h2: var(--text);
 }
 
@@ -484,6 +484,7 @@ nav button:hover,
     width: 100%;
     min-height: 34px;
     border: none;
+    border-radius: 8px;
     background: transparent;
     color: var(--muted);
     font-weight: 700;
@@ -662,7 +663,8 @@ main > h2 {
   line-height: 1.7;
 }
 
-.features img {
+.features img, 
+.footer-connection img {
   width: min(230px, 70%);
   border: var(--border);
   border-radius: var(--medium-radius);
@@ -782,6 +784,16 @@ body.dark-mode .stats-list span {
   background: var(--accent);
   color: #ffffff;
   border: none;
+  border-radius: var(--small-radius);
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.popup-login form > button[type='submit']:hover,
+.popup-register form > button[type='submit']:hover {
+  box-shadow: var(--shadow);
+  background: var(--success);
+  transition: 0.3s ease;
 }
 
 .error-login {
@@ -1612,7 +1624,7 @@ input[type='date'].item-input {
 
 footer {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 2fr 1fr;
   align-items: start;
   gap: 20px;
   padding: 22px 48px;
@@ -1622,6 +1634,9 @@ footer {
 }
 
 .footer-nav {
+  display: grid;
+  justify-content: right;
+  align-items: center;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -1637,6 +1652,19 @@ footer {
 .footer-nav a:hover {
   color: var(--accent);
 }
+
+.footer-message {
+  display: grid;
+  justify-content: left;
+  align-items: center;
+}
+  .footer-message a {
+    color: var(--accent);
+    text-decoration-line: underline;
+  }
+  .empty {
+    text-decoration-line: none;
+  }
 
 @media only screen and (max-width: 1460px) {
   nav {
