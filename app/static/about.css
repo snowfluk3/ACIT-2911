@@ -1,0 +1,306 @@
+
+
+
+
+ .about-page {
+    padding: 60px 40px;
+    background: #f5f5f5;
+}
+
+.about-section {
+    text-align: center;
+    margin-bottom: 80px;
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.about-section h1 {
+    font-size: 52px;
+    margin-bottom: 20px;
+}
+
+.about-section h2 {
+    font-size: 38px;
+    margin-bottom: 20px;
+}
+
+.about-section h3 {
+    color: #666;
+    max-width: 900px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+
+
+/* STATS */
+
+.stats-section {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 30px;
+    flex-wrap: wrap;
+
+    margin-bottom: 100px;
+}
+
+.stat-card {
+    background: white;
+
+    width: 200px;
+
+    padding: 40px 20px;
+
+    border-radius: 10px;
+
+    text-align: center;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.stat-card h2 {
+    color: #2563ff;
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.stat-card p {
+    color: #666;
+}
+
+
+
+/* VALUES */
+
+.values-section {
+    margin-bottom: 120px;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.section-header h2 {
+    font-size: 48px;
+    text-align: center;
+    width: 100%;
+}
+
+.values-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.value-card {
+    width: 600px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 35px;
+
+    display: flex;
+
+    gap: 25px;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.icon {
+    width: 60px;
+    height: 60px;
+
+    border-radius: 16px;
+
+    background: #eef4ff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 28px;
+
+    flex-shrink: 0;
+}
+
+.value-card h3 {
+    margin-bottom: 12px;
+}
+
+.value-card p {
+    color: #666;
+    line-height: 1.6;
+}
+
+
+
+/* TEAM */
+
+.team-section {
+    padding-bottom: 80px;
+}
+
+.team-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.team-header h2 {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.team-header p {
+    color: #666;
+}
+
+.team-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.team-card {
+    width: 320px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 40px 30px;
+
+    text-align: center;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.avatar {
+    width: 90px;
+    height: 90px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 25px;
+
+    color: white;
+
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.blue {
+    background: #3b82f6;
+}
+
+.green {
+    background: #10b981;
+}
+
+.purple {
+    background: #8b5cf6;
+}
+
+.orange {
+    background: #f59e0b;
+}
+
+.red {
+    background:#dc2626;
+}
+
+.team-card h3 {
+    margin-bottom: 10px;
+}
+
+.team-card span {
+    display: block;
+    color: #2563ff;
+    margin-bottom: 20px;
+}
+
+.team-card p {
+    color: #666;
+    line-height: 1.6;
+}
+
+
+
+/* =========================
+   ABOUT PAGE DARK MODE
+========================= */
+
+body.dark-mode .about-page,
+body.dark-mode .about-section,
+body.dark-mode .values-section,
+body.dark-mode .team-section {
+    background: var(--background);
+    color: var(--text);
+}
+
+body.dark-mode .about-section h2,
+body.dark-mode .about-section h3,
+body.dark-mode .section-header h2,
+body.dark-mode .team-header h2,
+body.dark-mode .team-header p,
+body.dark-mode .value-card h3,
+body.dark-mode .value-card p,
+body.dark-mode .team-card h3,
+body.dark-mode .team-card span {
+    color: var(--text);
+}
+
+body.dark-mode .stats-section {
+    background: var(--background);
+}
+
+body.dark-mode .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    color: var(--text);
+}
+
+body.dark-mode .stat-card p {
+    color: var(--muted);
+}
+
+body.dark-mode .value-card,
+body.dark-mode .team-card {
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    color: var(--text);
+}
+
+body.dark-mode .icon {
+    background: var(--surface-2);
+}
+
+body.dark-mode .avatar.blue {
+    background: #2563eb;
+}
+
+body.dark-mode .avatar.green {
+    background: #16a34a;
+}
+
+body.dark-mode .avatar.purple {
+    background: #9333ea;
+}
+
+body.dark-mode .avatar.orange {
+    background: #ea580c;
+}
+
+body.dark-mode .avatar.red {
+    background: #dc2626;
+}

@@ -1,0 +1,343 @@
+/* =========================
+   TOP CONTACT SECTION
+========================= */
+
+.contact-page {
+    background: #f5f5f7;
+    min-height: 100vh;
+}
+
+/* HERO */
+
+.contact-intro {
+    text-align: center;
+    padding: 70px 20px 40px;
+}
+
+.contact-intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.contact-icon {
+    width: 60px;
+    height: 60px;
+    background: #e9eefc;
+    border-radius: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.contact-intro h1 {
+    font-size: 52px;
+    color: #0b132b;
+    margin-bottom: 25px;
+}
+
+.contact-intro h3 {
+    font-size: 28px;
+    font-weight: 400;
+    color: #6b7280;
+    line-height: 1.6;
+    max-width: 900px;
+    margin: auto;
+}
+
+/* CONTACT CARDS */
+
+.contact-options {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 30px;
+    padding: 20 100px 40px;
+    flex-wrap: wrap;
+}
+
+.option-card {
+    background: white;
+    width: 320px;
+    min-height: 320px;
+    padding: 20px;
+    border-radius: 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.option-card h3 {
+    font-size: 30px;
+    margin-bottom: 18px;
+    color: #0b132b;
+}
+
+.option-card p {
+    color: #6b7280;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.option-card h4 {
+    color: #2563ff;
+    font-size: 24px;
+}
+
+
+
+/* =========================
+   CONTACT BOTTOM SECTION
+========================= */
+
+.contact-bottom {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 80px 120px;
+    background-color: #f5f5f7;
+}
+
+/* =========================
+   LEFT SIDE
+========================= */
+
+.message-box {
+    background: white;
+    padding: 40px;
+    border-radius: 24px;
+    width: 60%;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+.message-box h2 {
+    font-size: 38px;
+    margin-bottom: 40px;
+    color: #0b132b;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.input-group label {
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+    padding: 18px;
+    border: 1px solid #dcdfe4;
+    border-radius: 16px;
+    font-size: 16px;
+    outline: none;
+    background: #fafafa;
+}
+
+.input-group textarea {
+    height: 180px;
+    resize: none;
+}
+
+.send-btn {
+    margin-top: 10px;
+    background: #2563ff;
+    color: white;
+    border: none;
+    padding: 20px;
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.send-btn:hover {
+    background: #1d4ed8;
+}
+
+/* =========================
+   FAQ SECTION
+========================= */
+
+.faq-section {
+    width: 40%;
+}
+
+.faq-section h2 {
+    font-size: 38px;
+    margin-bottom: 30px;
+    color: #0b132b;
+}
+
+/* FAQ CARD */
+
+.faq-item {
+    background: white;
+    border-radius: 22px;
+    padding: 30px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+/* QUESTION BUTTON */
+
+.faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    cursor: pointer;
+    text-align: left;
+}
+
+.faq-question span:first-child {
+    flex: 1;
+
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+}
+
+/* PLUS BUTTON */
+
+.faq-question span:last-child {
+    background: #2563ff;
+    color: white;
+
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* ANSWER */
+
+.faq-answer {
+    display: none;
+    margin-top: 20px;
+}
+
+.faq-answer p {
+    line-height: 1.7;
+    color: #6b7280;
+    font-size: 17px;
+}
+
+/* ACTIVE STATE */
+
+.faq-item.active .faq-answer {
+    display: block;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+
+    .contact-bottom {
+        flex-direction: column;
+        padding: 60px 30px;
+    }
+
+    .message-box,
+    .faq-section {
+        width: 100%;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+}
+
+
+
+
+
+/* =========================
+   DARK MODE - CONTACT PAGE
+========================= */
+
+body.dark-mode .contact-page,
+body.dark-mode .contact-intro,
+body.dark-mode .contact-bottom,
+body.dark-mode .faq-section {
+    background: var(--background);
+    color: var(--text);
+}
+
+/* CARDS */
+
+body.dark-mode .option-card,
+body.dark-mode .message-box,
+body.dark-mode .faq-item {
+    background: var(--surface);
+    border: 1px solid var(--border-color);
+    color: var(--text);
+}
+
+/* TEXT */
+
+body.dark-mode .contact-intro h1,
+body.dark-mode .contact-intro h3,
+body.dark-mode .option-card h3,
+body.dark-mode .option-card h4,
+body.dark-mode .message-box h2,
+body.dark-mode .faq-section h2,
+body.dark-mode .faq-question span:first-child {
+    color: var(--text);
+}
+
+body.dark-mode .option-card p,
+body.dark-mode .faq-answer p,
+body.dark-mode label {
+    color: var(--muted);
+}
+
+/* INPUTS */
+
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background: var(--surface-2);
+    border: 1px solid var(--border-color);
+    color: var(--text);
+}
+
+/* ICONS */
+
+body.dark-mode .contact-icon {
+    background: var(--surface-2);
+}
